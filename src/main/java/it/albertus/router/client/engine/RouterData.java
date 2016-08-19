@@ -1,4 +1,4 @@
-package it.albertus.router.client.gui;
+package it.albertus.router.client.engine;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,5 +1,6 @@
 package it.albertus.router.client.gui;
 
+import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.Threshold;

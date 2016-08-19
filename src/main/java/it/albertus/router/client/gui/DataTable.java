@@ -2,6 +2,7 @@ package it.albertus.router.client.gui;
 
 import it.albertus.jface.SwtThreadExecutor;
 import it.albertus.jface.SwtUtils;
+import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.gui.listener.ClearDataTableSelectionListener;

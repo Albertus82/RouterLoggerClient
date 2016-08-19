@@ -19,10 +19,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 public class RouterLoggerGui extends ApplicationWindow {
 
-	public static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = null;
+	public static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = "gui.clipboard.max.chars";
 	public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
 
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
@@ -126,18 +127,18 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	public boolean canCopyConsole() {
-		// TODO Auto-generated method stub
-		return false;
+		final Text text = textConsole.getText();
+		return text != null && text.getSelectionCount() > 0 && (text.isFocusControl() || !dataTable.canCopy());
 	}
 
 	public boolean canSelectAllConsole() {
-		// TODO Auto-generated method stub
-		return false;
+		final Text text = textConsole.getText();
+		return text != null && !text.getText().isEmpty() && (text.isFocusControl() || !dataTable.canSelectAll());
 	}
 
 	public boolean canClearConsole() {
-		// TODO Auto-generated method stub
-		return false;
+		final Text text = textConsole.getText();
+		return text != null && !text.getText().isEmpty();
 	}
 
 	public RouterLoggerStatus getCurrentStatus() {
