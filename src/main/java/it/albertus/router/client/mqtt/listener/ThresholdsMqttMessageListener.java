@@ -35,7 +35,7 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 
 	private static final DateFormat timestampFormat = new SimpleDateFormat(DataTable.TIMESTAMP_PATTERN);
 
-	public ThresholdsMqttMessageListener(RouterLoggerGui gui) {
+	public ThresholdsMqttMessageListener(final RouterLoggerGui gui) {
 		this.gui = gui;
 	}
 

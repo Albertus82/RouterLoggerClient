@@ -16,12 +16,12 @@ public class StatusMqttMessageListener implements IMqttMessageListener {
 
 	private final RouterLoggerGui gui;
 
-	public StatusMqttMessageListener(RouterLoggerGui gui) {
+	public StatusMqttMessageListener(final RouterLoggerGui gui) {
 		this.gui = gui;
 	}
 
 	@Override
-	public void messageArrived(String topic, MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
+	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
 		final StatusPayload sp = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), StatusPayload.class);
 		final RouterLoggerStatus rls = RouterLoggerStatus.valueOf(sp.getStatus());
 		gui.setStatus(rls);
