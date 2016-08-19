@@ -16,11 +16,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
+import org.eclipse.jface.resource.FontRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -281,18 +285,18 @@ public class DataTable {
 
 					for (final String key : info.keySet()) {
 						// Grassetto...
-//						if (key != null && configuration.getGuiImportantKeys().contains(key.trim())) {
-//							FontRegistry fontRegistry = JFaceResources.getFontRegistry();
-//							if (!fontRegistry.hasValueFor("tableBold")) {
-//								final Font tableFont = item.getFont();
-//								final FontData oldFontData = tableFont.getFontData()[0];
-//								fontRegistry.put("tableBold", new FontData[] { new FontData(oldFontData.getName(), oldFontData.getHeight(), SWT.BOLD) });
-//							}
-//							item.setFont(i, fontRegistry.get("tableBold"));
-//
-//							// Evidenzia cella...
-//							item.setBackground(i, importantKeyBackgroundColor);
-//						}
+						if (key != null && configuration.getGuiImportantKeys().contains(key.trim())) {
+							FontRegistry fontRegistry = JFaceResources.getFontRegistry();
+							if (!fontRegistry.hasValueFor("tableBold")) {
+								final Font tableFont = item.getFont();
+								final FontData oldFontData = tableFont.getFontData()[0];
+								fontRegistry.put("tableBold", new FontData[] { new FontData(oldFontData.getName(), oldFontData.getHeight(), SWT.BOLD) });
+							}
+							item.setFont(i, fontRegistry.get("tableBold"));
+
+							// Evidenzia cella...
+							item.setBackground(i, importantKeyBackgroundColor);
+						}
 
 						// Colore per i valori oltre soglia...
 						for (final Threshold threshold : thresholdsReached.keySet()) {

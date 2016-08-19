@@ -4,8 +4,16 @@ import it.albertus.jface.JFaceResources;
 import it.albertus.router.client.resources.Resources;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
+import it.albertus.util.StringUtils;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class RouterLoggerConfiguration extends Configuration {
+
+	public interface Defaults {
+		String GUI_IMPORTANT_KEYS_SEPARATOR = ",";
+	}
 
 	private static class Singleton {
 		private static final RouterLoggerConfiguration instance = new RouterLoggerConfiguration();
@@ -16,6 +24,12 @@ public class RouterLoggerConfiguration extends Configuration {
 	}
 
 	public static final String FILE_NAME = "routerloggerclient.cfg";
+
+	private final Set<String> guiImportantKeys = new LinkedHashSet<String>();
+
+	public Set<String> getGuiImportantKeys() {
+		return guiImportantKeys;
+	}
 
 	private RouterLoggerConfiguration() {
 		/* Caricamento della configurazione... */
@@ -29,6 +43,14 @@ public class RouterLoggerConfiguration extends Configuration {
 			final String language = this.getString("language");
 			Resources.setLanguage(language);
 			JFaceResources.setLanguage(language);
+		}
+
+		/* Caricamento chiavi da evidenziare */
+		guiImportantKeys.clear();
+		for (final String importantKey : this.getString("gui.important.keys", "").split(this.getString("gui.important.keys.separator", Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).trim())) {
+			if (StringUtils.isNotBlank(importantKey)) {
+				this.guiImportantKeys.add(importantKey.trim());
+			}
 		}
 	}
 
