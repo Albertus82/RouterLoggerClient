@@ -50,7 +50,7 @@ public class TrayIcon {
 		this.gui = gui;
 		gui.getShell().addShellListener(new ShellAdapter() {
 			@Override
-			public void shellIconified(ShellEvent e) {
+			public void shellIconified(final ShellEvent se) {
 				if (configuration.getBoolean("gui.minimize.tray", Defaults.GUI_MINIMIZE_TRAY)) {
 					iconify();
 				}
