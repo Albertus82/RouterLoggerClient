@@ -8,6 +8,10 @@ import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Resources;
 import it.albertus.util.Configuration;
 import it.albertus.util.Configured;
+import it.albertus.util.Version;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
@@ -43,11 +47,13 @@ public class RouterLoggerGui extends ApplicationWindow {
 	public interface Defaults {
 		boolean GUI_START_MINIMIZED = false;
 		int GUI_CLIPBOARD_MAX_CHARS = 100000;
+		boolean CONSOLE_SHOW_CONFIGURATION = false;
 	}
 
 	public RouterLoggerGui(final Display display) {
 		super(null);
 		open();
+		printWelcome();
 		mqttClient.init(this);
 		new Thread("MQTT Client Start") {
 			@Override
@@ -65,6 +71,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 			}
 		}
 		mqttClient.disconnect();
+		printGoodbye();
 	}
 
 	@Override
@@ -96,6 +103,21 @@ public class RouterLoggerGui extends ApplicationWindow {
 
 		parent.addListener(SWT.Close, new CloseListener(this));
 		return parent;
+	}
+
+	protected void printWelcome() {
+		final Version version = Version.getInstance();
+		System.out.println(Resources.get("msg.welcome", Resources.get("msg.application.name"), Resources.get("msg.version", version.getNumber(), version.getDate()), Resources.get("msg.website")));
+		System.out.println();
+		System.out.println(Resources.get("msg.startup.date", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
+		if (configuration.getBoolean("console.show.configuration", Defaults.CONSOLE_SHOW_CONFIGURATION)) {
+			System.out.println(Resources.get("msg.settings", configuration));
+		}
+		System.out.println();
+	}
+
+	protected void printGoodbye() {
+		System.out.println(Resources.get("msg.bye"));
 	}
 
 	@Override
