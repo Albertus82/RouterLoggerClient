@@ -1,4 +1,4 @@
-package it.albertus.router.client.mqtt;
+package it.albertus.router.client.mqtt.listener;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;

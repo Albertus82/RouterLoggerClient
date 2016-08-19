@@ -35,13 +35,15 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class DataTable {
 
+	public static final String TIMESTAMP_PATTERN = "dd/MM/yyyy HH:mm:ss.SSS";
+
 	private static final char SAMPLE_CHAR = '9';
 	private static final char FIELD_SEPARATOR = '\t';
 
 	private static final String CFG_KEY_GUI_TABLE_COLUMNS_PADDING_RIGHT = "gui.table.columns.padding.right";
 	private static final String CFG_KEY_GUI_TABLE_COLUMNS_PACK = "gui.table.columns.pack";
 
-	private static final DateFormat dateFormatTable = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+	private static final DateFormat dateFormatTable = new SimpleDateFormat(TIMESTAMP_PATTERN);
 
 	public interface Defaults {
 		int MAX_ITEMS = 2000;
@@ -76,7 +78,8 @@ public class DataTable {
 	private final MenuItem clearMenuItem;
 
 	private final Color importantKeyBackgroundColor;
-	private final Color thresholdReachedForegroudColor;
+
+	public final Color thresholdReachedForegroudColor;
 
 	/**
 	 * Solo i <tt>MenuItem</tt> che fanno parte di una barra dei men&ugrave; con

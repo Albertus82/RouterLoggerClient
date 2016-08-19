@@ -1,5 +1,7 @@
 package it.albertus.router.client.mqtt;
 
+import it.albertus.router.client.mqtt.listener.MqttCallback;
+
 import java.io.UnsupportedEncodingException;
 
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;

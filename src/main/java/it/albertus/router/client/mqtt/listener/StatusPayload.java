@@ -1,4 +1,4 @@
-package it.albertus.router.client.mqtt;
+package it.albertus.router.client.mqtt.listener;
 
 import java.io.Serializable;
 import java.util.Date;

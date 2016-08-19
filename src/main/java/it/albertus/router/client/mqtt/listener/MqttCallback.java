@@ -1,4 +1,4 @@
-package it.albertus.router.client.mqtt;
+package it.albertus.router.client.mqtt.listener;
 
 import it.albertus.router.client.resources.Resources;
 

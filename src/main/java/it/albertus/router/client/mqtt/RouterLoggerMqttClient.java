@@ -5,6 +5,9 @@ import it.albertus.router.client.Logger;
 import it.albertus.router.client.Logger.Destination;
 import it.albertus.router.client.RouterLoggerConfiguration;
 import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.mqtt.listener.DataMqttMessageListener;
+import it.albertus.router.client.mqtt.listener.StatusMqttMessageListener;
+import it.albertus.router.client.mqtt.listener.ThresholdsMqttMessageListener;
 import it.albertus.router.client.resources.Resources;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
@@ -82,7 +85,7 @@ public class RouterLoggerMqttClient extends BaseMqttClient {
 	private RouterLoggerGui gui;
 	private IMqttMessageListener dataMessageListener;
 	private IMqttMessageListener statusMessageListener;
-	private IMqttMessageListener thresholdsMessageListener = new ThresholdsMqttMessageListener();
+	private IMqttMessageListener thresholdsMessageListener;
 
 	private RouterLoggerMqttClient() {}
 
@@ -90,6 +93,7 @@ public class RouterLoggerMqttClient extends BaseMqttClient {
 		this.gui = gui;
 		dataMessageListener = new DataMqttMessageListener(gui.getDataTable());
 		statusMessageListener = new StatusMqttMessageListener(gui);
+		thresholdsMessageListener = new ThresholdsMqttMessageListener(gui);
 	}
 
 	@Override
