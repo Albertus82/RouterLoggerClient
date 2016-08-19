@@ -59,21 +59,26 @@ public class TrayIcon {
 	}
 
 	private Image getTrayIcon(final RouterLoggerStatus status) {
-		switch (status) {
-		case STARTING:
-		case CONNECTING:
-		case DISCONNECTED:
-			return Images.TRAY_ICON_INACTIVE;
-		case RECONNECTING:
-			return Images.TRAY_ICON_INACTIVE_CLOCK;
-		case INFO:
-		case WARNING:
-			return Images.TRAY_ICON_ACTIVE_WARNING;
-		case AUTHENTICATING:
-			return Images.TRAY_ICON_ACTIVE_LOCK;
-		case ERROR:
-			return Images.TRAY_ICON_INACTIVE_ERROR;
-		default:
+		if (status != null) {
+			switch (status) {
+			case STARTING:
+			case CONNECTING:
+			case DISCONNECTED:
+				return Images.TRAY_ICON_INACTIVE;
+			case RECONNECTING:
+				return Images.TRAY_ICON_INACTIVE_CLOCK;
+			case INFO:
+			case WARNING:
+				return Images.TRAY_ICON_ACTIVE_WARNING;
+			case AUTHENTICATING:
+				return Images.TRAY_ICON_ACTIVE_LOCK;
+			case ERROR:
+				return Images.TRAY_ICON_INACTIVE_ERROR;
+			default:
+				return Images.TRAY_ICON_ACTIVE;
+			}
+		}
+		else {
 			return Images.TRAY_ICON_ACTIVE;
 		}
 	}

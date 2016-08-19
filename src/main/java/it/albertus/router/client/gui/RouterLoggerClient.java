@@ -39,7 +39,7 @@ public class RouterLoggerClient extends ApplicationWindow implements RouterLogge
 	private DataTable dataTable;
 	private TextConsole textConsole;
 
-	private RouterLoggerStatus currentStatus = RouterLoggerStatus.STARTING;
+	private RouterLoggerStatus currentStatus;
 	private RouterLoggerStatus previousStatus;
 
 	public interface Defaults {
