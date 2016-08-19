@@ -1,8 +1,8 @@
 package it.albertus.router.client.mqtt.listener;
 
 import it.albertus.router.client.Threshold;
-import it.albertus.router.client.gui.DataTable;
 import it.albertus.router.client.gui.RouterData;
+import it.albertus.router.client.gui.RouterLoggerGui;
 import it.albertus.router.client.mqtt.BaseMqttClient;
 
 import java.io.UnsupportedEncodingException;
@@ -16,18 +16,19 @@ import com.google.gson.JsonSyntaxException;
 
 public class DataMqttMessageListener implements IMqttMessageListener {
 
-	private final DataTable dataTable;
+	private final RouterLoggerGui gui;
 
 	private int iteration = 0;
 
-	public DataMqttMessageListener(DataTable dataTable) {
-		this.dataTable = dataTable;
+	public DataMqttMessageListener(final RouterLoggerGui gui) {
+		this.gui = gui;
 	}
 
 	@Override
-	public void messageArrived(String topic, MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
+	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
 		RouterData data = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), RouterData.class);
-		dataTable.addRow(++iteration, data, Collections.<Threshold, String> emptyMap());
+		gui.getDataTable().addRow(++iteration, data, Collections.<Threshold, String> emptyMap());
+		gui.getTrayIcon().updateTrayItem(gui.getCurrentStatus(), data);
 	}
 
 }
