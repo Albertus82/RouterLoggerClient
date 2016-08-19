@@ -1,5 +1,6 @@
 package it.albertus.router.client.mqtt;
 
+import it.albertus.router.client.Logger;
 import it.albertus.router.client.mqtt.listener.MqttCallback;
 
 import java.io.UnsupportedEncodingException;
@@ -32,7 +33,7 @@ public abstract class BaseMqttClient {
 				client.connect(options);
 			}
 			catch (final Exception e) {
-				e.printStackTrace();
+				Logger.getInstance().log(e);
 			}
 		}
 	}
@@ -44,7 +45,7 @@ public abstract class BaseMqttClient {
 			doDisconnect();
 		}
 		catch (final Exception e) {
-			e.printStackTrace();
+			Logger.getInstance().log(e);
 		}
 	}
 
@@ -77,7 +78,7 @@ public abstract class BaseMqttClient {
 					client.disconnect();
 				}
 				catch (final Exception e) {
-					e.printStackTrace();
+					Logger.getInstance().log(e);
 					client.disconnectForcibly();
 				}
 			}

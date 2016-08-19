@@ -2,7 +2,6 @@ package it.albertus.router.client.mqtt;
 
 import it.albertus.jface.preference.field.UriListEditor;
 import it.albertus.router.client.Logger;
-import it.albertus.router.client.Logger.Destination;
 import it.albertus.router.client.RouterLoggerConfiguration;
 import it.albertus.router.client.gui.RouterLoggerGui;
 import it.albertus.router.client.mqtt.listener.DataMqttMessageListener;
@@ -138,9 +137,6 @@ public class RouterLoggerMqttClient extends BaseMqttClient {
 			}
 
 			doConnect(clientId, options, persistence);
-			if (Logger.getInstance().isDebugEnabled()) {
-				System.out.println(options.toString().trim());
-			}
 		}
 		catch (final Exception e) {
 			Logger.getInstance().log(e);
@@ -149,14 +145,13 @@ public class RouterLoggerMqttClient extends BaseMqttClient {
 
 	@Override
 	public void disconnect() {
-		final Logger logger = Logger.getInstance();
 		try {
 			if (doDisconnect()) {
-				logger.log(Resources.get("msg.mqtt.disconnected"), Destination.CONSOLE);
+				Logger.getInstance().log(Resources.get("msg.mqtt.disconnected"));
 			}
 		}
 		catch (final Exception e) {
-			logger.log(e, Destination.CONSOLE, Destination.FILE);
+			Logger.getInstance().log(e);
 		}
 	}
 

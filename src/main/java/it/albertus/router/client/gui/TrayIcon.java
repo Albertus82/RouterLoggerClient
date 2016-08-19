@@ -1,5 +1,6 @@
 package it.albertus.router.client.gui;
 
+import it.albertus.router.client.Logger;
 import it.albertus.router.client.RouterLoggerConfiguration;
 import it.albertus.router.client.RouterLoggerStatus;
 import it.albertus.router.client.Threshold;
@@ -119,7 +120,7 @@ public class TrayIcon {
 				}
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				Logger.getInstance().log(e);
 			}
 		}
 
@@ -130,7 +131,7 @@ public class TrayIcon {
 			gui.getShell().setMinimized(false);
 		}
 		else {
-			System.out.println("Tray not available.");
+			Logger.getInstance().log("Tray not available.");
 		}
 	}
 

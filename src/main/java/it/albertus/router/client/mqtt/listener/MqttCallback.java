@@ -1,5 +1,6 @@
 package it.albertus.router.client.mqtt.listener;
 
+import it.albertus.router.client.Logger;
 import it.albertus.router.client.resources.Resources;
 
 public class MqttCallback extends MqttCallbackAdapter {
@@ -12,12 +13,12 @@ public class MqttCallback extends MqttCallbackAdapter {
 
 	@Override
 	public void connectionLost(final Throwable cause) {
-		cause.printStackTrace();
+		Logger.getInstance().log(cause);
 	}
 
 	@Override
 	public void connectComplete(final boolean reconnect, final String serverURI) {
-		System.out.println(Resources.get("msg.mqtt.connected", serverURI, clientId));
+		Logger.getInstance().log(Resources.get("msg.mqtt.connected", serverURI, clientId));
 	}
 
 }

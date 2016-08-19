@@ -67,6 +67,7 @@ public class RouterLoggerClient extends ApplicationWindow implements RouterLogge
 				Display.getCurrent().sleep();
 			}
 		}
+		mqttClient.disconnect();
 	}
 
 	@Override

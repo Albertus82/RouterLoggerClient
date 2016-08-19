@@ -1,10 +1,12 @@
 package it.albertus.router.client.mqtt.listener;
 
 import it.albertus.jface.SwtThreadExecutor;
+import it.albertus.router.client.Logger;
 import it.albertus.router.client.Threshold;
 import it.albertus.router.client.Threshold.Type;
 import it.albertus.router.client.gui.DataTable;
 import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.TrayIcon;
 import it.albertus.router.client.mqtt.BaseMqttClient;
 import it.albertus.router.client.resources.Resources;
 
@@ -90,9 +92,10 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 				}
 			}
 			if (print) {
-				System.out.println(Resources.get("msg.thresholds.reached", message));
-				if (gui.getTrayIcon() != null) {
-					gui.getTrayIcon().showBalloonToolTip(thresholdsReached);
+				Logger.getInstance().log(Resources.get("msg.thresholds.reached", message));
+				final TrayIcon trayIcon = gui.getTrayIcon();
+				if (trayIcon != null) {
+					trayIcon.showBalloonToolTip(thresholdsReached);
 				}
 			}
 		}
