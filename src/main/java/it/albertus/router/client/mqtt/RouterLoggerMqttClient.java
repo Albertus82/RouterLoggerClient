@@ -49,7 +49,7 @@ public class RouterLoggerMqttClient extends BaseMqttClient {
 
 	public interface Defaults {
 		boolean ENABLED = false;
-		String CLIENT_ID = "RouterLogger";
+		String CLIENT_ID = "RouterLoggerClient";
 		int KEEP_ALIVE_INTERVAL = MqttConnectOptions.KEEP_ALIVE_INTERVAL_DEFAULT;
 		int CONNECTION_TIMEOUT = MqttConnectOptions.CONNECTION_TIMEOUT_DEFAULT;
 		int MAX_INFLIGHT = MqttConnectOptions.MAX_INFLIGHT_DEFAULT;
