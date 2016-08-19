@@ -65,18 +65,20 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 				}
 			}.start();
 		}
-		
-		Map<Threshold, String> m = new LinkedHashMap<Threshold, String>();
-		for (Threshold t : getThresholds(tp)) {
-			for (ThresholdItem ti : tp.getThresholds()) {
-				if (t.getName().equals(ti.getName())) {
-					m.put(t, ti.getDetected());
+
+		if (!message.isRetained()) {
+			Map<Threshold, String> m = new LinkedHashMap<Threshold, String>();
+			for (Threshold t : getThresholds(tp)) {
+				for (ThresholdItem ti : tp.getThresholds()) {
+					if (t.getName().equals(ti.getName())) {
+						m.put(t, ti.getDetected());
+					}
 				}
 			}
+			printThresholdsReached(m);
 		}
-		printThresholdsReached(m);
 	}
-	
+
 	private void printThresholdsReached(final Map<Threshold, String> thresholdsReached) {
 		if (thresholdsReached != null && !thresholdsReached.isEmpty()) {
 			final Map<String, String> message = new TreeMap<String, String>();

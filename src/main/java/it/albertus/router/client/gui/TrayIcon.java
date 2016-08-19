@@ -141,13 +141,13 @@ public class TrayIcon {
 	public void updateTrayItem(final RouterLoggerStatus status, final RouterData info) {
 		if (trayItem != null && !trayItem.isDisposed()) {
 			final StringBuilder sb = new StringBuilder(getBaseToolTipText(status));
-			//			if (!configuration.getGuiImportantKeys().isEmpty() && info != null && info.getData() != null && !info.getData().isEmpty()) {
-			//				for (final String key : configuration.getGuiImportantKeys()) {
-			//					if (info.getData().containsKey(key)) {
-			//						sb.append(NewLine.SYSTEM_LINE_SEPARATOR).append(key).append(": ").append(info.getData().get(key));
-			//					}
-			//				}
-			//			}
+			if (!configuration.getGuiImportantKeys().isEmpty() && info != null && info.getData() != null && !info.getData().isEmpty()) {
+				for (final String key : configuration.getGuiImportantKeys()) {
+					if (info.getData().containsKey(key)) {
+						sb.append(NewLine.SYSTEM_LINE_SEPARATOR).append(key).append(": ").append(info.getData().get(key));
+					}
+				}
+			}
 			final String updatedToolTipText = sb.toString();
 			if (!updatedToolTipText.equals(toolTipText) || (status != null && !getTrayIcon(status).equals(trayIcon))) {
 				try {
