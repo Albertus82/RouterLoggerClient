@@ -1,14 +1,14 @@
 package it.albertus.router.client.mqtt.listener;
 
 import it.albertus.jface.SwtThreadExecutor;
-import it.albertus.router.client.Logger;
-import it.albertus.router.client.Threshold;
-import it.albertus.router.client.Threshold.Type;
+import it.albertus.router.client.engine.Threshold;
+import it.albertus.router.client.engine.Threshold.Type;
 import it.albertus.router.client.gui.DataTable;
 import it.albertus.router.client.gui.RouterLoggerGui;
 import it.albertus.router.client.gui.TrayIcon;
 import it.albertus.router.client.mqtt.BaseMqttClient;
 import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.util.Logger;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;

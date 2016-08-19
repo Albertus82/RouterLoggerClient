@@ -1,6 +1,6 @@
 package it.albertus.router.client.gui;
 
-import it.albertus.router.client.RouterLoggerConfiguration;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.resources.Resources;
 
 import org.eclipse.swt.SWT;
@@ -26,7 +26,7 @@ public class CloseMessageBox {
 	}
 
 	public static boolean show() {
-		return RouterLoggerConfiguration.getInstance().getBoolean("gui.confirm.close", Defaults.GUI_CONFIRM_CLOSE);
+		return RouterLoggerClientConfiguration.getInstance().getBoolean("gui.confirm.close", Defaults.GUI_CONFIRM_CLOSE);
 	}
 
 }

@@ -1,13 +1,13 @@
 package it.albertus.router.client.mqtt;
 
 import it.albertus.jface.preference.field.UriListEditor;
-import it.albertus.router.client.Logger;
-import it.albertus.router.client.RouterLoggerConfiguration;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.gui.RouterLoggerGui;
 import it.albertus.router.client.mqtt.listener.DataMqttMessageListener;
 import it.albertus.router.client.mqtt.listener.StatusMqttMessageListener;
 import it.albertus.router.client.mqtt.listener.ThresholdsMqttMessageListener;
 import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
 
@@ -18,7 +18,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 
 /** @Singleton */
-public class RouterLoggerMqttClient extends BaseMqttClient {
+public class RouterLoggerClientMqttClient extends BaseMqttClient {
 
 	private static final String CFG_KEY_MQTT_CLEAN_SESSION = "mqtt.clean.session";
 	private static final String CFG_KEY_MQTT_MAX_INFLIGHT = "mqtt.max.inflight";
@@ -72,21 +72,21 @@ public class RouterLoggerMqttClient extends BaseMqttClient {
 	}
 
 	private static class Singleton {
-		private static final RouterLoggerMqttClient instance = new RouterLoggerMqttClient();
+		private static final RouterLoggerClientMqttClient instance = new RouterLoggerClientMqttClient();
 	}
 
-	public static RouterLoggerMqttClient getInstance() {
+	public static RouterLoggerClientMqttClient getInstance() {
 		return Singleton.instance;
 	}
 
-	private final Configuration configuration = RouterLoggerConfiguration.getInstance();
+	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 
 	private RouterLoggerGui gui;
 	private IMqttMessageListener dataMessageListener;
 	private IMqttMessageListener statusMessageListener;
 	private IMqttMessageListener thresholdsMessageListener;
 
-	private RouterLoggerMqttClient() {}
+	private RouterLoggerClientMqttClient() {}
 
 	public void init(final RouterLoggerGui gui) {
 		this.gui = gui;

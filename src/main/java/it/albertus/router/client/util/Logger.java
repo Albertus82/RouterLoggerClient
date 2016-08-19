@@ -1,5 +1,6 @@
-package it.albertus.router.client;
+package it.albertus.router.client.util;
 
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.util.Configuration;
 
 import java.io.PrintWriter;
@@ -24,7 +25,7 @@ public class Logger {
 	private Logger() {
 		Configuration configuration;
 		try {
-			configuration = RouterLoggerConfiguration.getInstance();
+			configuration = RouterLoggerClientConfiguration.getInstance();
 		}
 		catch (final Throwable t) {
 			t.printStackTrace();

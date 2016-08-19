@@ -1,6 +1,6 @@
 package it.albertus.router.client.mqtt.listener;
 
-import it.albertus.router.client.RouterLoggerStatus;
+import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.gui.RouterLoggerGui;
 import it.albertus.router.client.mqtt.BaseMqttClient;
 

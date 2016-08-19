@@ -1,6 +1,6 @@
 package it.albertus.router.client.mqtt.listener;
 
-import it.albertus.router.client.Threshold;
+import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.gui.RouterData;
 import it.albertus.router.client.gui.RouterLoggerGui;
 import it.albertus.router.client.mqtt.BaseMqttClient;

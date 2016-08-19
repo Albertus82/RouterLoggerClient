@@ -1,10 +1,10 @@
 package it.albertus.router.client.gui;
 
 import it.albertus.jface.TextConsole;
-import it.albertus.router.client.RouterLoggerConfiguration;
-import it.albertus.router.client.RouterLoggerStatus;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.gui.listener.CloseListener;
-import it.albertus.router.client.mqtt.RouterLoggerMqttClient;
+import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Resources;
 import it.albertus.util.Configuration;
 import it.albertus.util.Configured;
@@ -30,8 +30,8 @@ public class RouterLoggerClient extends ApplicationWindow implements RouterLogge
 		display.dispose();
 	}
 
-	private final Configuration configuration = RouterLoggerConfiguration.getInstance();
-	private final RouterLoggerMqttClient mqttClient = RouterLoggerMqttClient.getInstance();
+	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
+	private final RouterLoggerClientMqttClient mqttClient = RouterLoggerClientMqttClient.getInstance();
 
 	private TrayIcon trayIcon;
 	private MenuBar menuBar;

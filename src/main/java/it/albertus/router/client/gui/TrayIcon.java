@@ -1,12 +1,12 @@
 package it.albertus.router.client.gui;
 
-import it.albertus.router.client.Logger;
-import it.albertus.router.client.RouterLoggerConfiguration;
-import it.albertus.router.client.RouterLoggerStatus;
-import it.albertus.router.client.Threshold;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.RouterLoggerStatus;
+import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.gui.listener.RestoreShellListener;
 import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.util.Logger;
 import it.albertus.util.NewLine;
 
 import java.util.Map;
@@ -31,7 +31,7 @@ public class TrayIcon {
 		boolean GUI_TRAY_TOOLTIP = true;
 	}
 
-	private final RouterLoggerConfiguration configuration = RouterLoggerConfiguration.getInstance();
+	private final RouterLoggerClientConfiguration configuration = RouterLoggerClientConfiguration.getInstance();
 	private final RouterLoggerGui gui;
 
 	private Tray tray;

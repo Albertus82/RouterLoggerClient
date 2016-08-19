@@ -1,4 +1,4 @@
-package it.albertus.router.client;
+package it.albertus.router.client.engine;
 
 import it.albertus.jface.JFaceResources;
 import it.albertus.router.client.resources.Resources;
@@ -9,17 +9,17 @@ import it.albertus.util.StringUtils;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class RouterLoggerConfiguration extends Configuration {
+public class RouterLoggerClientConfiguration extends Configuration {
 
 	public interface Defaults {
 		String GUI_IMPORTANT_KEYS_SEPARATOR = ",";
 	}
 
 	private static class Singleton {
-		private static final RouterLoggerConfiguration instance = new RouterLoggerConfiguration();
+		private static final RouterLoggerClientConfiguration instance = new RouterLoggerClientConfiguration();
 	}
 
-	public static RouterLoggerConfiguration getInstance() {
+	public static RouterLoggerClientConfiguration getInstance() {
 		return Singleton.instance;
 	}
 
@@ -31,7 +31,7 @@ public class RouterLoggerConfiguration extends Configuration {
 		return guiImportantKeys;
 	}
 
-	private RouterLoggerConfiguration() {
+	private RouterLoggerClientConfiguration() {
 		/* Caricamento della configurazione... */
 		super(FILE_NAME);
 		init();

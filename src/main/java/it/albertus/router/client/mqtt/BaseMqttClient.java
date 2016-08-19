@@ -1,7 +1,7 @@
 package it.albertus.router.client.mqtt;
 
-import it.albertus.router.client.Logger;
 import it.albertus.router.client.mqtt.listener.MqttCallback;
+import it.albertus.router.client.util.Logger;
 
 import java.io.UnsupportedEncodingException;
 

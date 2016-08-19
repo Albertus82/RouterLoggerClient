@@ -1,7 +1,7 @@
 package it.albertus.router.client.gui;
 
 import it.albertus.jface.TextConsole;
-import it.albertus.router.client.RouterLoggerStatus;
+import it.albertus.router.client.engine.RouterLoggerStatus;
 
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.widgets.Shell;

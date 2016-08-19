@@ -1,6 +1,6 @@
 package it.albertus.router.client.mqtt.listener;
 
-import it.albertus.router.client.Threshold;
+import it.albertus.router.client.engine.Threshold;
 
 import java.io.Serializable;
 import java.util.Date;

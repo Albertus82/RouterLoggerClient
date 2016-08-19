@@ -1,7 +1,7 @@
 package it.albertus.router.client.mqtt.listener;
 
-import it.albertus.router.client.Logger;
 import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.util.Logger;
 
 public class MqttCallback extends MqttCallbackAdapter {
 
