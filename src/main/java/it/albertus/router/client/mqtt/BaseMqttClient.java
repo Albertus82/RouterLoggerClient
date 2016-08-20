@@ -3,8 +3,6 @@ package it.albertus.router.client.mqtt;
 import it.albertus.router.client.mqtt.listener.MqttCallback;
 import it.albertus.router.client.util.Logger;
 
-import java.io.UnsupportedEncodingException;
-
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
@@ -91,24 +89,8 @@ public abstract class BaseMqttClient {
 		}
 	}
 
-	protected byte[] createPayload(final Object object) {
-		return createPayload(object != null ? object.toString() : null);
-	}
-
-	protected byte[] createPayload(final String string) {
-		byte[] payload;
-		if (string != null) {
-			try {
-				payload = string.getBytes(PREFERRED_CHARSET);
-			}
-			catch (final UnsupportedEncodingException uee) {
-				payload = string.getBytes();
-			}
-		}
-		else {
-			payload = "".getBytes();
-		}
-		return payload;
+	public boolean isConnected() {
+		return client != null && client.isConnected();
 	}
 
 }

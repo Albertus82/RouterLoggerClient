@@ -55,14 +55,32 @@ public class RouterLoggerGui extends ApplicationWindow {
 		open();
 		printWelcome();
 		mqttClient.init(this);
-		new Thread("MQTT Client Start") {
+
+		final Thread starter = new Thread("MQTT Client Start") {
 			@Override
 			public void run() {
-				mqttClient.subscribeStatus();
-				mqttClient.subscribeData();
-				mqttClient.subscribeThresholds();
-			};
-		}.start();
+				while (true) {
+					mqttClient.subscribeStatus();
+					if (!mqttClient.isConnected()) {
+						mqttClient.disconnect();
+						continue;
+					}
+					mqttClient.subscribeData();
+					if (!mqttClient.isConnected()) {
+						mqttClient.disconnect();
+						continue;
+					}
+					mqttClient.subscribeThresholds();
+					if (!mqttClient.isConnected()) {
+						mqttClient.disconnect();
+						continue;
+					}
+					break;
+				}
+			}
+		};
+		starter.setDaemon(true);
+		starter.start();
 
 		final Shell shell = getShell();
 		while (!shell.isDisposed()) {
