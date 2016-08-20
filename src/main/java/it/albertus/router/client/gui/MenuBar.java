@@ -10,6 +10,7 @@ import it.albertus.router.client.gui.listener.DeleteDataTableSelectionListener;
 import it.albertus.router.client.gui.listener.EditClearSubMenuArmListener;
 import it.albertus.router.client.gui.listener.EditMenuBarArmListener;
 import it.albertus.router.client.gui.listener.PreferencesSelectionListener;
+import it.albertus.router.client.gui.listener.RestartSelectionListener;
 import it.albertus.router.client.gui.listener.SelectAllMenuBarSelectionListener;
 import it.albertus.router.client.resources.Resources;
 
@@ -30,7 +31,7 @@ public class MenuBar {
 
 	private final Menu fileMenu;
 	private final MenuItem fileMenuHeader;
-	//	private final MenuItem fileRestartItem;
+	private final MenuItem fileRestartItem;
 	private final MenuItem fileExitItem;
 
 	private final Menu editMenu;
@@ -66,7 +67,11 @@ public class MenuBar {
 		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
 		fileMenuHeader.setMenu(fileMenu);
 
-		//		new MenuItem(fileMenu, SWT.SEPARATOR);
+		fileRestartItem = new MenuItem(fileMenu, SWT.PUSH);
+		fileRestartItem.setText(Resources.get("lbl.menu.item.restart"));
+		fileRestartItem.addSelectionListener(new RestartSelectionListener(gui));
+
+		new MenuItem(fileMenu, SWT.SEPARATOR);
 
 		fileExitItem = new MenuItem(fileMenu, SWT.PUSH);
 		fileExitItem.setText(Resources.get("lbl.menu.item.exit"));
@@ -155,7 +160,7 @@ public class MenuBar {
 
 	public void updateTexts() {
 		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
-		//		fileRestartItem.setText(Resources.get("lbl.menu.item.restart"));
+		fileRestartItem.setText(Resources.get("lbl.menu.item.restart"));
 		fileExitItem.setText(Resources.get("lbl.menu.item.exit"));
 		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
 		editCopyMenuItem.setText(Resources.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
@@ -185,9 +190,9 @@ public class MenuBar {
 		return fileMenuHeader;
 	}
 
-	//	public MenuItem getFileRestartItem() {
-	//		return fileRestartItem;
-	//	}
+	public MenuItem getFileRestartItem() {
+		return fileRestartItem;
+	}
 
 	public MenuItem getFileExitItem() {
 		return fileExitItem;

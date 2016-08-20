@@ -90,6 +90,10 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 
 	public void init(final RouterLoggerGui gui) {
 		this.gui = gui;
+		createListeners(gui);
+	}
+
+	protected void createListeners(final RouterLoggerGui gui) {
 		dataMessageListener = new DataMqttMessageListener(gui);
 		statusMessageListener = new StatusMqttMessageListener(gui);
 		thresholdsMessageListener = new ThresholdsMqttMessageListener(gui);
@@ -97,9 +101,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 
 	@Override
 	protected void connect() {
-		dataMessageListener = new DataMqttMessageListener(gui);
-		statusMessageListener = new StatusMqttMessageListener(gui);
-		thresholdsMessageListener = new ThresholdsMqttMessageListener(gui);
+		createListeners(gui);
 		try {
 			final MqttConnectOptions options = new MqttConnectOptions();
 			final String[] serverURIs = configuration.getString(CFG_KEY_MQTT_SERVER_URI, "").split(UriListEditor.URI_SPLIT_REGEX);

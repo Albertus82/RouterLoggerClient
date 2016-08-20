@@ -89,8 +89,8 @@ public abstract class BaseMqttClient {
 		}
 	}
 
-	public boolean isConnected() {
-		return client != null && client.isConnected();
+	public MqttClient getClient() {
+		return client;
 	}
 
 }

@@ -44,6 +44,8 @@ public class RouterLoggerGui extends ApplicationWindow {
 	private RouterLoggerStatus currentStatus;
 	private RouterLoggerStatus previousStatus;
 
+	private volatile Thread mqttConnectionThread;
+
 	public interface Defaults {
 		boolean GUI_START_MINIMIZED = false;
 		int GUI_CLIPBOARD_MAX_CHARS = 100000;
@@ -56,31 +58,23 @@ public class RouterLoggerGui extends ApplicationWindow {
 		printWelcome();
 		mqttClient.init(this);
 
-		final Thread starter = new Thread("MQTT Client Start") {
+		mqttConnectionThread = new Thread("mqttConnectionThread") {
 			@Override
 			public void run() {
 				while (true) {
 					mqttClient.subscribeStatus();
-					if (!mqttClient.isConnected()) {
+					if (!mqttClient.getClient().isConnected()) {
 						mqttClient.disconnect();
-						continue;
+						continue; // Retry
 					}
 					mqttClient.subscribeData();
-					if (!mqttClient.isConnected()) {
-						mqttClient.disconnect();
-						continue;
-					}
 					mqttClient.subscribeThresholds();
-					if (!mqttClient.isConnected()) {
-						mqttClient.disconnect();
-						continue;
-					}
 					break;
 				}
 			}
 		};
-		starter.setDaemon(true);
-		starter.start();
+		mqttConnectionThread.setDaemon(true);
+		mqttConnectionThread.start();
 
 		final Shell shell = getShell();
 		while (!shell.isDisposed()) {
