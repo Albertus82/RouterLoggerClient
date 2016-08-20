@@ -197,4 +197,8 @@ public class RouterLoggerGui extends ApplicationWindow {
 		}
 	}
 
+	public void restart() {
+		System.out.println("TODO"); // TODO
+	}
+
 }

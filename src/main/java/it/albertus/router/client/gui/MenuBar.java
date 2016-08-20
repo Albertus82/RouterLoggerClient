@@ -9,6 +9,7 @@ import it.albertus.router.client.gui.listener.CopyMenuBarSelectionListener;
 import it.albertus.router.client.gui.listener.DeleteDataTableSelectionListener;
 import it.albertus.router.client.gui.listener.EditClearSubMenuArmListener;
 import it.albertus.router.client.gui.listener.EditMenuBarArmListener;
+import it.albertus.router.client.gui.listener.PreferencesSelectionListener;
 import it.albertus.router.client.gui.listener.SelectAllMenuBarSelectionListener;
 import it.albertus.router.client.resources.Resources;
 
@@ -29,7 +30,7 @@ public class MenuBar {
 
 	private final Menu fileMenu;
 	private final MenuItem fileMenuHeader;
-//	private final MenuItem fileRestartItem;
+	//	private final MenuItem fileRestartItem;
 	private final MenuItem fileExitItem;
 
 	private final Menu editMenu;
@@ -43,14 +44,14 @@ public class MenuBar {
 	private final MenuItem editClearDataTableMenuItem;
 	private final MenuItem editClearConsoleMenuItem;
 
-//	private final Menu connectionMenu;
-//	private final MenuItem connectionMenuHeader;
-//	private final MenuItem connectionConnectItem;
-//	private final MenuItem connectionDisconnectItem;
+	//	private final Menu connectionMenu;
+	//	private final MenuItem connectionMenuHeader;
+	//	private final MenuItem connectionConnectItem;
+	//	private final MenuItem connectionDisconnectItem;
 
-//	private final Menu toolsMenu;
-//	private final MenuItem toolsMenuHeader;
-//	private final MenuItem toolsPreferencesMenuItem;
+	private final Menu toolsMenu;
+	private final MenuItem toolsMenuHeader;
+	private final MenuItem toolsPreferencesMenuItem;
 
 	private final Menu helpMenu;
 	private final MenuItem helpMenuHeader;
@@ -65,7 +66,7 @@ public class MenuBar {
 		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
 		fileMenuHeader.setMenu(fileMenu);
 
-//		new MenuItem(fileMenu, SWT.SEPARATOR);
+		//		new MenuItem(fileMenu, SWT.SEPARATOR);
 
 		fileExitItem = new MenuItem(fileMenu, SWT.PUSH);
 		fileExitItem.setText(Resources.get("lbl.menu.item.exit"));
@@ -113,31 +114,31 @@ public class MenuBar {
 		editClearConsoleMenuItem.addSelectionListener(new ClearConsoleSelectionListener(gui));
 
 		/* Connection */
-//		connectionMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-//		connectionMenuHeader = new MenuItem(bar, SWT.CASCADE);
-//		connectionMenuHeader.setText(Resources.get("lbl.menu.header.connection"));
-//		connectionMenuHeader.setMenu(connectionMenu);
-//		connectionMenuHeader.addArmListener(new ConnectionMenuBarArmListener(gui));
+		//		connectionMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		//		connectionMenuHeader = new MenuItem(bar, SWT.CASCADE);
+		//		connectionMenuHeader.setText(Resources.get("lbl.menu.header.connection"));
+		//		connectionMenuHeader.setMenu(connectionMenu);
+		//		connectionMenuHeader.addArmListener(new ConnectionMenuBarArmListener(gui));
 
-//		connectionConnectItem = new MenuItem(connectionMenu, SWT.PUSH);
-//		connectionConnectItem.setText(Resources.get("lbl.menu.item.connect"));
-//		connectionConnectItem.addSelectionListener(new ConnectSelectionListener(gui));
+		//		connectionConnectItem = new MenuItem(connectionMenu, SWT.PUSH);
+		//		connectionConnectItem.setText(Resources.get("lbl.menu.item.connect"));
+		//		connectionConnectItem.addSelectionListener(new ConnectSelectionListener(gui));
 
-//		new MenuItem(connectionMenu, SWT.SEPARATOR);
+		//		new MenuItem(connectionMenu, SWT.SEPARATOR);
 
-//		connectionDisconnectItem = new MenuItem(connectionMenu, SWT.PUSH);
-//		connectionDisconnectItem.setText(Resources.get("lbl.menu.item.disconnect"));
-//		connectionDisconnectItem.addSelectionListener(new DisconnectSelectionListener(gui));
+		//		connectionDisconnectItem = new MenuItem(connectionMenu, SWT.PUSH);
+		//		connectionDisconnectItem.setText(Resources.get("lbl.menu.item.disconnect"));
+		//		connectionDisconnectItem.addSelectionListener(new DisconnectSelectionListener(gui));
 
 		/* Tools */
-//		toolsMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-//		toolsMenuHeader = new MenuItem(bar, SWT.CASCADE);
-//		toolsMenuHeader.setText(Resources.get("lbl.menu.header.tools"));
-//		toolsMenuHeader.setMenu(toolsMenu);
+		toolsMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		toolsMenuHeader = new MenuItem(bar, SWT.CASCADE);
+		toolsMenuHeader.setText(Resources.get("lbl.menu.header.tools"));
+		toolsMenuHeader.setMenu(toolsMenu);
 
-//		toolsPreferencesMenuItem = new MenuItem(toolsMenu, SWT.PUSH);
-//		toolsPreferencesMenuItem.setText(Resources.get("lbl.menu.item.preferences"));
-//		toolsPreferencesMenuItem.addSelectionListener(new PreferencesSelectionListener(gui));
+		toolsPreferencesMenuItem = new MenuItem(toolsMenu, SWT.PUSH);
+		toolsPreferencesMenuItem.setText(Resources.get("lbl.menu.item.preferences"));
+		toolsPreferencesMenuItem.addSelectionListener(new PreferencesSelectionListener(gui));
 
 		/* Help */
 		helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
@@ -154,7 +155,7 @@ public class MenuBar {
 
 	public void updateTexts() {
 		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
-//		fileRestartItem.setText(Resources.get("lbl.menu.item.restart"));
+		//		fileRestartItem.setText(Resources.get("lbl.menu.item.restart"));
 		fileExitItem.setText(Resources.get("lbl.menu.item.exit"));
 		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
 		editCopyMenuItem.setText(Resources.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
@@ -163,11 +164,11 @@ public class MenuBar {
 		editClearSubMenuItem.setText(Resources.get("lbl.menu.item.clear"));
 		editClearDataTableMenuItem.setText(Resources.get("lbl.menu.item.clear.table"));
 		editClearConsoleMenuItem.setText(Resources.get("lbl.menu.item.clear.console"));
-//		connectionMenuHeader.setText(Resources.get("lbl.menu.header.connection"));
-//		connectionConnectItem.setText(Resources.get("lbl.menu.item.connect"));
-//		connectionDisconnectItem.setText(Resources.get("lbl.menu.item.disconnect"));
-//		toolsMenuHeader.setText(Resources.get("lbl.menu.header.tools"));
-//		toolsPreferencesMenuItem.setText(Resources.get("lbl.menu.item.preferences"));
+		//		connectionMenuHeader.setText(Resources.get("lbl.menu.header.connection"));
+		//		connectionConnectItem.setText(Resources.get("lbl.menu.item.connect"));
+		//		connectionDisconnectItem.setText(Resources.get("lbl.menu.item.disconnect"));
+		toolsMenuHeader.setText(Resources.get("lbl.menu.header.tools"));
+		toolsPreferencesMenuItem.setText(Resources.get("lbl.menu.item.preferences"));
 		helpMenuHeader.setText(Resources.get("lbl.menu.header.help"));
 		helpAboutItem.setText(Resources.get("lbl.menu.item.about"));
 	}
@@ -184,9 +185,9 @@ public class MenuBar {
 		return fileMenuHeader;
 	}
 
-//	public MenuItem getFileRestartItem() {
-//		return fileRestartItem;
-//	}
+	//	public MenuItem getFileRestartItem() {
+	//		return fileRestartItem;
+	//	}
 
 	public MenuItem getFileExitItem() {
 		return fileExitItem;
@@ -228,33 +229,33 @@ public class MenuBar {
 		return editClearConsoleMenuItem;
 	}
 
-//	public Menu getConnectionMenu() {
-//		return connectionMenu;
-//	}
-//
-//	public MenuItem getConnectionMenuHeader() {
-//		return connectionMenuHeader;
-//	}
-//
-//	public MenuItem getConnectionConnectItem() {
-//		return connectionConnectItem;
-//	}
-//
-//	public MenuItem getConnectionDisconnectItem() {
-//		return connectionDisconnectItem;
-//	}
+	//	public Menu getConnectionMenu() {
+	//		return connectionMenu;
+	//	}
+	//
+	//	public MenuItem getConnectionMenuHeader() {
+	//		return connectionMenuHeader;
+	//	}
+	//
+	//	public MenuItem getConnectionConnectItem() {
+	//		return connectionConnectItem;
+	//	}
+	//
+	//	public MenuItem getConnectionDisconnectItem() {
+	//		return connectionDisconnectItem;
+	//	}
 
-//	public Menu getToolsMenu() {
-//		return toolsMenu;
-//	}
-//
-//	public MenuItem getToolsMenuHeader() {
-//		return toolsMenuHeader;
-//	}
-//
-//	public MenuItem getToolsPreferencesMenuItem() {
-//		return toolsPreferencesMenuItem;
-//	}
+	public Menu getToolsMenu() {
+		return toolsMenu;
+	}
+
+	public MenuItem getToolsMenuHeader() {
+		return toolsMenuHeader;
+	}
+
+	public MenuItem getToolsPreferencesMenuItem() {
+		return toolsPreferencesMenuItem;
+	}
 
 	public Menu getHelpMenu() {
 		return helpMenu;
