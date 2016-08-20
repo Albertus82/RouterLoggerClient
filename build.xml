@@ -249,12 +249,7 @@
 		</jar>
 	</target>
 
-	<target name="exe" depends="jar">
-		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${dependencies.directory}/launch4j/launch4j.jar:${dependencies.directory}/launch4j/lib/xstream.jar" />
-		<launch4j configFile="${dependencies.directory}/launch4j/conf/win32-win32-x86_64.xml" jar="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.jar" outfile="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.exe" />
-	</target>
-
-	<target name="release" depends="exe">
+	<target name="release" depends="jar">
 		<!-- Mac OS X -->
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64" filemode="755">
