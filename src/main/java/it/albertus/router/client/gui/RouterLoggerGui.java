@@ -52,7 +52,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 		boolean GUI_START_MINIMIZED = false;
 		int GUI_CLIPBOARD_MAX_CHARS = 100000;
 		boolean CONSOLE_SHOW_CONFIGURATION = false;
-		int MQTT_CONNECT_RETRY_INTERVAL_SECS = 2;
+		int MQTT_CONNECT_RETRY_INTERVAL_SECS = 5;
 	}
 
 	private class MqttConnectionThread extends Thread {

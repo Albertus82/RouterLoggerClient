@@ -11,6 +11,8 @@ import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
 
+import java.util.Arrays;
+
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -141,7 +143,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			else {
 				persistence = new MemoryPersistence();
 			}
-
+			Logger.getInstance().log(Resources.get("msg.mqtt.connecting", Arrays.toString(serverURIs), clientId));
 			doConnect(clientId, options, persistence, configuration.getBoolean(CFG_KEY_MQTT_CONNECT_RETRY, Defaults.CONNECT_RETRY));
 		}
 		catch (final Exception e) {
