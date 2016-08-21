@@ -8,6 +8,7 @@ import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Resources;
 import it.albertus.util.Configuration;
 import it.albertus.util.Configured;
+import it.albertus.util.ThreadUtils;
 import it.albertus.util.Version;
 
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -63,8 +65,8 @@ public class RouterLoggerGui extends ApplicationWindow {
 			public void run() {
 				while (true) {
 					mqttClient.subscribeStatus();
-					if (!mqttClient.getClient().isConnected()) {
-						mqttClient.disconnect();
+					if (mqttClient.getClient() == null) {
+						ThreadUtils.sleep(2000); // Wait between retries
 						continue; // Retry
 					}
 					mqttClient.subscribeData();
@@ -95,6 +97,15 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	@Override
+	protected void handleShellCloseEvent() {
+		final Event event = new Event();
+		new CloseListener(this).handleEvent(event);
+		if (event.doit) {
+			super.handleShellCloseEvent();
+		}
+	}
+
+	@Override
 	protected Control createContents(final Composite parent) {
 		trayIcon = new TrayIcon(this);
 
@@ -112,8 +123,6 @@ public class RouterLoggerGui extends ApplicationWindow {
 				return configuration.getInt("gui.console.max.chars");
 			}
 		});
-
-		parent.addListener(SWT.Close, new CloseListener(this));
 		return parent;
 	}
 

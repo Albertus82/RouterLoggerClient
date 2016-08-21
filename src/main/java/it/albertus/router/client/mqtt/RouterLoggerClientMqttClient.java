@@ -29,6 +29,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 	private static final String CFG_KEY_MQTT_CLIENT_ID = "mqtt.client.id";
 	private static final String CFG_KEY_MQTT_SERVER_URI = "mqtt.server.uri";
 	private static final String CFG_KEY_MQTT_AUTOMATIC_RECONNECT = "mqtt.automatic.reconnect";
+	private static final String CFG_KEY_MQTT_CONNECT_RETRY = "mqtt.connect.retry";
 	private static final String CFG_KEY_MQTT_VERSION = "mqtt.version";
 	private static final String CFG_KEY_MQTT_PERSISTENCE_FILE_ENABLED = "mqtt.persistence.file.enabled";
 	private static final String CFG_KEY_MQTT_PERSISTENCE_FILE_CUSTOM = "mqtt.persistence.file.custom";
@@ -54,6 +55,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 		int MAX_INFLIGHT = MqttConnectOptions.MAX_INFLIGHT_DEFAULT;
 		boolean CLEAN_SESSION = MqttConnectOptions.CLEAN_SESSION_DEFAULT;
 		boolean AUTOMATIC_RECONNECT = true;
+		boolean CONNECT_RETRY = true;
 		byte MQTT_VERSION = MqttConnectOptions.MQTT_VERSION_DEFAULT;
 		boolean PERSISTENCE_FILE_ENABLED = false;
 		boolean PERSISTENCE_FILE_CUSTOM = false;
@@ -140,7 +142,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 				persistence = new MemoryPersistence();
 			}
 
-			doConnect(clientId, options, persistence);
+			doConnect(clientId, options, persistence, configuration.getBoolean(CFG_KEY_MQTT_CONNECT_RETRY, Defaults.CONNECT_RETRY));
 		}
 		catch (final Exception e) {
 			Logger.getInstance().log(e);
