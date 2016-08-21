@@ -14,6 +14,10 @@ public class Logger {
 
 	private static final DateFormat timestampFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
+	private static synchronized String formatTimestamp(final Date timestamp) {
+		return timestampFormat.format(timestamp);
+	}
+
 	private static class Singleton {
 		private static final Logger instance = new Logger();
 	}
@@ -56,10 +60,6 @@ public class Logger {
 		final Writer sw = new StringWriter();
 		throwable.printStackTrace(new PrintWriter(sw));
 		System.err.println(formatTimestamp(new Date()) + ' ' + sw.toString().trim());
-	}
-
-	private synchronized String formatTimestamp(final Date timestamp) {
-		return timestampFormat.format(timestamp);
 	}
 
 }
