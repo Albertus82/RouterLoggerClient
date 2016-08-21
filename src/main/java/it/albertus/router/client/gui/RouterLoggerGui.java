@@ -54,27 +54,33 @@ public class RouterLoggerGui extends ApplicationWindow {
 		boolean CONSOLE_SHOW_CONFIGURATION = false;
 	}
 
+	private class MqttConnectionThread extends Thread {
+		private MqttConnectionThread() {
+			super("mqttConnectionThread");
+		}
+
+		@Override
+		public void run() {
+			while (true) {
+				mqttClient.subscribeStatus();
+				if (mqttClient.getClient() == null) {
+					ThreadUtils.sleep(2000); // Wait between retries
+					continue; // Retry
+				}
+				mqttClient.subscribeData();
+				mqttClient.subscribeThresholds();
+				break;
+			}
+		}
+	}
+
 	public RouterLoggerGui(final Display display) {
 		super(null);
 		open();
+
 		printWelcome();
 		mqttClient.init(this);
-
-		mqttConnectionThread = new Thread("mqttConnectionThread") {
-			@Override
-			public void run() {
-				while (true) {
-					mqttClient.subscribeStatus();
-					if (mqttClient.getClient() == null) {
-						ThreadUtils.sleep(2000); // Wait between retries
-						continue; // Retry
-					}
-					mqttClient.subscribeData();
-					mqttClient.subscribeThresholds();
-					break;
-				}
-			}
-		};
+		mqttConnectionThread = new MqttConnectionThread();
 		mqttConnectionThread.setDaemon(true);
 		mqttConnectionThread.start();
 
@@ -201,7 +207,18 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	public void restart() {
-		System.out.println("TODO"); // TODO
+		mqttClient.disconnect();
+		printGoodbye();
+
+		configuration.reload();
+		dataTable.clear();
+		textConsole.clear();
+
+		printWelcome();
+		mqttClient.init(this);
+		mqttConnectionThread = new MqttConnectionThread();
+		mqttConnectionThread.setDaemon(true);
+		mqttConnectionThread.start();
 	}
 
 }
