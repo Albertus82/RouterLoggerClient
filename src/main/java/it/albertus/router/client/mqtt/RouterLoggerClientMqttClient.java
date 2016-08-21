@@ -10,6 +10,7 @@ import it.albertus.router.client.resources.Resources;
 import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
+import it.albertus.util.NewLine;
 
 import java.util.Arrays;
 
@@ -143,7 +144,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			else {
 				persistence = new MemoryPersistence();
 			}
-			Logger.getInstance().log(Resources.get("msg.mqtt.connecting", Arrays.toString(serverURIs), clientId));
+			Logger.getInstance().log(Resources.get("msg.mqtt.connecting", Arrays.toString(serverURIs), NewLine.SYSTEM_LINE_SEPARATOR + options.toString().trim() + "======"));
 			doConnect(clientId, options, persistence, configuration.getBoolean(CFG_KEY_MQTT_CONNECT_RETRY, Defaults.CONNECT_RETRY));
 		}
 		catch (final Exception e) {
