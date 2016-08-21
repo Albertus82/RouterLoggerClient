@@ -4,15 +4,17 @@ import it.albertus.jface.TextConsole;
 import it.albertus.jface.preference.FieldEditorData;
 import it.albertus.jface.preference.FieldEditorData.FieldEditorDataBuilder;
 import it.albertus.jface.preference.Preference;
+import it.albertus.jface.preference.PreferenceData;
+import it.albertus.jface.preference.PreferenceData.PreferenceDataBuilder;
 import it.albertus.jface.preference.page.Page;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.gui.CloseMessageBox;
 import it.albertus.router.client.gui.DataTable;
 import it.albertus.router.client.gui.RouterLoggerGui;
 import it.albertus.router.client.gui.TrayIcon;
-import it.albertus.router.client.gui.preference.PreferenceData.PreferenceDataBuilder;
-import it.albertus.router.client.gui.preference.page.GeneralAdvancedPreferencePage;
+import it.albertus.router.client.gui.preference.page.AdvancedMqttPreferencePage;
 import it.albertus.router.client.gui.preference.page.GeneralPreferencePage;
+import it.albertus.router.client.gui.preference.page.MqttPreferencePage;
 import it.albertus.router.client.gui.preference.page.RouterLoggerClientPage;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Resources;
@@ -28,32 +30,36 @@ import org.eclipse.swt.widgets.Composite;
 public enum RouterLoggerClientPreference implements Preference {
 
 	LANGUAGE(RouterLoggerClientPage.GENERAL, FieldEditorType.Combo, new PreferenceDataBuilder().defaultValue(Locale.getDefault().getLanguage()).build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
-	MQTT_SERVER_URI(RouterLoggerClientPage.GENERAL, FieldEditorType.Uri, new PreferenceDataBuilder().restartRequired().separator().build(), new FieldEditorDataBuilder().horizontalSpan(2).build()),
-	MQTT_USERNAME(RouterLoggerClientPage.GENERAL, FieldEditorType.FormattedString, new PreferenceDataBuilder().build()),
-	MQTT_PASSWORD(RouterLoggerClientPage.GENERAL, FieldEditorType.Password, new PreferenceDataBuilder().restartRequired().build()),
-	MQTT_CLIENT_ID(RouterLoggerClientPage.GENERAL, FieldEditorType.FormattedString, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CLIENT_ID).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
-	MQTT_DATA_TOPIC(RouterLoggerClientPage.GENERAL, FieldEditorType.FormattedString, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.DATA_TOPIC).separator().build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
-	MQTT_STATUS_TOPIC(RouterLoggerClientPage.GENERAL, FieldEditorType.FormattedString, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.STATUS_TOPIC).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
-	MQTT_THRESHOLDS_TOPIC(RouterLoggerClientPage.GENERAL, FieldEditorType.FormattedString, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.THRESHOLDS_TOPIC).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
 
-	MQTT_CLEAN_SESSION(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.DefaultBoolean, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CLEAN_SESSION).build()),
-	MQTT_AUTOMATIC_RECONNECT(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.DefaultBoolean, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.AUTOMATIC_RECONNECT).build()),
-	MQTT_CONNECTION_TIMEOUT(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.FormattedInteger, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CONNECTION_TIMEOUT).build()),
-	MQTT_KEEP_ALIVE_INTERVAL(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.FormattedInteger, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.KEEP_ALIVE_INTERVAL).build()),
-	MQTT_MAX_INFLIGHT(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.FormattedInteger, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.MAX_INFLIGHT).build()),
-	MQTT_VERSION(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.FormattedCombo, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.MQTT_VERSION).build(), new FieldEditorDataBuilder().namesAndValues(GeneralAdvancedPreferencePage.getMqttVersionComboOptions()).build()),
-	MQTT_PERSISTENCE_FILE_ENABLED(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.DefaultBoolean, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.PERSISTENCE_FILE_ENABLED).build()),
-	MQTT_PERSISTENCE_FILE_CUSTOM(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.DefaultBoolean, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.PERSISTENCE_FILE_CUSTOM).parent(MQTT_PERSISTENCE_FILE_ENABLED).build()),
-	MQTT_PERSISTENCE_FILE_PATH(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.FormattedDirectory, new PreferenceDataBuilder().restartRequired().defaultValue(System.getProperty("user.dir")).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).directoryDialogMessage(new Localized() {
+	MQTT_SERVER_URI(RouterLoggerClientPage.MQTT, FieldEditorType.Uri, new PreferenceDataBuilder().restartRequired().build(), new FieldEditorDataBuilder().build()),
+	MQTT_USERNAME(RouterLoggerClientPage.MQTT, FieldEditorType.FormattedString, new PreferenceDataBuilder().restartRequired().build()),
+	MQTT_PASSWORD(RouterLoggerClientPage.MQTT, FieldEditorType.Password, new PreferenceDataBuilder().restartRequired().build()),
+	MQTT_CLIENT_ID(RouterLoggerClientPage.MQTT, FieldEditorType.FormattedString, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CLIENT_ID).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
+	MQTT_CONNECT_RETRY(RouterLoggerClientPage.MQTT, FieldEditorType.DefaultBoolean, new PreferenceDataBuilder().restartRequired().separator().defaultValue(RouterLoggerClientMqttClient.Defaults.CONNECT_RETRY).build()),
+	MQTT_CONNECT_RETRY_INTERVAL_SECS(RouterLoggerClientPage.MQTT, FieldEditorType.ScaleInteger, new PreferenceDataBuilder().parent(MQTT_CONNECT_RETRY).defaultValue(RouterLoggerGui.Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS).build(), new FieldEditorDataBuilder().scaleMinimum(1).scaleMaximum(Byte.MAX_VALUE).scalePageIncrement(5).build()),
+
+	MQTT_DATA_TOPIC(RouterLoggerClientPage.MQTT_MESSAGES, FieldEditorType.FormattedString, new PreferenceDataBuilder().defaultValue(RouterLoggerClientMqttClient.Defaults.DATA_TOPIC).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
+	MQTT_DATA_QOS(RouterLoggerClientPage.MQTT_MESSAGES, FieldEditorType.FormattedCombo, new PreferenceDataBuilder().defaultValue(RouterLoggerClientMqttClient.Defaults.DATA_QOS).build(), new FieldEditorDataBuilder().namesAndValues(MqttPreferencePage.getMqttQosComboOptions()).build()),
+	MQTT_STATUS_TOPIC(RouterLoggerClientPage.MQTT_MESSAGES, FieldEditorType.FormattedString, new PreferenceDataBuilder().separator().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.STATUS_TOPIC).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
+	MQTT_STATUS_QOS(RouterLoggerClientPage.MQTT_MESSAGES, FieldEditorType.FormattedCombo, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.STATUS_QOS).build(), new FieldEditorDataBuilder().namesAndValues(MqttPreferencePage.getMqttQosComboOptions()).build()),
+	MQTT_THRESHOLDS_TOPIC(RouterLoggerClientPage.MQTT_MESSAGES, FieldEditorType.FormattedString, new PreferenceDataBuilder().separator().defaultValue(RouterLoggerClientMqttClient.Defaults.THRESHOLDS_TOPIC).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
+	MQTT_THRESHOLDS_QOS(RouterLoggerClientPage.MQTT_MESSAGES, FieldEditorType.FormattedCombo, new PreferenceDataBuilder().defaultValue(RouterLoggerClientMqttClient.Defaults.THRESHOLDS_QOS).build(), new FieldEditorDataBuilder().namesAndValues(MqttPreferencePage.getMqttQosComboOptions()).build()),
+
+	MQTT_CLEAN_SESSION(RouterLoggerClientPage.MQTT_ADVANCED, FieldEditorType.DefaultBoolean, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CLEAN_SESSION).build()),
+	MQTT_AUTOMATIC_RECONNECT(RouterLoggerClientPage.MQTT_ADVANCED, FieldEditorType.DefaultBoolean, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.AUTOMATIC_RECONNECT).build()),
+	MQTT_CONNECTION_TIMEOUT(RouterLoggerClientPage.MQTT_ADVANCED, FieldEditorType.FormattedInteger, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CONNECTION_TIMEOUT).build()),
+	MQTT_KEEP_ALIVE_INTERVAL(RouterLoggerClientPage.MQTT_ADVANCED, FieldEditorType.FormattedInteger, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.KEEP_ALIVE_INTERVAL).build()),
+	MQTT_MAX_INFLIGHT(RouterLoggerClientPage.MQTT_ADVANCED, FieldEditorType.FormattedInteger, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.MAX_INFLIGHT).build()),
+	MQTT_VERSION(RouterLoggerClientPage.MQTT_ADVANCED, FieldEditorType.FormattedCombo, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.MQTT_VERSION).build(), new FieldEditorDataBuilder().namesAndValues(AdvancedMqttPreferencePage.getMqttVersionComboOptions()).build()),
+	MQTT_PERSISTENCE_FILE_ENABLED(RouterLoggerClientPage.MQTT_ADVANCED, FieldEditorType.DefaultBoolean, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.PERSISTENCE_FILE_ENABLED).build()),
+	MQTT_PERSISTENCE_FILE_CUSTOM(RouterLoggerClientPage.MQTT_ADVANCED, FieldEditorType.DefaultBoolean, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.PERSISTENCE_FILE_CUSTOM).parent(MQTT_PERSISTENCE_FILE_ENABLED).build()),
+	MQTT_PERSISTENCE_FILE_PATH(RouterLoggerClientPage.MQTT_ADVANCED, FieldEditorType.FormattedDirectory, new PreferenceDataBuilder().restartRequired().defaultValue(System.getProperty("user.dir")).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).directoryDialogMessage(new Localized() {
 		@Override
 		public String getString() {
 			return Resources.get("msg.preferences.directory.dialog.message.mqtt");
 		}
 	}).build()),
-	MQTT_DATA_QOS(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.FormattedCombo, new PreferenceDataBuilder().separator().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.DATA_QOS).build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getMqttQosComboOptions()).build()),
-	MQTT_STATUS_QOS(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.FormattedCombo, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.STATUS_QOS).build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getMqttQosComboOptions()).build()),
-	MQTT_THRESHOLDS_QOS(RouterLoggerClientPage.GENERAL_ADVANCED, FieldEditorType.FormattedCombo, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.THRESHOLDS_QOS).build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getMqttQosComboOptions()).build()),
-	
+
 	GUI_TABLE_ITEMS_MAX(RouterLoggerClientPage.APPEARANCE, FieldEditorType.FormattedInteger, new PreferenceDataBuilder().defaultValue(DataTable.Defaults.MAX_ITEMS).build(), new FieldEditorDataBuilder().textLimit(4).build()),
 	GUI_IMPORTANT_KEYS(RouterLoggerClientPage.APPEARANCE, FieldEditorType.WrapString),
 	GUI_IMPORTANT_KEYS_SEPARATOR(RouterLoggerClientPage.APPEARANCE, FieldEditorType.FormattedString, new PreferenceDataBuilder().defaultValue(RouterLoggerClientConfiguration.Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),

@@ -6,8 +6,10 @@ import it.albertus.router.client.resources.Resources;
 
 public enum RouterLoggerClientPage implements Page {
 	GENERAL(GeneralPreferencePage.class),
-	APPEARANCE(AppearancePreferencePage.class), 
-	GENERAL_ADVANCED(GeneralAdvancedPreferencePage.class, GENERAL);
+	MQTT(MqttPreferencePage.class),
+	MQTT_MESSAGES(MqttMessagesPreferencePage.class, MQTT),
+	MQTT_ADVANCED(AdvancedMqttPreferencePage.class, MQTT),
+	APPEARANCE(AppearancePreferencePage.class);
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";
 

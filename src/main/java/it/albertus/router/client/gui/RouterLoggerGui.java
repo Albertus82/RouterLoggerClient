@@ -52,6 +52,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 		boolean GUI_START_MINIMIZED = false;
 		int GUI_CLIPBOARD_MAX_CHARS = 100000;
 		boolean CONSOLE_SHOW_CONFIGURATION = false;
+		int MQTT_CONNECT_RETRY_INTERVAL_SECS = 2;
 	}
 
 	private class MqttConnectionThread extends Thread {
@@ -64,7 +65,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 			while (true) {
 				mqttClient.subscribeStatus();
 				if (mqttClient.getClient() == null) {
-					ThreadUtils.sleep(2000); // Wait between retries
+					ThreadUtils.sleep(1000 * configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
 					continue; // Retry
 				}
 				mqttClient.subscribeData();

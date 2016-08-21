@@ -6,7 +6,7 @@ import it.albertus.util.Localized;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
-public class GeneralAdvancedPreferencePage extends GeneralPreferencePage {
+public class AdvancedMqttPreferencePage extends MqttPreferencePage {
 
 	public static LocalizedNamesAndValues getMqttVersionComboOptions() {
 		final LocalizedNamesAndValues options = new LocalizedNamesAndValues(3);
