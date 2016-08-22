@@ -1,6 +1,8 @@
 package it.albertus.router.client.mqtt.listener;
 
 import it.albertus.jface.SwtThreadExecutor;
+import it.albertus.router.client.dto.ThresholdDto;
+import it.albertus.router.client.dto.ThresholdsDto;
 import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.engine.Threshold.Type;
 import it.albertus.router.client.gui.DataTable;
@@ -41,7 +43,7 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 
 	@Override
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
-		final ThresholdsPayload tp = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), ThresholdsPayload.class);
+		final ThresholdsDto tp = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), ThresholdsDto.class);
 		if (gui.getDataTable() != null && gui.getDataTable().getTable() != null) {
 			final Set<Integer> indexes = new HashSet<Integer>(tp.getThresholds().size());
 			new SwtThreadExecutor(gui.getDataTable().getTable()) {
@@ -49,7 +51,7 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 				protected void run() {
 					for (int i = 0; i < gui.getDataTable().getTable().getColumnCount(); i++) {
 						final TableColumn tc = gui.getDataTable().getTable().getColumn(i);
-						for (final ThresholdItem ti : tp.getThresholds()) {
+						for (final ThresholdDto ti : tp.getThresholds()) {
 							if (tc.getText().equals(ti.getKey())) {
 								indexes.add(i);
 							}
@@ -71,7 +73,7 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 		if (!message.isRetained()) {
 			Map<Threshold, String> m = new LinkedHashMap<Threshold, String>();
 			for (Threshold t : getThresholds(tp)) {
-				for (ThresholdItem ti : tp.getThresholds()) {
+				for (ThresholdDto ti : tp.getThresholds()) {
 					if (t.getName().equals(ti.getName())) {
 						m.put(t, ti.getDetected());
 					}
@@ -101,9 +103,9 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 		}
 	}
 
-	protected Iterable<Threshold> getThresholds(final ThresholdsPayload tp) {
+	protected Iterable<Threshold> getThresholds(final ThresholdsDto tp) {
 		final Set<Threshold> thresholds = new LinkedHashSet<Threshold>();
-		for (final ThresholdItem ti : tp.getThresholds()) {
+		for (final ThresholdDto ti : tp.getThresholds()) {
 			thresholds.add(new Threshold(ti.getName(), ti.getKey(), Type.valueOf(ti.getType()), ti.getValue(), false));
 		}
 		return thresholds;

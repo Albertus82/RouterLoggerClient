@@ -28,7 +28,9 @@ public class DataMqttMessageListener implements IMqttMessageListener {
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
 		final RouterData data = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), RouterData.class);
 		gui.getDataTable().addRow(++iteration, data, Collections.<Threshold, String> emptyMap());
-		gui.getTrayIcon().updateTrayItem(gui.getCurrentStatus(), data);
+		if (gui.getCurrentStatus() != null) {
+			gui.getTrayIcon().updateTrayItem(gui.getCurrentStatus().getStatus(), data);
+		}
 	}
 
 }

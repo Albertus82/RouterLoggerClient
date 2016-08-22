@@ -200,10 +200,12 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	public void setStatus(final RouterLoggerStatus newStatus) {
-		this.previousStatus = this.currentStatus;
-		this.currentStatus = newStatus;
-		if (trayIcon != null) {
-			trayIcon.updateTrayItem(newStatus);
+		if (currentStatus == null || !currentStatus.getStatus().equals(newStatus.getStatus())) {
+			previousStatus = currentStatus;
+			currentStatus = newStatus;
+			if (trayIcon != null) {
+				trayIcon.updateTrayItem(currentStatus.getStatus());
+			}
 		}
 	}
 

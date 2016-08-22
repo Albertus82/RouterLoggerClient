@@ -1,6 +1,8 @@
 package it.albertus.router.client.mqtt.listener;
 
+import it.albertus.router.client.dto.StatusDto;
 import it.albertus.router.client.engine.RouterLoggerStatus;
+import it.albertus.router.client.engine.Status;
 import it.albertus.router.client.gui.RouterLoggerGui;
 import it.albertus.router.client.mqtt.BaseMqttClient;
 
@@ -22,8 +24,8 @@ public class StatusMqttMessageListener implements IMqttMessageListener {
 
 	@Override
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
-		final StatusPayload sp = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), StatusPayload.class);
-		final RouterLoggerStatus rls = RouterLoggerStatus.valueOf(sp.getStatus());
+		final StatusDto sp = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), StatusDto.class);
+		final RouterLoggerStatus rls = new RouterLoggerStatus(Status.valueOf(sp.getStatus()));
 		gui.setStatus(rls);
 	}
 

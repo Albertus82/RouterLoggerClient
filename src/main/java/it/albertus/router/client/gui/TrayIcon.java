@@ -2,7 +2,7 @@ package it.albertus.router.client.gui;
 
 import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
-import it.albertus.router.client.engine.RouterLoggerStatus;
+import it.albertus.router.client.engine.Status;
 import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.gui.listener.RestoreShellListener;
@@ -59,7 +59,7 @@ public class TrayIcon {
 		});
 	}
 
-	private Image getTrayIcon(final RouterLoggerStatus status) {
+	private Image getTrayIcon(final Status status) {
 		if (status != null) {
 			switch (status) {
 			case STARTING:
@@ -93,9 +93,9 @@ public class TrayIcon {
 
 				if (tray != null) {
 					trayItem = new TrayItem(tray, SWT.NONE);
-					trayIcon = getTrayIcon(gui.getCurrentStatus());
+					trayIcon = getTrayIcon(gui.getCurrentStatus().getStatus());
 					trayItem.setImage(trayIcon);
-					toolTipText = getBaseToolTipText(gui.getCurrentStatus());
+					toolTipText = getBaseToolTipText(gui.getCurrentStatus().getStatus());
 					trayItem.setToolTipText(toolTipText);
 
 					toolTip = new ToolTip(gui.getShell(), SWT.BALLOON | SWT.ICON_WARNING);
@@ -142,11 +142,11 @@ public class TrayIcon {
 		}
 	}
 
-	public void updateTrayItem(final RouterLoggerStatus status) {
+	public void updateTrayItem(final Status status) {
 		updateTrayItem(status, null);
 	}
 
-	public void updateTrayItem(final RouterLoggerStatus status, final RouterData info) {
+	public void updateTrayItem(final Status status, final RouterData info) {
 		if (trayItem != null && !trayItem.isDisposed()) {
 			final StringBuilder sb = new StringBuilder(getBaseToolTipText(status));
 			if (!configuration.getGuiImportantKeys().isEmpty() && info != null && info.getData() != null && !info.getData().isEmpty()) {
@@ -183,7 +183,7 @@ public class TrayIcon {
 	}
 
 	public void showBalloonToolTip(final Map<Threshold, String> thresholdsReached) {
-		if (configuration.getBoolean("gui.tray.tooltip", Defaults.GUI_TRAY_TOOLTIP) && thresholdsReached != null && !thresholdsReached.isEmpty() && toolTip != null && trayItem != null && gui != null && gui.getShell() != null && !gui.getCurrentStatus().equals(gui.getPreviousStatus()) && !gui.getShell().isDisposed() && !trayItem.isDisposed() && !toolTip.isDisposed()) {
+		if (configuration.getBoolean("gui.tray.tooltip", Defaults.GUI_TRAY_TOOLTIP) && thresholdsReached != null && !thresholdsReached.isEmpty() && toolTip != null && trayItem != null && gui != null && gui.getShell() != null && !gui.getCurrentStatus().getStatus().equals(gui.getPreviousStatus().getStatus()) && !gui.getShell().isDisposed() && !trayItem.isDisposed() && !toolTip.isDisposed()) {
 			final StringBuilder message = new StringBuilder();
 			for (final Threshold threshold : thresholdsReached.keySet()) {
 				message.append(threshold.getKey()).append('=').append(thresholdsReached.get(threshold)).append(NewLine.SYSTEM_LINE_SEPARATOR);
@@ -193,7 +193,7 @@ public class TrayIcon {
 				trayItem.getDisplay().syncExec(new Runnable() {
 					@Override
 					public void run() {
-						if (configuration.getBoolean("gui.tray.tooltip", Defaults.GUI_TRAY_TOOLTIP) && toolTip != null && trayItem != null && gui != null && gui.getShell() != null && !gui.getCurrentStatus().equals(gui.getPreviousStatus()) && !gui.getShell().isDisposed() && !trayItem.isDisposed() && !toolTip.isDisposed() && trayItem.getVisible() && !gui.getShell().getVisible()) {
+						if (configuration.getBoolean("gui.tray.tooltip", Defaults.GUI_TRAY_TOOLTIP) && toolTip != null && trayItem != null && gui != null && gui.getShell() != null && !gui.getCurrentStatus().getStatus().equals(gui.getPreviousStatus().getStatus()) && !gui.getShell().isDisposed() && !trayItem.isDisposed() && !toolTip.isDisposed() && trayItem.getVisible() && !gui.getShell().getVisible()) {
 							toolTip.setMessage(message.toString().trim());
 							toolTip.setVisible(true);
 						}
@@ -204,7 +204,7 @@ public class TrayIcon {
 		}
 	}
 
-	private String getBaseToolTipText(final RouterLoggerStatus status) {
+	private String getBaseToolTipText(final Status status) {
 		final StringBuilder sb = new StringBuilder(Resources.get("lbl.tray.tooltip"));
 		if (status != null) {
 			sb.append(" (").append(status.getDescription()).append(')');
