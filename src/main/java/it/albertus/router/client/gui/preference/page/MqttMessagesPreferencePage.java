@@ -1,5 +1,5 @@
 package it.albertus.router.client.gui.preference.page;
 
-public class MqttMessagesPreferencePage extends MqttPreferencePage {
+public class MqttMessagesPreferencePage extends RestartHeaderPreferencePage {
 
 }

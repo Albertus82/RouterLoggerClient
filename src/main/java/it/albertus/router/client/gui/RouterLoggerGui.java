@@ -212,7 +212,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 		printGoodbye();
 
 		configuration.reload();
-		dataTable.clear();
+		dataTable.reset();
 		textConsole.clear();
 
 		printWelcome();
