@@ -2,13 +2,12 @@ package it.albertus.router.client.http;
 
 import it.albertus.router.client.dto.RouterDataDto;
 import it.albertus.router.client.dto.StatusDto;
-import it.albertus.router.client.dto.ThresholdDto;
 import it.albertus.router.client.dto.ThresholdsDto;
+import it.albertus.router.client.dto.transformer.DataTransformer;
+import it.albertus.router.client.dto.transformer.StatusTransformer;
+import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
 import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.RouterLoggerStatus;
-import it.albertus.router.client.engine.Status;
-import it.albertus.router.client.engine.Threshold;
-import it.albertus.router.client.engine.Threshold.Type;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.RouterLoggerGui;
 
@@ -18,8 +17,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.xml.bind.DatatypeConverter;
@@ -51,8 +48,6 @@ public class HttpPollingThread extends Thread {
 				}
 			}
 
-
-			
 			final String scheme = "https"; // TODO config
 			final String host = "localhost"; // TODO config
 			final String username = "admin"; // TODO config
@@ -83,7 +78,7 @@ public class HttpPollingThread extends Thread {
 				httpReader = new InputStreamReader(is);
 				final StatusDto statusDto = new Gson().fromJson(httpReader, StatusDto.class);
 				httpReader.close();
-				final RouterLoggerStatus rls = new RouterLoggerStatus(Status.valueOf(statusDto.getStatus()), statusDto.getTimestamp());
+				final RouterLoggerStatus rls = StatusTransformer.fromDto(statusDto);
 				gui.setStatus(rls);
 
 				// RouterData
@@ -119,7 +114,7 @@ public class HttpPollingThread extends Thread {
 				httpReader = new InputStreamReader(is);
 				final RouterDataDto routerDataDto = new Gson().fromJson(httpReader, RouterDataDto.class);
 				httpReader.close();
-				final RouterData data = new RouterData(routerDataDto.getTimestamp(), routerDataDto.getResponseTime(), routerDataDto.getData());
+				final RouterData data = DataTransformer.fromDto(routerDataDto);
 
 				// ThresholdsReached
 				url = new URL(scheme + "://" + host + "/json/thresholds");
@@ -132,11 +127,7 @@ public class HttpPollingThread extends Thread {
 				httpReader = new InputStreamReader(is);
 				final ThresholdsDto thresholdsDto = new Gson().fromJson(httpReader, ThresholdsDto.class);
 				httpReader.close();
-				final Map<Threshold, String> reached = new LinkedHashMap<>();
-				for (final ThresholdDto td : thresholdsDto.getReached()) {
-					reached.put(new Threshold(td.getName(), td.getKey(), Type.valueOf(td.getType()), td.getValue(), td.isExcluded()), td.getDetected());
-				}
-				final ThresholdsReached thresholdsReached = new ThresholdsReached(reached, routerDataDto.getTimestamp());
+				final ThresholdsReached thresholdsReached = ThresholdsTransformer.fromDto(thresholdsDto);
 
 				// Update GUI
 				gui.getDataTable().addRow(++iteration, data, thresholdsReached.getReached());

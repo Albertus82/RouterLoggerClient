@@ -1,10 +1,9 @@
 package it.albertus.router.client.mqtt.listener;
 
 import it.albertus.jface.SwtThreadExecutor;
-import it.albertus.router.client.dto.ThresholdDto;
 import it.albertus.router.client.dto.ThresholdsDto;
+import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
 import it.albertus.router.client.engine.Threshold;
-import it.albertus.router.client.engine.Threshold.Type;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.DataTable;
 import it.albertus.router.client.gui.RouterLoggerGui;
@@ -18,7 +17,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -50,11 +48,7 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 		final ThresholdsDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), ThresholdsDto.class);
 
 		if (dto != null && dto.getReached() != null && !dto.getReached().isEmpty()) {
-			final Map<Threshold, String> reached = new LinkedHashMap<>();
-			for (final ThresholdDto td : dto.getReached()) {
-				reached.put(new Threshold(td.getName(), td.getKey(), Type.valueOf(td.getType()), td.getValue(), td.isExcluded()), td.getDetected());
-			}
-			final ThresholdsReached thresholdsReached = new ThresholdsReached(reached, dto.getTimestamp());
+			final ThresholdsReached thresholdsReached = ThresholdsTransformer.fromDto(dto);
 
 			if (gui.getDataTable() != null && gui.getDataTable().getTable() != null) {
 				final Set<Integer> indexes = new HashSet<Integer>(thresholdsReached.getReached().size());

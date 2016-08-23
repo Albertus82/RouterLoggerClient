@@ -1,6 +1,7 @@
 package it.albertus.router.client.mqtt.listener;
 
 import it.albertus.router.client.dto.RouterDataDto;
+import it.albertus.router.client.dto.transformer.DataTransformer;
 import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.gui.RouterLoggerGui;
@@ -28,7 +29,7 @@ public class DataMqttMessageListener implements IMqttMessageListener {
 	@Override
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
 		final RouterDataDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), RouterDataDto.class);
-		final RouterData data = new RouterData(dto.getTimestamp(), dto.getResponseTime(), dto.getData());
+		final RouterData data = DataTransformer.fromDto(dto);
 		gui.getDataTable().addRow(++iteration, data, Collections.<Threshold, String> emptyMap());
 		gui.getTrayIcon().updateTrayItem(gui.getCurrentStatus() != null ? gui.getCurrentStatus().getStatus() : null, data);
 	}
