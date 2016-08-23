@@ -79,11 +79,11 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 					}
 				}
 			}
-			printThresholdsReached(m);
+			printThresholdsReached(m, tp.getTimestamp());
 		}
 	}
 
-	private void printThresholdsReached(final Map<Threshold, String> thresholdsReached) {
+	private void printThresholdsReached(final Map<Threshold, String> thresholdsReached, final Date timestamp) {
 		if (thresholdsReached != null && !thresholdsReached.isEmpty()) {
 			final Map<String, String> message = new TreeMap<String, String>();
 			boolean print = false;
@@ -94,7 +94,7 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 				}
 			}
 			if (print) {
-				Logger.getInstance().log(Resources.get("msg.thresholds.reached", message));
+				Logger.getInstance().log(Resources.get("msg.thresholds.reached", message), timestamp);
 				final TrayIcon trayIcon = gui.getTrayIcon();
 				if (trayIcon != null) {
 					trayIcon.showBalloonToolTip(thresholdsReached);
