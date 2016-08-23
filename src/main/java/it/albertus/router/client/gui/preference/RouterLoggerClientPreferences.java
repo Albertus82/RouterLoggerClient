@@ -33,6 +33,7 @@ public class RouterLoggerClientPreferences extends Preferences {
 		// Check if must update texts...
 		if (gui != null && !language.equals(Resources.getLanguage())) {
 			gui.getMenuBar().updateTexts();
+			gui.getDataTable().updateTexts();
 		}
 
 		return returnCode;

@@ -33,9 +33,13 @@ import com.google.gson.JsonSyntaxException;
 
 public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 
-	private final RouterLoggerGui gui;
-
 	private static final DateFormat timestampFormat = new SimpleDateFormat(DataTable.TIMESTAMP_PATTERN);
+
+	private static synchronized String formatTimestamp(final Date timestamp) {
+		return timestampFormat.format(timestamp);
+	}
+
+	private final RouterLoggerGui gui;
 
 	public ThresholdsMqttMessageListener(final RouterLoggerGui gui) {
 		this.gui = gui;
@@ -43,25 +47,25 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 
 	@Override
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
-		final ThresholdsDto tp = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), ThresholdsDto.class);
+		final ThresholdsDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), ThresholdsDto.class);
 		if (gui.getDataTable() != null && gui.getDataTable().getTable() != null) {
-			final Set<Integer> indexes = new HashSet<Integer>(tp.getThresholds().size());
+			final Set<Integer> indexes = new HashSet<Integer>(dto.getThresholds().size());
 			new SwtThreadExecutor(gui.getDataTable().getTable()) {
 				@Override
 				protected void run() {
-					for (int i = 0; i < gui.getDataTable().getTable().getColumnCount(); i++) {
-						final TableColumn tc = gui.getDataTable().getTable().getColumn(i);
-						for (final ThresholdDto ti : tp.getThresholds()) {
+					for (int index = 0; index < gui.getDataTable().getTable().getColumnCount(); index++) {
+						final TableColumn tc = gui.getDataTable().getTable().getColumn(index);
+						for (final ThresholdDto ti : dto.getThresholds()) {
 							if (tc.getText().equals(ti.getKey())) {
-								indexes.add(i);
+								indexes.add(index);
 							}
 						}
 					}
 
 					for (final TableItem ti : gui.getDataTable().getTable().getItems()) {
-						if (ti.getText(1).equals(formatTimestamp(tp.getTimestamp()))) {
-							for (final int i : indexes) {
-								ti.setForeground(i, gui.getDataTable().thresholdReachedForegroudColor);
+						if (ti.getText(1).equals(formatTimestamp(dto.getTimestamp()))) {
+							for (final int index : indexes) {
+								ti.setForeground(index, gui.getDataTable().thresholdReachedForegroudColor);
 							}
 							break;
 						}
@@ -71,15 +75,15 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 		}
 
 		if (!message.isRetained()) {
-			Map<Threshold, String> m = new LinkedHashMap<Threshold, String>();
-			for (Threshold t : getThresholds(tp)) {
-				for (ThresholdDto ti : tp.getThresholds()) {
+			final Map<Threshold, String> m = new LinkedHashMap<Threshold, String>();
+			for (final Threshold t : getThresholds(dto)) {
+				for (final ThresholdDto ti : dto.getThresholds()) {
 					if (t.getName().equals(ti.getName())) {
 						m.put(t, ti.getDetected());
 					}
 				}
 			}
-			printThresholdsReached(m, tp.getTimestamp());
+			printThresholdsReached(m, dto.getTimestamp());
 		}
 	}
 
@@ -109,10 +113,6 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 			thresholds.add(new Threshold(ti.getName(), ti.getKey(), Type.valueOf(ti.getType()), ti.getValue(), false));
 		}
 		return thresholds;
-	}
-
-	private synchronized String formatTimestamp(final Date timestamp) {
-		return timestampFormat.format(timestamp);
 	}
 
 }
