@@ -25,7 +25,7 @@ public class StatusMqttMessageListener implements IMqttMessageListener {
 	@Override
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
 		final StatusDto sp = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), StatusDto.class);
-		final RouterLoggerStatus rls = new RouterLoggerStatus(Status.valueOf(sp.getStatus()));
+		final RouterLoggerStatus rls = new RouterLoggerStatus(Status.valueOf(sp.getStatus()), sp.getTimestamp());
 		gui.setStatus(rls);
 	}
 

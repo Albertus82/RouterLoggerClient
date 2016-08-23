@@ -10,10 +10,6 @@ public class RouterLoggerStatus implements Serializable {
 	private final Date timestamp;
 	private final Status status;
 
-	public RouterLoggerStatus(final Status status) {
-		this(status, new Date());
-	}
-
 	public RouterLoggerStatus(final Status status, final Date timestamp) {
 		this.timestamp = timestamp;
 		this.status = status;
