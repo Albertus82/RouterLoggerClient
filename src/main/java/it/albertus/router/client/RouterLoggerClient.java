@@ -69,7 +69,7 @@ public class RouterLoggerClient {
 //
 //				Reader r = null;
 //				try {
-//					URL url = new URL("https://norad.sytes.net/json/data");
+//					URL url = new URL("https://localhost/json/data");
 //					final URLConnection urlConnection = url.openConnection();
 //					final String header = "Basic " + DatatypeConverter.printBase64Binary("admin:admin".getBytes());
 //					urlConnection.addRequestProperty("Authorization", header);
