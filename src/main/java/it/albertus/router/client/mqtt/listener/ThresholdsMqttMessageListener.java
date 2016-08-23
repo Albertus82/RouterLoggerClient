@@ -49,9 +49,9 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
 		final ThresholdsDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), ThresholdsDto.class);
 
-		if (dto != null && dto.getThresholds() != null && !dto.getThresholds().isEmpty()) {
+		if (dto != null && dto.getReached() != null && !dto.getReached().isEmpty()) {
 			final Map<Threshold, String> reached = new LinkedHashMap<>();
-			for (final ThresholdDto td : dto.getThresholds()) {
+			for (final ThresholdDto td : dto.getReached()) {
 				reached.put(new Threshold(td.getName(), td.getKey(), Type.valueOf(td.getType()), td.getValue(), td.isExcluded()), td.getDetected());
 			}
 			final ThresholdsReached thresholdsReached = new ThresholdsReached(reached, dto.getTimestamp());

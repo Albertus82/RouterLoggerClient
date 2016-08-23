@@ -9,19 +9,19 @@ public class ThresholdsDto implements Serializable {
 	private static final long serialVersionUID = -566811797356824879L;
 
 	private Date timestamp;
-	private Set<ThresholdDto> thresholds;
+	private Set<ThresholdDto> reached;
 
 	public Date getTimestamp() {
 		return timestamp;
 	}
 
-	public Set<ThresholdDto> getThresholds() {
-		return thresholds;
+	public Set<ThresholdDto> getReached() {
+		return reached;
 	}
 
 	@Override
 	public String toString() {
-		return "ThresholdsDto [timestamp=" + timestamp + ", thresholds=" + thresholds + "]";
+		return "ThresholdsDto [timestamp=" + timestamp + ", reached=" + reached + "]";
 	}
 
 }
