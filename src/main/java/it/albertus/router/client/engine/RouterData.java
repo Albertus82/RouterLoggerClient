@@ -39,22 +39,4 @@ public class RouterData implements Serializable {
 		return "RouterData [timestamp=" + timestamp + ", responseTime=" + responseTime + ", data=" + data + "]";
 	}
 
-//	@Override
-//	public String toJson() {
-//		final StringBuilder json = new StringBuilder("{\"timestamp\":\"").append(ISO8601Utils.format(timestamp, true, defaultTimeZone)).append("\",\"responseTime\":").append(responseTime);
-//		if (data != null && !data.isEmpty()) {
-//			json.append(",\"data\":{");
-//			int index = 0;
-//			for (final Entry<String, String> entry : data.entrySet()) {
-//				json.append('"').append(entry.getKey()).append("\":\"").append(entry.getValue()).append("\"");
-//				if (++index < data.size()) {
-//					json.append(',');
-//				}
-//			}
-//			json.append("}");
-//		}
-//		json.append("}");
-//		return json.toString();
-//	}
-
 }
