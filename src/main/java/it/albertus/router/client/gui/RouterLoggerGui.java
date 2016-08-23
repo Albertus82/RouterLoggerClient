@@ -4,6 +4,8 @@ import it.albertus.jface.TextConsole;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.gui.listener.CloseListener;
+import it.albertus.router.client.http.DummyTrustManager;
+import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Resources;
 import it.albertus.util.Configuration;
@@ -11,8 +13,14 @@ import it.albertus.util.Configured;
 import it.albertus.util.ThreadUtils;
 import it.albertus.util.Version;
 
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
@@ -32,6 +40,8 @@ public class RouterLoggerGui extends ApplicationWindow {
 	public static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = "gui.clipboard.max.chars";
 	public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
 
+	public static final SSLSocketFactory defaultSSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
+
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
 
 	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
@@ -47,6 +57,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 	private RouterLoggerStatus previousStatus;
 
 	private volatile Thread mqttConnectionThread;
+	private volatile Thread httpPollingThread;
 
 	public interface Defaults {
 		boolean GUI_START_MINIMIZED = false;
@@ -58,6 +69,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 	private class MqttConnectionThread extends Thread {
 		private MqttConnectionThread() {
 			super("mqttConnectionThread");
+			this.setDaemon(true);
 		}
 
 		@Override
@@ -80,10 +92,25 @@ public class RouterLoggerGui extends ApplicationWindow {
 		open();
 
 		printWelcome();
-		mqttClient.init(this);
-		mqttConnectionThread = new MqttConnectionThread();
-		mqttConnectionThread.setDaemon(true);
-		mqttConnectionThread.start();
+		if (true) { // MQTT
+			mqttClient.init(this);
+			mqttConnectionThread = new MqttConnectionThread();
+			mqttConnectionThread.start();
+		}
+		else { // HTTP
+			if (true) { // SSL insecure
+				try {
+					final SSLContext sslContext = SSLContext.getInstance("SSL");
+					sslContext.init(null, new TrustManager[] { new DummyTrustManager() }, new SecureRandom());
+					HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+				}
+				catch (final Exception e) {
+					e.printStackTrace();
+				}
+			}
+			httpPollingThread = new HttpPollingThread(this);
+			httpPollingThread.start();
+		}
 
 		final Shell shell = getShell();
 		while (!shell.isDisposed()) {
@@ -91,7 +118,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 				Display.getCurrent().sleep();
 			}
 		}
-		mqttClient.disconnect();
+		//		mqttClient.disconnect();
 		printGoodbye();
 	}
 
@@ -220,7 +247,6 @@ public class RouterLoggerGui extends ApplicationWindow {
 		printWelcome();
 		mqttClient.init(this);
 		mqttConnectionThread = new MqttConnectionThread();
-		mqttConnectionThread.setDaemon(true);
 		mqttConnectionThread.start();
 	}
 
