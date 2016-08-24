@@ -1,5 +1,6 @@
 package it.albertus.router.client.gui;
 
+import it.albertus.jface.SwtThreadExecutor;
 import it.albertus.jface.TextConsole;
 import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
@@ -21,7 +22,6 @@ import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 import org.eclipse.jface.window.ApplicationWindow;
@@ -42,7 +42,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 	public static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = "gui.clipboard.max.chars";
 	public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
 
-//	public static final SSLSocketFactory defaultSSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
+	//	public static final SSLSocketFactory defaultSSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
 
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
 
@@ -94,6 +94,19 @@ public class RouterLoggerGui extends ApplicationWindow {
 		super(null);
 		open();
 
+		connect();
+
+		final Shell shell = getShell();
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
+				Display.getCurrent().sleep();
+			}
+		}
+
+		release();
+	}
+
+	private void connect() {
 		printWelcome();
 		final String protocol = configuration.getString("client.protocol", Defaults.CLIENT_PROTOCOL).trim();
 		if (protocol.equalsIgnoreCase(Protocol.MQTT.toString())) { // MQTT
@@ -118,14 +131,17 @@ public class RouterLoggerGui extends ApplicationWindow {
 		else {
 			Logger.getInstance().log("Protocollo non valido."); // TODO
 		}
+	}
 
-		final Shell shell = getShell();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				Display.getCurrent().sleep();
+	private void release() {
+		mqttClient.disconnect();
+		if (httpPollingThread != null) {
+			httpPollingThread.interrupt();
+			try {
+				httpPollingThread.join();
 			}
+			catch (final InterruptedException ie) {/* Ignore */}
 		}
-		//		mqttClient.disconnect();
 		printGoodbye();
 	}
 
@@ -244,17 +260,23 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	public void restart() {
-		mqttClient.disconnect();
-		printGoodbye();
+		new Thread("resetThread") {
+			@Override
+			public void run() {
+				release();
 
-		configuration.reload();
-		dataTable.reset();
-		textConsole.clear();
+				configuration.reload();
+				new SwtThreadExecutor(getShell()) {
+					@Override
+					protected void run() {
+						dataTable.reset();
+						//						textConsole.clear();
+					}
+				}.start();
 
-		printWelcome();
-		mqttClient.init(this);
-		mqttConnectionThread = new MqttConnectionThread();
-		mqttConnectionThread.start();
+				connect();
+			}
+		}.start();
 	}
 
 }
