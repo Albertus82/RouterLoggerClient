@@ -1,6 +1,7 @@
 package it.albertus.router.client.gui;
 
 import it.albertus.jface.TextConsole;
+import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.gui.listener.CloseListener;
@@ -8,6 +9,7 @@ import it.albertus.router.client.http.DummyTrustManager;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
 import it.albertus.util.Configured;
 import it.albertus.util.ThreadUtils;
@@ -40,7 +42,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 	public static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = "gui.clipboard.max.chars";
 	public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
 
-	public static final SSLSocketFactory defaultSSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
+//	public static final SSLSocketFactory defaultSSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
 
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
 
@@ -64,6 +66,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 		int GUI_CLIPBOARD_MAX_CHARS = 100000;
 		boolean CONSOLE_SHOW_CONFIGURATION = false;
 		int MQTT_CONNECT_RETRY_INTERVAL_SECS = 5;
+		String CLIENT_PROTOCOL = Protocol.MQTT.name();
 	}
 
 	private class MqttConnectionThread extends Thread {
@@ -92,12 +95,13 @@ public class RouterLoggerGui extends ApplicationWindow {
 		open();
 
 		printWelcome();
-		if (true) { // MQTT
+		final String protocol = configuration.getString("client.protocol", Defaults.CLIENT_PROTOCOL).trim();
+		if (protocol.equalsIgnoreCase(Protocol.MQTT.toString())) { // MQTT
 			mqttClient.init(this);
 			mqttConnectionThread = new MqttConnectionThread();
 			mqttConnectionThread.start();
 		}
-		else { // HTTP
+		else if (protocol.equalsIgnoreCase(Protocol.HTTP.toString())) { // HTTP
 			if (true) { // SSL insecure
 				try {
 					final SSLContext sslContext = SSLContext.getInstance("SSL");
@@ -110,6 +114,9 @@ public class RouterLoggerGui extends ApplicationWindow {
 			}
 			httpPollingThread = new HttpPollingThread(this);
 			httpPollingThread.start();
+		}
+		else {
+			Logger.getInstance().log("Protocollo non valido."); // TODO
 		}
 
 		final Shell shell = getShell();

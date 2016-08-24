@@ -19,12 +19,10 @@ public enum FieldEditorType {
 	DatabaseCombo,
 	DelimiterCombo,
 	IntegerCombo,
-	ReaderCombo,
 	ValidatedCombo,
-	WriterCombo,
+	Radio,
 	Directory,
 	FormattedDirectory,
 	EmailAddresses,
-	Uri,
-	Thresholds;
+	Uri;
 }
