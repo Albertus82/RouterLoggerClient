@@ -18,10 +18,6 @@ public class RouterData implements Serializable {
 		this.data = data;
 	}
 
-	public RouterData(final int responseTime, final Map<String, String> data) {
-		this(new Date(), responseTime, data);
-	}
-
 	public Date getTimestamp() {
 		return timestamp;
 	}
