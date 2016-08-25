@@ -9,6 +9,7 @@ public enum RouterLoggerClientPage implements Page {
 	MQTT(MqttPreferencePage.class),
 	MQTT_MESSAGES(MqttMessagesPreferencePage.class, MQTT),
 	MQTT_ADVANCED(AdvancedMqttPreferencePage.class, MQTT),
+	HTTP(HttpPreferencePage.class),
 	APPEARANCE(AppearancePreferencePage.class);
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";

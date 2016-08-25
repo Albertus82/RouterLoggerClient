@@ -6,7 +6,6 @@ import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.gui.listener.CloseListener;
-import it.albertus.router.client.http.DummyTrustManager;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Resources;
@@ -16,13 +15,8 @@ import it.albertus.util.Configured;
 import it.albertus.util.ThreadUtils;
 import it.albertus.util.Version;
 
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
 
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
@@ -114,17 +108,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 			mqttConnectionThread = new MqttConnectionThread();
 			mqttConnectionThread.start();
 		}
-		else if (protocol.equalsIgnoreCase(Protocol.HTTP.toString())) { // HTTP
-			if (true) { // SSL insecure
-				try {
-					final SSLContext sslContext = SSLContext.getInstance("SSL");
-					sslContext.init(null, new TrustManager[] { new DummyTrustManager() }, new SecureRandom());
-					HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
-				}
-				catch (final Exception e) {
-					e.printStackTrace();
-				}
-			}
+		else if (protocol.toUpperCase().startsWith(Protocol.HTTP.toString().toUpperCase())) { // HTTP
 			httpPollingThread = new HttpPollingThread(this);
 			httpPollingThread.start();
 		}

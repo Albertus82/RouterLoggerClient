@@ -28,6 +28,7 @@ import it.albertus.router.client.gui.preference.page.AdvancedMqttPreferencePage;
 import it.albertus.router.client.gui.preference.page.GeneralPreferencePage;
 import it.albertus.router.client.gui.preference.page.MqttPreferencePage;
 import it.albertus.router.client.gui.preference.page.RouterLoggerClientPage;
+import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Resources;
 import it.albertus.util.Localized;
@@ -42,7 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 public enum RouterLoggerClientPreference implements Preference {
 
 	LANGUAGE(RouterLoggerClientPage.GENERAL, ComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(Locale.getDefault().getLanguage()).build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
-	CLIENT_PROTOCOL(RouterLoggerClientPage.GENERAL, DefaultRadioGroupFieldEditor.class, new PreferenceDataBuilder().separator().defaultValue(RouterLoggerGui.Defaults.CLIENT_PROTOCOL).restartRequired().build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(2).radioUseGroup(true).build()),
+	CLIENT_PROTOCOL(RouterLoggerClientPage.GENERAL, DefaultRadioGroupFieldEditor.class, new PreferenceDataBuilder().separator().defaultValue(RouterLoggerGui.Defaults.CLIENT_PROTOCOL).restartRequired().build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
 
 	MQTT_SERVER_URI(RouterLoggerClientPage.MQTT, UriListEditor.class, new PreferenceDataBuilder().restartRequired().build(), new FieldEditorDataBuilder().build()),
 	MQTT_USERNAME(RouterLoggerClientPage.MQTT, FormattedStringFieldEditor.class, new PreferenceDataBuilder().restartRequired().build()),
@@ -72,6 +73,13 @@ public enum RouterLoggerClientPreference implements Preference {
 			return Resources.get("msg.preferences.directory.dialog.message.mqtt");
 		}
 	}).build()),
+
+	HTTP_HOST(RouterLoggerClientPage.HTTP, FormattedStringFieldEditor.class),
+	HTTP_PORT(RouterLoggerClientPage.HTTP, FormattedIntegerFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.PORT).build(), new FieldEditorDataBuilder().integerValidRange(1, 65535).emptyStringAllowed(false).build()),
+	HTTP_AUTHENTICATION(RouterLoggerClientPage.HTTP, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.AUTHENTICATION).build()),
+	HTTP_USERNAME(RouterLoggerClientPage.HTTP, FormattedStringFieldEditor.class, new PreferenceDataBuilder().parent(HTTP_AUTHENTICATION).build()),
+	HTTP_PASSWORD(RouterLoggerClientPage.HTTP, PasswordFieldEditor.class, new PreferenceDataBuilder().parent(HTTP_AUTHENTICATION).build()),
+	HTTP_IGNORE_CERTIFICATE(RouterLoggerClientPage.HTTP, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.IGNORE_CERTIFICATE).restartRequired().build()),
 
 	GUI_TABLE_ITEMS_MAX(RouterLoggerClientPage.APPEARANCE, FormattedIntegerFieldEditor.class, new PreferenceDataBuilder().defaultValue(DataTable.Defaults.MAX_ITEMS).build(), new FieldEditorDataBuilder().textLimit(4).build()),
 	GUI_IMPORTANT_KEYS(RouterLoggerClientPage.APPEARANCE, WrapStringFieldEditor.class),

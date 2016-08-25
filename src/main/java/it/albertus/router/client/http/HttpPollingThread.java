@@ -7,9 +7,11 @@ import it.albertus.router.client.dto.transformer.DataTransformer;
 import it.albertus.router.client.dto.transformer.StatusTransformer;
 import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
 import it.albertus.router.client.engine.RouterData;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.util.Configuration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,24 +19,47 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.SecureRandom;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 import javax.xml.bind.DatatypeConverter;
 
 import com.google.gson.Gson;
 
 public class HttpPollingThread extends Thread {
 
+	private static final String CFG_KEY_HTTP_IGNORE_CERTIFICATE = "http.ignore.certificate";
+
+	public interface Defaults {
+		int REFRESH = 5;
+		boolean AUTHENTICATION = true;
+		int PORT = 80;
+		boolean IGNORE_CERTIFICATE = false;
+	}
+
+	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 	private final RouterLoggerGui gui;
 
 	private int iteration = 0;
 	private String eTag;
-	private int refresh = 5; // TODO DEFAULT
+
 	private volatile boolean exit = false;
 
 	public HttpPollingThread(final RouterLoggerGui gui) {
 		this.setDaemon(true);
 		this.gui = gui;
+		if (configuration.getBoolean(CFG_KEY_HTTP_IGNORE_CERTIFICATE, Defaults.IGNORE_CERTIFICATE)) {
+			try {
+				final SSLContext sslContext = SSLContext.getInstance("SSL");
+				sslContext.init(null, new TrustManager[] { new DummyTrustManager() }, new SecureRandom());
+				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+			}
+			catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -46,18 +71,21 @@ public class HttpPollingThread extends Thread {
 	@Override
 	public void run() {
 		while (true) {
-			final String scheme = "https"; // TODO config
-			final String host = "localhost"; // TODO config
-			final String username = "admin"; // TODO config
-			final String password = "admin"; // TODO config
+			final String scheme = configuration.getString("client.protocol").trim().toLowerCase();
+			final String host = configuration.getString("http.host");
+			final int port = configuration.getInt("http.port", Defaults.PORT);
+			final String username = configuration.getString("http.username");
+			final char[] password = configuration.getCharArray("http.password");
 
-			if (true) {
+			final String baseUrl = scheme + "://" + host + ":" + port;
+
+			if (configuration.getBoolean(CFG_KEY_HTTP_IGNORE_CERTIFICATE, Defaults.IGNORE_CERTIFICATE)) {
 				HttpsURLConnection.setDefaultHostnameVerifier(new RouterLoggerHostnameVerifier(host));
 			}
 
 			final String authenticationHeader;
-			if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
-				authenticationHeader = "Basic " + DatatypeConverter.printBase64Binary((username + ":" + password).getBytes());
+			if (configuration.getBoolean("http.authentication", Defaults.AUTHENTICATION) && username != null && !username.isEmpty() && password != null && password.length > 0) {
+				authenticationHeader = "Basic " + DatatypeConverter.printBase64Binary((username + ":" + String.valueOf(password)).getBytes());
 			}
 			else {
 				authenticationHeader = null;
@@ -65,8 +93,9 @@ public class HttpPollingThread extends Thread {
 
 			// RouterLoggerStatus
 			Reader httpReader = null;
+			int refresh = configuration.getInt("http.refresh.secs", Defaults.REFRESH);
 			try {
-				URL url = new URL(scheme + "://" + host + "/json/status");
+				URL url = new URL(baseUrl + "/json/status");
 				HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 				urlConnection.addRequestProperty("Accept", "application/json");
 				if (authenticationHeader != null) {
@@ -80,7 +109,7 @@ public class HttpPollingThread extends Thread {
 				gui.setStatus(rls);
 
 				// RouterData
-				url = new URL(scheme + "://" + host + "/json/data");
+				url = new URL(baseUrl + "/json/data");
 				urlConnection = (HttpURLConnection) url.openConnection();
 				urlConnection.addRequestProperty("Accept", "application/json");
 				if (authenticationHeader != null) {
@@ -112,7 +141,7 @@ public class HttpPollingThread extends Thread {
 				final RouterData data = DataTransformer.fromDto(routerDataDto);
 
 				// ThresholdsReached
-				url = new URL(scheme + "://" + host + "/json/thresholds");
+				url = new URL(baseUrl + "/json/thresholds");
 				urlConnection = (HttpURLConnection) url.openConnection();
 				urlConnection.addRequestProperty("Accept", "application/json");
 				if (authenticationHeader != null) {

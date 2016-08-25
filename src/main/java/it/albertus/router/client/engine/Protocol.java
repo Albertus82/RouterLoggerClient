@@ -2,5 +2,6 @@ package it.albertus.router.client.engine;
 
 public enum Protocol {
 	MQTT,
-	HTTP;
+	HTTP,
+	HTTPS;
 }
