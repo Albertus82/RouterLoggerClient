@@ -3,6 +3,7 @@ package it.albertus.router.client.gui.preference;
 import it.albertus.jface.preference.FieldEditorData;
 import it.albertus.jface.preference.field.ComboFieldEditor;
 import it.albertus.jface.preference.field.DefaultBooleanFieldEditor;
+import it.albertus.jface.preference.field.DefaultRadioGroupFieldEditor;
 import it.albertus.jface.preference.field.DelimiterComboFieldEditor;
 import it.albertus.jface.preference.field.EditableComboFieldEditor;
 import it.albertus.jface.preference.field.EmailAddressesListEditor;
@@ -66,7 +67,9 @@ public final class FieldEditorFactory {
 		case Password:
 			return createPasswordFieldEditor(name, label, parent, data);
 		case Radio:
-			return new RadioGroupFieldEditor(name, label, data.getRadioNumColumns(), data.getNamesAndValues().toArray(), parent, data.getRadioUseGroup() != null ? data.getRadioUseGroup() : false);
+			return createRadioGroupFieldEditor(name, label, parent, data);
+		case DefaultRadio:
+			return createDefaultRadioGroupFieldEditor(name, label, parent, data);
 		case Scale:
 			return createScaleFieldEditor(name, label, parent, data);
 		case ScaleInteger:
@@ -81,6 +84,15 @@ public final class FieldEditorFactory {
 			return createWrapStringFieldEditor(name, label, parent, data);
 		default:
 			throw new IllegalStateException("Unsupported FieldEditor: " + type);
+		}
+	}
+
+	private static FieldEditor createDefaultRadioGroupFieldEditor(final String name, final String label, final Composite parent, final FieldEditorData data) {
+		if (data.getRadioUseGroup() != null) {
+			return new DefaultRadioGroupFieldEditor(name, label, data.getRadioNumColumns(), data.getNamesAndValues().toArray(), parent, data.getRadioUseGroup());
+		}
+		else {
+			return new DefaultRadioGroupFieldEditor(name, label, data.getRadioNumColumns(), data.getNamesAndValues().toArray(), parent);
 		}
 	}
 
@@ -241,6 +253,15 @@ public final class FieldEditorFactory {
 			}
 		}
 		return passwordFieldEditor;
+	}
+
+	private static FieldEditor createRadioGroupFieldEditor(final String name, final String label, final Composite parent, final FieldEditorData data) {
+		if (data.getRadioUseGroup() != null) {
+			return new RadioGroupFieldEditor(name, label, data.getRadioNumColumns(), data.getNamesAndValues().toArray(), parent, data.getRadioUseGroup());
+		}
+		else {
+			return new RadioGroupFieldEditor(name, label, data.getRadioNumColumns(), data.getNamesAndValues().toArray(), parent);
+		}
 	}
 
 	private static FieldEditor createScaleFieldEditor(final String name, final String label, final Composite parent, final FieldEditorData data) {

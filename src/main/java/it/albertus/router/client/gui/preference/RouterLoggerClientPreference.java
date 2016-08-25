@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 public enum RouterLoggerClientPreference implements Preference {
 
 	LANGUAGE(RouterLoggerClientPage.GENERAL, FieldEditorType.Combo, new PreferenceDataBuilder().defaultValue(Locale.getDefault().getLanguage()).build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
-	CLIENT_PROTOCOL(RouterLoggerClientPage.GENERAL, FieldEditorType.Radio, new PreferenceDataBuilder().separator().defaultValue(RouterLoggerGui.Defaults.CLIENT_PROTOCOL).restartRequired().build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(2).radioUseGroup(true).build()),
+	CLIENT_PROTOCOL(RouterLoggerClientPage.GENERAL, FieldEditorType.DefaultRadio, new PreferenceDataBuilder().separator().defaultValue(RouterLoggerGui.Defaults.CLIENT_PROTOCOL).restartRequired().build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(2).radioUseGroup(true).build()),
 
 	MQTT_SERVER_URI(RouterLoggerClientPage.MQTT, FieldEditorType.Uri, new PreferenceDataBuilder().restartRequired().build(), new FieldEditorDataBuilder().build()),
 	MQTT_USERNAME(RouterLoggerClientPage.MQTT, FieldEditorType.FormattedString, new PreferenceDataBuilder().restartRequired().build()),
