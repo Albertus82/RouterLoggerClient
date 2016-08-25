@@ -33,6 +33,7 @@ import it.albertus.router.client.gui.preference.page.RouterLoggerClientPage;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.util.Logger;
 import it.albertus.util.Localized;
 
 import java.util.EnumSet;
@@ -46,6 +47,7 @@ public enum RouterLoggerClientPreference implements Preference {
 
 	LANGUAGE(RouterLoggerClientPage.GENERAL, ComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(Locale.getDefault().getLanguage()).build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
 	CLIENT_PROTOCOL(RouterLoggerClientPage.GENERAL, DefaultRadioGroupFieldEditor.class, new PreferenceDataBuilder().separator().defaultValue(RouterLoggerGui.Defaults.CLIENT_PROTOCOL).restartRequired().build(), new FieldEditorDataBuilder().namesAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
+	DEBUG(RouterLoggerClientPage.GENERAL, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().separator().defaultValue(Logger.Defaults.DEBUG).build()),
 
 	MQTT_SERVER_URI(RouterLoggerClientPage.MQTT, UriListEditor.class, new PreferenceDataBuilder().restartRequired().build(), new FieldEditorDataBuilder().build()),
 	MQTT_USERNAME(RouterLoggerClientPage.MQTT, FormattedStringFieldEditor.class, new PreferenceDataBuilder().restartRequired().build()),
@@ -82,13 +84,13 @@ public enum RouterLoggerClientPreference implements Preference {
 	HTTP_USERNAME(RouterLoggerClientPage.HTTP, FormattedStringFieldEditor.class, new PreferenceDataBuilder().parent(HTTP_AUTHENTICATION).build()),
 	HTTP_PASSWORD(RouterLoggerClientPage.HTTP, PasswordFieldEditor.class, new PreferenceDataBuilder().parent(HTTP_AUTHENTICATION).build()),
 	HTTP_IGNORE_CERTIFICATE(RouterLoggerClientPage.HTTP, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.IGNORE_CERTIFICATE).restartRequired().build()),
-	HTTP_REFRESH_SECS(RouterLoggerClientPage.HTTP,  IntegerComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.REFRESH_SECS).build(), new FieldEditorDataBuilder().namesAndValues(new LocalizedNamesAndValues(new Localized() {
+	HTTP_REFRESH_SECS(RouterLoggerClientPage.HTTP, IntegerComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.REFRESH_SECS).build(), new FieldEditorDataBuilder().namesAndValues(new LocalizedNamesAndValues(new Localized() {
 		@Override
 		public String getString() {
 			return Resources.get("lbl.preferences.http.refresh.auto");
 		}
 	}, 0)).build()),
-	
+
 	GUI_TABLE_ITEMS_MAX(RouterLoggerClientPage.APPEARANCE, FormattedIntegerFieldEditor.class, new PreferenceDataBuilder().defaultValue(DataTable.Defaults.MAX_ITEMS).build(), new FieldEditorDataBuilder().textLimit(4).build()),
 	GUI_IMPORTANT_KEYS(RouterLoggerClientPage.APPEARANCE, WrapStringFieldEditor.class),
 	GUI_IMPORTANT_KEYS_SEPARATOR(RouterLoggerClientPage.APPEARANCE, FormattedStringFieldEditor.class, new PreferenceDataBuilder().defaultValue(RouterLoggerClientConfiguration.Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
