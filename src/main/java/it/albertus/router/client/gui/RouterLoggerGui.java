@@ -260,7 +260,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	public void restart() {
-		new Thread("resetThread") {
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				release();
@@ -270,13 +270,13 @@ public class RouterLoggerGui extends ApplicationWindow {
 					@Override
 					protected void run() {
 						dataTable.reset();
-						//						textConsole.clear();
+						textConsole.clear();
 					}
 				}.start();
 
 				connect();
 			}
-		}.start();
+		}, "resetThread").start();
 	}
 
 }

@@ -29,7 +29,8 @@ public class HttpPollingThread extends Thread {
 
 	private int iteration = 0;
 	private String eTag;
-	private int refresh;
+	private int refresh = 5; // TODO DEFAULT
+	private volatile boolean exit = false;
 
 	public HttpPollingThread(final RouterLoggerGui gui) {
 		this.setDaemon(true);
@@ -37,17 +38,14 @@ public class HttpPollingThread extends Thread {
 	}
 
 	@Override
+	public void interrupt() {
+		exit = true;
+		super.interrupt();
+	}
+
+	@Override
 	public void run() {
 		while (true) {
-			if (refresh > 0) {
-				try {
-					Thread.sleep(refresh * 1000);
-				}
-				catch (InterruptedException e) {
-					break;
-				}
-			}
-
 			final String scheme = "https"; // TODO config
 			final String host = "localhost"; // TODO config
 			final String username = "admin"; // TODO config
@@ -106,9 +104,6 @@ public class HttpPollingThread extends Thread {
 						}
 					}
 				}
-				if (refresh == 0) {
-					refresh = 5; // TODO default
-				}
 
 				is = urlConnection.getInputStream();
 				httpReader = new InputStreamReader(is);
@@ -136,6 +131,18 @@ public class HttpPollingThread extends Thread {
 			catch (final IOException ioe) {
 				ioe.printStackTrace();
 			}
+			if (exit) {
+				break;
+			}
+			else {
+				try {
+					Thread.sleep(refresh * 1000);
+				}
+				catch (InterruptedException e) {
+					break;
+				}
+			}
 		}
 	}
+
 }
