@@ -11,6 +11,8 @@ import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
 
 import java.io.IOException;
@@ -30,10 +32,15 @@ import com.google.gson.Gson;
 
 public class HttpPollingThread extends Thread {
 
+	private static final String CFG_KEY_HTTP_PASSWORD = "http.password";
+	private static final String CFG_KEY_HTTP_USERNAME = "http.username";
+	private static final String CFG_KEY_HTTP_PORT = "http.port";
+	private static final String CFG_KEY_HTTP_HOST = "http.host";
+	private static final String CFG_KEY_CLIENT_PROTOCOL = "client.protocol";
 	private static final String CFG_KEY_HTTP_IGNORE_CERTIFICATE = "http.ignore.certificate";
 
 	public interface Defaults {
-		int REFRESH = 5;
+		int REFRESH_SECS = 0;
 		boolean AUTHENTICATION = true;
 		int PORT = 8080;
 		boolean IGNORE_CERTIFICATE = false;
@@ -70,17 +77,30 @@ public class HttpPollingThread extends Thread {
 
 	@Override
 	public void run() {
+		String scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL).trim().toLowerCase();
+		if (!scheme.contains("http")) {
+			return;
+		}
+		String host = configuration.getString(CFG_KEY_HTTP_HOST);
+		int port = configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT);
+		String username = configuration.getString(CFG_KEY_HTTP_USERNAME);
+		char[] password = configuration.getCharArray(CFG_KEY_HTTP_PASSWORD);
+
+		String baseUrl = scheme + "://" + host + ":" + port;
+
+		Logger.getInstance().log(Resources.get("msg.http.polling", baseUrl));
+
 		while (true) {
-			final String scheme = configuration.getString("client.protocol").trim().toLowerCase();
+			scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL).trim().toLowerCase();
 			if (!scheme.contains("http")) {
 				break;
 			}
-			final String host = configuration.getString("http.host");
-			final int port = configuration.getInt("http.port", Defaults.PORT);
-			final String username = configuration.getString("http.username");
-			final char[] password = configuration.getCharArray("http.password");
+			host = configuration.getString(CFG_KEY_HTTP_HOST);
+			port = configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT);
+			username = configuration.getString(CFG_KEY_HTTP_USERNAME);
+			password = configuration.getCharArray(CFG_KEY_HTTP_PASSWORD);
 
-			final String baseUrl = scheme + "://" + host + ":" + port;
+			baseUrl = scheme + "://" + host + ":" + port;
 
 			if (configuration.getBoolean(CFG_KEY_HTTP_IGNORE_CERTIFICATE, Defaults.IGNORE_CERTIFICATE)) {
 				HttpsURLConnection.setDefaultHostnameVerifier(new RouterLoggerHostnameVerifier(host));
@@ -96,7 +116,7 @@ public class HttpPollingThread extends Thread {
 
 			// RouterLoggerStatus
 			Reader httpReader = null;
-			int refresh = configuration.getInt("http.refresh.secs", Defaults.REFRESH);
+			int refresh = configuration.getInt("http.refresh.secs", Defaults.REFRESH_SECS);
 			try {
 				URL url = new URL(baseUrl + "/json/status");
 				HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -123,42 +143,45 @@ public class HttpPollingThread extends Thread {
 					urlConnection.addRequestProperty("If-None-Match", eTag);
 				}
 
-				if (urlConnection.getResponseCode() != 200) {
-					continue;
+				// Logging
+				if (Logger.getInstance().isDebugEnabled()) {
+					Logger.getInstance().log(Resources.get("msg.http.response.code", urlConnection.getResponseCode()));
 				}
+
 				for (final String header : urlConnection.getHeaderFields().keySet()) {
 					if (header != null) {
 						if (header.equalsIgnoreCase("Etag")) {
 							eTag = urlConnection.getHeaderField(header);
 						}
-						else if (header.equalsIgnoreCase("Refresh")) {
+						else if (refresh <= 0 && header.equalsIgnoreCase("Refresh")) {
 							refresh = Integer.parseInt(urlConnection.getHeaderField(header));
 						}
 					}
 				}
+				if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK || urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_AUTHORITATIVE) {
+					is = urlConnection.getInputStream();
+					httpReader = new InputStreamReader(is);
+					final RouterDataDto routerDataDto = new Gson().fromJson(httpReader, RouterDataDto.class);
+					httpReader.close();
+					final RouterData data = DataTransformer.fromDto(routerDataDto);
 
-				is = urlConnection.getInputStream();
-				httpReader = new InputStreamReader(is);
-				final RouterDataDto routerDataDto = new Gson().fromJson(httpReader, RouterDataDto.class);
-				httpReader.close();
-				final RouterData data = DataTransformer.fromDto(routerDataDto);
+					// ThresholdsReached
+					url = new URL(baseUrl + "/json/thresholds");
+					urlConnection = (HttpURLConnection) url.openConnection();
+					urlConnection.addRequestProperty("Accept", "application/json");
+					if (authenticationHeader != null) {
+						urlConnection.addRequestProperty("Authorization", authenticationHeader);
+					}
+					is = urlConnection.getInputStream();
+					httpReader = new InputStreamReader(is);
+					final ThresholdsDto thresholdsDto = new Gson().fromJson(httpReader, ThresholdsDto.class);
+					httpReader.close();
+					final ThresholdsReached thresholdsReached = ThresholdsTransformer.fromDto(thresholdsDto);
 
-				// ThresholdsReached
-				url = new URL(baseUrl + "/json/thresholds");
-				urlConnection = (HttpURLConnection) url.openConnection();
-				urlConnection.addRequestProperty("Accept", "application/json");
-				if (authenticationHeader != null) {
-					urlConnection.addRequestProperty("Authorization", authenticationHeader);
+					// Update GUI
+					gui.getDataTable().addRow(++iteration, data, thresholdsReached.getReached());
+					gui.getTrayIcon().updateTrayItem(rls.getStatus(), data);
 				}
-				is = urlConnection.getInputStream();
-				httpReader = new InputStreamReader(is);
-				final ThresholdsDto thresholdsDto = new Gson().fromJson(httpReader, ThresholdsDto.class);
-				httpReader.close();
-				final ThresholdsReached thresholdsReached = ThresholdsTransformer.fromDto(thresholdsDto);
-
-				// Update GUI
-				gui.getDataTable().addRow(++iteration, data, thresholdsReached.getReached());
-				gui.getTrayIcon().updateTrayItem(rls.getStatus(), data);
 			}
 			catch (final IOException ioe) {
 				ioe.printStackTrace();
@@ -167,14 +190,17 @@ public class HttpPollingThread extends Thread {
 				break;
 			}
 			else {
+				if (refresh <= 0) {
+					Logger.getInstance().log(Resources.get("err.http.refresh.auto"));
+					break;
+				}
 				try {
 					Thread.sleep(refresh * 1000);
 				}
-				catch (InterruptedException e) {
+				catch (final InterruptedException e) {
 					break;
 				}
 			}
 		}
 	}
-
 }

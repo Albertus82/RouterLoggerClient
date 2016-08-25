@@ -45,7 +45,7 @@ public class Logger {
 	private final Configuration configuration;
 
 	public boolean isDebugEnabled() {
-		return configuration != null ? configuration.getBoolean("console.debug", Defaults.DEBUG) : true;
+		return configuration != null ? configuration.getBoolean("debug", Defaults.DEBUG) : true;
 	}
 
 	public void log(final String text) {

@@ -4,6 +4,7 @@ import it.albertus.jface.TextConsole;
 import it.albertus.jface.preference.FieldEditorData;
 import it.albertus.jface.preference.FieldEditorData.FieldEditorDataBuilder;
 import it.albertus.jface.preference.FieldEditorFactory;
+import it.albertus.jface.preference.LocalizedNamesAndValues;
 import it.albertus.jface.preference.Preference;
 import it.albertus.jface.preference.PreferenceData;
 import it.albertus.jface.preference.PreferenceData.PreferenceDataBuilder;
@@ -14,6 +15,7 @@ import it.albertus.jface.preference.field.FormattedComboFieldEditor;
 import it.albertus.jface.preference.field.FormattedDirectoryFieldEditor;
 import it.albertus.jface.preference.field.FormattedIntegerFieldEditor;
 import it.albertus.jface.preference.field.FormattedStringFieldEditor;
+import it.albertus.jface.preference.field.IntegerComboFieldEditor;
 import it.albertus.jface.preference.field.PasswordFieldEditor;
 import it.albertus.jface.preference.field.ScaleIntegerFieldEditor;
 import it.albertus.jface.preference.field.UriListEditor;
@@ -80,7 +82,13 @@ public enum RouterLoggerClientPreference implements Preference {
 	HTTP_USERNAME(RouterLoggerClientPage.HTTP, FormattedStringFieldEditor.class, new PreferenceDataBuilder().parent(HTTP_AUTHENTICATION).build()),
 	HTTP_PASSWORD(RouterLoggerClientPage.HTTP, PasswordFieldEditor.class, new PreferenceDataBuilder().parent(HTTP_AUTHENTICATION).build()),
 	HTTP_IGNORE_CERTIFICATE(RouterLoggerClientPage.HTTP, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.IGNORE_CERTIFICATE).restartRequired().build()),
-
+	HTTP_REFRESH_SECS(RouterLoggerClientPage.HTTP,  IntegerComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.REFRESH_SECS).build(), new FieldEditorDataBuilder().namesAndValues(new LocalizedNamesAndValues(new Localized() {
+		@Override
+		public String getString() {
+			return Resources.get("lbl.preferences.http.refresh.auto");
+		}
+	}, 0)).build()),
+	
 	GUI_TABLE_ITEMS_MAX(RouterLoggerClientPage.APPEARANCE, FormattedIntegerFieldEditor.class, new PreferenceDataBuilder().defaultValue(DataTable.Defaults.MAX_ITEMS).build(), new FieldEditorDataBuilder().textLimit(4).build()),
 	GUI_IMPORTANT_KEYS(RouterLoggerClientPage.APPEARANCE, WrapStringFieldEditor.class),
 	GUI_IMPORTANT_KEYS_SEPARATOR(RouterLoggerClientPage.APPEARANCE, FormattedStringFieldEditor.class, new PreferenceDataBuilder().defaultValue(RouterLoggerClientConfiguration.Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
