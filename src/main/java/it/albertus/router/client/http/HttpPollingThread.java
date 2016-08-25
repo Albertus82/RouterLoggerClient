@@ -72,6 +72,9 @@ public class HttpPollingThread extends Thread {
 	public void run() {
 		while (true) {
 			final String scheme = configuration.getString("client.protocol").trim().toLowerCase();
+			if (!scheme.contains("http")) {
+				break;
+			}
 			final String host = configuration.getString("http.host");
 			final int port = configuration.getInt("http.port", Defaults.PORT);
 			final String username = configuration.getString("http.username");
