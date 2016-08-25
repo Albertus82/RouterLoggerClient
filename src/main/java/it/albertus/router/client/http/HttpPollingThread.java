@@ -35,7 +35,7 @@ public class HttpPollingThread extends Thread {
 	public interface Defaults {
 		int REFRESH = 5;
 		boolean AUTHENTICATION = true;
-		int PORT = 80;
+		int PORT = 8080;
 		boolean IGNORE_CERTIFICATE = false;
 	}
 
