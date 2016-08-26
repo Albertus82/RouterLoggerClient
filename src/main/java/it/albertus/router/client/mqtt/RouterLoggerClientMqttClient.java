@@ -38,15 +38,12 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 	private static final String CFG_KEY_MQTT_PERSISTENCE_FILE_CUSTOM = "mqtt.persistence.file.custom";
 	private static final String CFG_KEY_MQTT_PERSISTENCE_FILE_PATH = "mqtt.persistence.file.path";
 
-	private static final String CFG_KEY_MQTT_DATA_ENABLED = "mqtt.data.enabled";
 	private static final String CFG_KEY_MQTT_DATA_TOPIC = "mqtt.data.topic";
 	private static final String CFG_KEY_MQTT_DATA_QOS = "mqtt.data.qos";
 
-	private static final String CFG_KEY_MQTT_THRESHOLDS_ENABLED = "mqtt.thresholds.enabled";
 	private static final String CFG_KEY_MQTT_THRESHOLDS_TOPIC = "mqtt.thresholds.topic";
 	private static final String CFG_KEY_MQTT_THRESHOLDS_QOS = "mqtt.thresholds.qos";
 
-	private static final String CFG_KEY_MQTT_STATUS_ENABLED = "mqtt.status.enabled";
 	private static final String CFG_KEY_MQTT_STATUS_TOPIC = "mqtt.status.topic";
 	private static final String CFG_KEY_MQTT_STATUS_QOS = "mqtt.status.qos";
 
@@ -165,41 +162,35 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 	}
 
 	public void subscribeData() {
-		if (configuration.getBoolean(CFG_KEY_MQTT_DATA_ENABLED, Defaults.DATA_ENABLED)) {
-			final String topic = configuration.getString(CFG_KEY_MQTT_DATA_TOPIC, Defaults.DATA_TOPIC);
-			final int qos = configuration.getByte(CFG_KEY_MQTT_DATA_QOS, Defaults.DATA_QOS);
-			try {
-				doSubscribe(topic, qos, dataMessageListener);
-			}
-			catch (final Exception e) {
-				Logger.getInstance().log(e);
-			}
+		final String topic = configuration.getString(CFG_KEY_MQTT_DATA_TOPIC, Defaults.DATA_TOPIC);
+		final int qos = configuration.getByte(CFG_KEY_MQTT_DATA_QOS, Defaults.DATA_QOS);
+		try {
+			doSubscribe(topic, qos, dataMessageListener);
+		}
+		catch (final Exception e) {
+			Logger.getInstance().log(e);
 		}
 	}
 
 	public void subscribeStatus() {
-		if (configuration.getBoolean(CFG_KEY_MQTT_STATUS_ENABLED, Defaults.STATUS_ENABLED)) {
-			final String topic = configuration.getString(CFG_KEY_MQTT_STATUS_TOPIC, Defaults.STATUS_TOPIC);
-			final int qos = configuration.getByte(CFG_KEY_MQTT_STATUS_QOS, Defaults.STATUS_QOS);
-			try {
-				doSubscribe(topic, qos, statusMessageListener);
-			}
-			catch (final Exception e) {
-				Logger.getInstance().log(e);
-			}
+		final String topic = configuration.getString(CFG_KEY_MQTT_STATUS_TOPIC, Defaults.STATUS_TOPIC);
+		final int qos = configuration.getByte(CFG_KEY_MQTT_STATUS_QOS, Defaults.STATUS_QOS);
+		try {
+			doSubscribe(topic, qos, statusMessageListener);
+		}
+		catch (final Exception e) {
+			Logger.getInstance().log(e);
 		}
 	}
 
 	public void subscribeThresholds() {
-		if (configuration.getBoolean(CFG_KEY_MQTT_THRESHOLDS_ENABLED, Defaults.THRESHOLDS_ENABLED)) {
-			final String topic = configuration.getString(CFG_KEY_MQTT_THRESHOLDS_TOPIC, Defaults.THRESHOLDS_TOPIC);
-			final int qos = configuration.getByte(CFG_KEY_MQTT_THRESHOLDS_QOS, Defaults.THRESHOLDS_QOS);
-			try {
-				doSubscribe(topic, qos, thresholdsMessageListener);
-			}
-			catch (final Exception e) {
-				Logger.getInstance().log(e);
-			}
+		final String topic = configuration.getString(CFG_KEY_MQTT_THRESHOLDS_TOPIC, Defaults.THRESHOLDS_TOPIC);
+		final int qos = configuration.getByte(CFG_KEY_MQTT_THRESHOLDS_QOS, Defaults.THRESHOLDS_QOS);
+		try {
+			doSubscribe(topic, qos, thresholdsMessageListener);
+		}
+		catch (final Exception e) {
+			Logger.getInstance().log(e);
 		}
 	}
 
