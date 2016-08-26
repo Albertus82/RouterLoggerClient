@@ -88,7 +88,8 @@ public class HttpPollingThread extends Thread {
 
 		String baseUrl = scheme + "://" + host + ":" + port;
 
-		Logger.getInstance().log(Resources.get("msg.http.polling", baseUrl));
+		final Logger logger = Logger.getInstance();
+		logger.log(Resources.get("msg.http.polling", scheme.toUpperCase(), baseUrl));
 
 		while (true) {
 			scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL).trim().toLowerCase();
@@ -144,8 +145,8 @@ public class HttpPollingThread extends Thread {
 				}
 
 				// Logging
-				if (Logger.getInstance().isDebugEnabled()) {
-					Logger.getInstance().log(Resources.get("msg.http.response.code", urlConnection.getResponseCode()));
+				if (logger.isDebugEnabled()) {
+					logger.log(Resources.get("msg.http.response.code", urlConnection.getResponseCode()));
 				}
 
 				for (final String header : urlConnection.getHeaderFields().keySet()) {
@@ -191,7 +192,7 @@ public class HttpPollingThread extends Thread {
 			}
 			else {
 				if (refresh <= 0) {
-					Logger.getInstance().log(Resources.get("err.http.refresh.auto"));
+					logger.log(Resources.get("err.http.refresh.auto"));
 					break;
 				}
 				try {
