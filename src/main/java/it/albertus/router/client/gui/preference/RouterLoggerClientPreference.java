@@ -84,6 +84,18 @@ public enum RouterLoggerClientPreference implements Preference {
 	HTTP_USERNAME(RouterLoggerClientPage.HTTP, DefaultStringFieldEditor.class, new PreferenceDataBuilder().parent(HTTP_AUTHENTICATION).build()),
 	HTTP_PASSWORD(RouterLoggerClientPage.HTTP, PasswordFieldEditor.class, new PreferenceDataBuilder().parent(HTTP_AUTHENTICATION).build()),
 	HTTP_IGNORE_CERTIFICATE(RouterLoggerClientPage.HTTP, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.IGNORE_CERTIFICATE).restartRequired().build()),
+	HTTP_CONNECTION_TIMEOUT(RouterLoggerClientPage.HTTP, IntegerComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.CONNECTION_TIMEOUT).build(), new FieldEditorDataBuilder().labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
+		@Override
+		public String getString() {
+			return Resources.get("lbl.preferences.http.timeout.infinite");
+		}
+	}, 0)).build()),
+	HTTP_READ_TIMEOUT(RouterLoggerClientPage.HTTP, IntegerComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.READ_TIMEOUT).build(), new FieldEditorDataBuilder().labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
+		@Override
+		public String getString() {
+			return Resources.get("lbl.preferences.http.timeout.infinite");
+		}
+	}, 0)).build()),
 	HTTP_REFRESH_SECS(RouterLoggerClientPage.HTTP, IntegerComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.REFRESH_SECS).build(), new FieldEditorDataBuilder().labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
 		@Override
 		public String getString() {

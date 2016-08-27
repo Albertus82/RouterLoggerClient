@@ -32,11 +32,15 @@ import com.google.gson.Gson;
 
 public class HttpPollingThread extends Thread {
 
-	private static final String CFG_KEY_HTTP_PASSWORD = "http.password";
-	private static final String CFG_KEY_HTTP_USERNAME = "http.username";
-	private static final String CFG_KEY_HTTP_PORT = "http.port";
-	private static final String CFG_KEY_HTTP_HOST = "http.host";
 	private static final String CFG_KEY_CLIENT_PROTOCOL = "client.protocol";
+	private static final String CFG_KEY_HTTP_HOST = "http.host";
+	private static final String CFG_KEY_HTTP_PORT = "http.port";
+	private static final String CFG_KEY_HTTP_AUTHENTICATION = "http.authentication";
+	private static final String CFG_KEY_HTTP_USERNAME = "http.username";
+	private static final String CFG_KEY_HTTP_PASSWORD = "http.password";
+	private static final String CFG_KEY_HTTP_READ_TIMEOUT = "http.read.timeout";
+	private static final String CFG_KEY_HTTP_CONNECTION_TIMEOUT = "http.connection.timeout";
+	private static final String CFG_KEY_HTTP_REFRESH_SECS = "http.refresh.secs";
 	private static final String CFG_KEY_HTTP_IGNORE_CERTIFICATE = "http.ignore.certificate";
 
 	public interface Defaults {
@@ -44,6 +48,8 @@ public class HttpPollingThread extends Thread {
 		boolean AUTHENTICATION = true;
 		int PORT = 8080;
 		boolean IGNORE_CERTIFICATE = false;
+		int CONNECTION_TIMEOUT = 0;
+		int READ_TIMEOUT = 0;
 	}
 
 	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
@@ -100,6 +106,8 @@ public class HttpPollingThread extends Thread {
 			port = configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT);
 			username = configuration.getString(CFG_KEY_HTTP_USERNAME);
 			password = configuration.getCharArray(CFG_KEY_HTTP_PASSWORD);
+			final int connectionTimeout = configuration.getInt(CFG_KEY_HTTP_CONNECTION_TIMEOUT, Defaults.CONNECTION_TIMEOUT);
+			final int readTimeout = configuration.getInt(CFG_KEY_HTTP_READ_TIMEOUT, Defaults.READ_TIMEOUT);
 
 			baseUrl = scheme + "://" + host + ":" + port;
 
@@ -108,23 +116,19 @@ public class HttpPollingThread extends Thread {
 			}
 
 			final String authenticationHeader;
-			if (configuration.getBoolean("http.authentication", Defaults.AUTHENTICATION) && username != null && !username.isEmpty() && password != null && password.length > 0) {
+			if (configuration.getBoolean(CFG_KEY_HTTP_AUTHENTICATION, Defaults.AUTHENTICATION) && username != null && !username.isEmpty() && password != null && password.length > 0) {
 				authenticationHeader = "Basic " + DatatypeConverter.printBase64Binary((username + ":" + String.valueOf(password)).getBytes());
 			}
 			else {
 				authenticationHeader = null;
 			}
 
-			// RouterLoggerStatus
 			Reader httpReader = null;
-			int refresh = configuration.getInt("http.refresh.secs", Defaults.REFRESH_SECS);
+			int refresh = configuration.getInt(CFG_KEY_HTTP_REFRESH_SECS, Defaults.REFRESH_SECS);
 			try {
+				// RouterLoggerStatus
 				URL url = new URL(baseUrl + "/json/status");
-				HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-				urlConnection.addRequestProperty("Accept", "application/json");
-				if (authenticationHeader != null) {
-					urlConnection.addRequestProperty("Authorization", authenticationHeader);
-				}
+				HttpURLConnection urlConnection = openConnection(url, authenticationHeader, connectionTimeout, readTimeout);
 				InputStream is = urlConnection.getInputStream();
 				httpReader = new InputStreamReader(is);
 				final StatusDto statusDto = new Gson().fromJson(httpReader, StatusDto.class);
@@ -134,11 +138,7 @@ public class HttpPollingThread extends Thread {
 
 				// RouterData
 				url = new URL(baseUrl + "/json/data");
-				urlConnection = (HttpURLConnection) url.openConnection();
-				urlConnection.addRequestProperty("Accept", "application/json");
-				if (authenticationHeader != null) {
-					urlConnection.addRequestProperty("Authorization", authenticationHeader);
-				}
+				urlConnection = openConnection(url, authenticationHeader, connectionTimeout, readTimeout);
 
 				if (eTag != null) {
 					urlConnection.addRequestProperty("If-None-Match", eTag);
@@ -168,11 +168,7 @@ public class HttpPollingThread extends Thread {
 
 					// ThresholdsReached
 					url = new URL(baseUrl + "/json/thresholds");
-					urlConnection = (HttpURLConnection) url.openConnection();
-					urlConnection.addRequestProperty("Accept", "application/json");
-					if (authenticationHeader != null) {
-						urlConnection.addRequestProperty("Authorization", authenticationHeader);
-					}
+					urlConnection = openConnection(url, authenticationHeader, connectionTimeout, readTimeout);
 					is = urlConnection.getInputStream();
 					httpReader = new InputStreamReader(is);
 					final ThresholdsDto thresholdsDto = new Gson().fromJson(httpReader, ThresholdsDto.class);
@@ -204,4 +200,16 @@ public class HttpPollingThread extends Thread {
 			}
 		}
 	}
+
+	private HttpURLConnection openConnection(final URL url, final String authenticationHeader, final int connectionTimeout, final int readTimeout) throws IOException {
+		final HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+		urlConnection.setConnectTimeout(connectionTimeout);
+		urlConnection.setReadTimeout(readTimeout);
+		urlConnection.addRequestProperty("Accept", "application/json");
+		if (authenticationHeader != null) {
+			urlConnection.addRequestProperty("Authorization", authenticationHeader);
+		}
+		return urlConnection;
+	}
+
 }
