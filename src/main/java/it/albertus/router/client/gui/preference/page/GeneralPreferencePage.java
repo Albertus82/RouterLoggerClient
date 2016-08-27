@@ -1,7 +1,7 @@
 package it.albertus.router.client.gui.preference.page;
 
-import it.albertus.jface.preference.LocalizedNamesAndValues;
-import it.albertus.jface.preference.StaticNamesAndValues;
+import it.albertus.jface.preference.LocalizedLabelsAndValues;
+import it.albertus.jface.preference.StaticLabelsAndValues;
 import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.resources.Resources;
 import it.albertus.router.client.resources.Resources.Language;
@@ -11,9 +11,9 @@ import java.util.Locale;
 
 public class GeneralPreferencePage extends RestartHeaderPreferencePage {
 
-	public static LocalizedNamesAndValues getLanguageComboOptions() {
+	public static LocalizedLabelsAndValues getLanguageComboOptions() {
 		final Language[] values = Resources.Language.values();
-		final LocalizedNamesAndValues options = new LocalizedNamesAndValues(values.length);
+		final LocalizedLabelsAndValues options = new LocalizedLabelsAndValues(values.length);
 		for (final Language language : values) {
 			final Locale locale = language.getLocale();
 			final String value = locale.getLanguage();
@@ -28,8 +28,8 @@ public class GeneralPreferencePage extends RestartHeaderPreferencePage {
 		return options;
 	}
 
-	public static StaticNamesAndValues getProtocolComboOptions() {
-		final StaticNamesAndValues options = new StaticNamesAndValues(Protocol.values().length);
+	public static StaticLabelsAndValues getProtocolComboOptions() {
+		final StaticLabelsAndValues options = new StaticLabelsAndValues(Protocol.values().length);
 		for (final Protocol protocol : Protocol.values()) {
 			final String value = protocol.name();
 			final String name = protocol.toString();
