@@ -67,7 +67,7 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 						for (final TableItem ti : gui.getDataTable().getTable().getItems()) {
 							if (ti.getText(1).equals(formatTimestamp(thresholdsReached.getTimestamp()))) {
 								for (final int index : indexes) {
-									ti.setForeground(index, gui.getDataTable().thresholdReachedForegroudColor);
+									ti.setForeground(index, gui.getDataTable().getThresholdsReachedForegroundColor());
 								}
 								break;
 							}
