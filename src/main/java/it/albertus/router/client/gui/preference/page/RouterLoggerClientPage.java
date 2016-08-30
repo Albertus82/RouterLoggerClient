@@ -4,6 +4,8 @@ import it.albertus.jface.preference.page.BasePreferencePage;
 import it.albertus.jface.preference.page.PageDefinition;
 import it.albertus.router.client.resources.Resources;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+
 public enum RouterLoggerClientPage implements PageDefinition {
 	GENERAL(GeneralPreferencePage.class),
 	MQTT(MqttPreferencePage.class),
@@ -74,6 +76,11 @@ public enum RouterLoggerClientPage implements PageDefinition {
 	@Override
 	public PageDefinition getParent() {
 		return parent;
+	}
+
+	@Override
+	public ImageDescriptor getImage() {
+		return null;
 	}
 
 }
