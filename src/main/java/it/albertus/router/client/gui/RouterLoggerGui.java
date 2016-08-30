@@ -5,6 +5,9 @@ import it.albertus.jface.TextConsole;
 import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
+import it.albertus.router.client.engine.Status;
+import it.albertus.router.client.engine.Threshold;
+import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
@@ -17,6 +20,8 @@ import it.albertus.util.Version;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
@@ -239,6 +244,9 @@ public class RouterLoggerGui extends ApplicationWindow {
 			currentStatus = newStatus;
 			if (trayIcon != null) {
 				trayIcon.updateTrayItem(currentStatus.getStatus());
+				if (Status.WARNING.equals(currentStatus.getStatus())) {
+					trayIcon.setShowToolTip(true);
+				}
 			}
 		}
 	}
@@ -261,6 +269,25 @@ public class RouterLoggerGui extends ApplicationWindow {
 				connect();
 			}
 		}, "resetThread").start();
+	}
+
+	public void printThresholdsReached(final ThresholdsReached thresholdsReached) {
+		if (thresholdsReached != null && thresholdsReached.getReached() != null && !thresholdsReached.getReached().isEmpty()) {
+			final Map<String, String> message = new TreeMap<String, String>();
+			boolean print = false;
+			for (final Threshold threshold : thresholdsReached.getReached().keySet()) {
+				message.put(threshold.getKey(), thresholdsReached.getReached().get(threshold));
+				if (!threshold.isExcluded()) {
+					print = true;
+				}
+			}
+			if (print) {
+				Logger.getInstance().log(Resources.get("msg.thresholds.reached", message), thresholdsReached.getTimestamp());
+				if (trayIcon != null) {
+					trayIcon.showBalloonToolTip(thresholdsReached.getReached());
+				}
+			}
+		}
 	}
 
 }

@@ -7,19 +7,14 @@ import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.DataTable;
 import it.albertus.router.client.gui.RouterLoggerGui;
-import it.albertus.router.client.gui.TrayIcon;
 import it.albertus.router.client.mqtt.BaseMqttClient;
-import it.albertus.router.client.resources.Resources;
-import it.albertus.router.client.util.Logger;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -77,27 +72,7 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 			}
 
 			if (!message.isRetained()) {
-				printThresholdsReached(thresholdsReached);
-			}
-		}
-	}
-
-	private void printThresholdsReached(final ThresholdsReached thresholdsReached) {
-		if (thresholdsReached != null && thresholdsReached.getReached() != null && !thresholdsReached.getReached().isEmpty()) {
-			final Map<String, String> message = new TreeMap<String, String>();
-			boolean print = false;
-			for (final Threshold threshold : thresholdsReached.getReached().keySet()) {
-				message.put(threshold.getKey(), thresholdsReached.getReached().get(threshold));
-				if (!threshold.isExcluded()) {
-					print = true;
-				}
-			}
-			if (print) {
-				Logger.getInstance().log(Resources.get("msg.thresholds.reached", message), thresholdsReached.getTimestamp());
-				final TrayIcon trayIcon = gui.getTrayIcon();
-				if (trayIcon != null) {
-					trayIcon.showBalloonToolTip(thresholdsReached.getReached());
-				}
+				gui.printThresholdsReached(thresholdsReached);
 			}
 		}
 	}

@@ -178,6 +178,7 @@ public class HttpPollingThread extends Thread {
 					// Update GUI
 					gui.getDataTable().addRow(++iteration, data, thresholdsReached.getReached());
 					gui.getTrayIcon().updateTrayItem(rls.getStatus(), data);
+					gui.printThresholdsReached(thresholdsReached);
 				}
 			}
 			catch (final IOException ioe) {
