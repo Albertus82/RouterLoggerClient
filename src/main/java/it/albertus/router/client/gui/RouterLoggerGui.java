@@ -89,6 +89,48 @@ public class RouterLoggerGui extends ApplicationWindow {
 		}
 	}
 
+	private class ConnectThread extends Thread {
+		private ConnectThread() {
+			super("connectThread");
+		}
+
+		@Override
+		public void run() {
+			final String protocol = configuration.getString("client.protocol", Defaults.CLIENT_PROTOCOL).trim();
+			if (protocol.equalsIgnoreCase(Protocol.MQTT.toString())) { // MQTT
+				mqttClient.init(RouterLoggerGui.this);
+				mqttConnectionThread = new MqttConnectionThread();
+				mqttConnectionThread.start();
+			}
+			else if (protocol.toUpperCase().startsWith(Protocol.HTTP.toString().toUpperCase())) { // HTTP
+				httpPollingThread = new HttpPollingThread(RouterLoggerGui.this);
+				httpPollingThread.start();
+			}
+			else {
+				Logger.getInstance().log("Protocollo non valido."); // TODO
+			}
+		}
+	}
+
+	private class ReleaseThread extends Thread {
+		private ReleaseThread() {
+			super("releaseThread");
+		}
+
+		@Override
+		public void run() {
+			mqttClient.disconnect();
+			if (httpPollingThread != null) {
+				httpPollingThread.interrupt();
+				try {
+					httpPollingThread.join();
+				}
+				catch (final InterruptedException ie) {/* Ignore */}
+			}
+			printGoodbye();
+		}
+	}
+
 	public RouterLoggerGui(final Display display) {
 		super(null);
 		open();
@@ -107,31 +149,11 @@ public class RouterLoggerGui extends ApplicationWindow {
 
 	private void connect() {
 		printWelcome();
-		final String protocol = configuration.getString("client.protocol", Defaults.CLIENT_PROTOCOL).trim();
-		if (protocol.equalsIgnoreCase(Protocol.MQTT.toString())) { // MQTT
-			mqttClient.init(this);
-			mqttConnectionThread = new MqttConnectionThread();
-			mqttConnectionThread.start();
-		}
-		else if (protocol.toUpperCase().startsWith(Protocol.HTTP.toString().toUpperCase())) { // HTTP
-			httpPollingThread = new HttpPollingThread(this);
-			httpPollingThread.start();
-		}
-		else {
-			Logger.getInstance().log("Protocollo non valido."); // TODO
-		}
+		new ConnectThread().start();
 	}
 
 	private void release() {
-		mqttClient.disconnect();
-		if (httpPollingThread != null) {
-			httpPollingThread.interrupt();
-			try {
-				httpPollingThread.join();
-			}
-			catch (final InterruptedException ie) {/* Ignore */}
-		}
-		printGoodbye();
+		new ReleaseThread().start();
 	}
 
 	@Override
@@ -252,10 +274,15 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	public void restart() {
-		new Thread(new Runnable() {
+		new Thread("resetThread") {
 			@Override
 			public void run() {
-				release();
+				final Thread releaseThread = new ReleaseThread();
+				releaseThread.start();
+				try {
+					releaseThread.join();
+				}
+				catch (final InterruptedException ie) {/* Ignore */}
 
 				configuration.reload();
 				new SwtThreadExecutor(getShell()) {
@@ -268,7 +295,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 
 				connect();
 			}
-		}, "resetThread").start();
+		}.start();
 	}
 
 	public void printThresholdsReached(final ThresholdsReached thresholdsReached) {

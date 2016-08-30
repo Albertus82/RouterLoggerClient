@@ -97,7 +97,7 @@ public class HttpPollingThread extends Thread {
 		final Logger logger = Logger.getInstance();
 		logger.log(Resources.get("msg.http.polling", scheme.toUpperCase(), baseUrl));
 
-		while (true) {
+		while (!exit) {
 			scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL).trim().toLowerCase();
 			if (!scheme.contains("http")) {
 				break;
