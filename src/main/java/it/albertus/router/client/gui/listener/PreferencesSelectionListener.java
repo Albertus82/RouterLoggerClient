@@ -23,7 +23,7 @@ public class PreferencesSelectionListener extends SelectionAdapter {
 	public void widgetSelected(final SelectionEvent se) {
 		final Preferences preferences = new RouterLoggerClientPreferences(gui);
 		try {
-			preferences.open(gui.getShell());
+			preferences.openDialog(gui.getShell());
 		}
 		catch (final Exception e) {
 			Logger.getInstance().log(e);

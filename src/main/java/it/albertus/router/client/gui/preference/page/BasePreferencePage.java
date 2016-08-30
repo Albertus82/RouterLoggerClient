@@ -1,7 +1,7 @@
 package it.albertus.router.client.gui.preference.page;
 
 import it.albertus.jface.preference.page.AbstractPreferencePage;
-import it.albertus.jface.preference.page.Page;
+import it.albertus.jface.preference.page.PageDefinition;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.gui.preference.RouterLoggerClientPreference;
 
@@ -16,7 +16,7 @@ public abstract class BasePreferencePage extends AbstractPreferencePage {
 	}
 
 	@Override
-	public Page getPage() {
+	public PageDefinition getPageDefinition() {
 		return RouterLoggerClientPage.forClass(getClass());
 	}
 
