@@ -1,45 +1,45 @@
 package it.albertus.router.client.gui.preference.page;
 
-import it.albertus.jface.preference.page.AbstractPreferencePage;
+import it.albertus.jface.preference.page.BasePreferencePage;
 import it.albertus.jface.preference.page.PageDefinition;
 import it.albertus.router.client.resources.Resources;
 
 public enum RouterLoggerClientPage implements PageDefinition {
 	GENERAL(GeneralPreferencePage.class),
 	MQTT(MqttPreferencePage.class),
-	MQTT_MESSAGES(MqttMessagesPreferencePage.class, MQTT),
+	MQTT_MESSAGES(RestartHeaderPreferencePage.class, MQTT),
 	MQTT_ADVANCED(AdvancedMqttPreferencePage.class, MQTT),
-	HTTP(HttpPreferencePage.class),
-	APPEARANCE(AppearancePreferencePage.class);
+	HTTP(RestartHeaderPreferencePage.class),
+	APPEARANCE(RestartHeaderPreferencePage.class);
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";
 
 	private final String nodeId;
 	private final String labelKey;
-	private final Class<? extends AbstractPreferencePage> pageClass;
+	private final Class<? extends BasePreferencePage> pageClass;
 	private final PageDefinition parent;
 
-	private RouterLoggerClientPage(final Class<? extends AbstractPreferencePage> pageClass) {
+	private RouterLoggerClientPage(final Class<? extends BasePreferencePage> pageClass) {
 		this(null, null, pageClass, null);
 	}
 
-	private RouterLoggerClientPage(final Class<? extends AbstractPreferencePage> pageClass, final PageDefinition parent) {
+	private RouterLoggerClientPage(final Class<? extends BasePreferencePage> pageClass, final PageDefinition parent) {
 		this(null, null, pageClass, parent);
 	}
 
-	private RouterLoggerClientPage(final String labelKey, final Class<? extends AbstractPreferencePage> pageClass) {
+	private RouterLoggerClientPage(final String labelKey, final Class<? extends BasePreferencePage> pageClass) {
 		this(null, labelKey, pageClass, null);
 	}
 
-	private RouterLoggerClientPage(final String labelKey, final Class<? extends AbstractPreferencePage> pageClass, final PageDefinition parent) {
+	private RouterLoggerClientPage(final String labelKey, final Class<? extends BasePreferencePage> pageClass, final PageDefinition parent) {
 		this(null, labelKey, pageClass, parent);
 	}
 
-	private RouterLoggerClientPage(final String nodeId, final String labelKey, final Class<? extends AbstractPreferencePage> pageClass) {
+	private RouterLoggerClientPage(final String nodeId, final String labelKey, final Class<? extends BasePreferencePage> pageClass) {
 		this(nodeId, labelKey, pageClass, null);
 	}
 
-	private RouterLoggerClientPage(final String nodeId, final String labelKey, final Class<? extends AbstractPreferencePage> pageClass, final PageDefinition parent) {
+	private RouterLoggerClientPage(final String nodeId, final String labelKey, final Class<? extends BasePreferencePage> pageClass, final PageDefinition parent) {
 		if (nodeId != null && !nodeId.isEmpty()) {
 			this.nodeId = nodeId;
 		}
@@ -67,7 +67,7 @@ public enum RouterLoggerClientPage implements PageDefinition {
 	}
 
 	@Override
-	public Class<? extends AbstractPreferencePage> getPageClass() {
+	public Class<? extends BasePreferencePage> getPageClass() {
 		return pageClass;
 	}
 
