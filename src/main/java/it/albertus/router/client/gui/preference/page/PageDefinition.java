@@ -10,6 +10,7 @@ import it.albertus.util.Localized;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 public enum PageDefinition implements IPreferencePageDefinition {
+
 	GENERAL(new PreferencePageDefinitionBuilder().pageClass(GeneralPreferencePage.class).build()),
 	MQTT(new PreferencePageDefinitionBuilder().pageClass(MqttPreferencePage.class).build()),
 	MQTT_MESSAGES(new PreferencePageDefinitionBuilder().pageClass(RestartHeaderPreferencePage.class).parent(MQTT).build()),

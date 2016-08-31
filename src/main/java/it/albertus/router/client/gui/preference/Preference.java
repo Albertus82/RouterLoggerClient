@@ -44,7 +44,7 @@ import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.widgets.Composite;
 
-public enum RouterLoggerClientPreference implements IPreference {
+public enum Preference implements IPreference {
 
 	LANGUAGE(new PreferenceDetailsBuilder(PageDefinition.GENERAL).defaultValue(Locale.getDefault().getLanguage()).build(), new FieldEditorDetailsBuilder(ComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
 	CLIENT_PROTOCOL(new PreferenceDetailsBuilder(PageDefinition.GENERAL).separate().defaultValue(RouterLoggerGui.Defaults.CLIENT_PROTOCOL).restartRequired().build(), new FieldEditorDetailsBuilder(DefaultRadioGroupFieldEditor.class).labelsAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
@@ -125,7 +125,7 @@ public enum RouterLoggerClientPreference implements IPreference {
 	private final PreferenceDetails preferenceDetails;
 	private final FieldEditorDetails fieldEditorDetails;
 
-	RouterLoggerClientPreference(final PreferenceDetails preferenceDetails, final FieldEditorDetails fieldEditorDetails) {
+	Preference(final PreferenceDetails preferenceDetails, final FieldEditorDetails fieldEditorDetails) {
 		this.preferenceDetails = preferenceDetails;
 		this.fieldEditorDetails = fieldEditorDetails;
 		if (preferenceDetails.getName() == null) {
@@ -178,8 +178,8 @@ public enum RouterLoggerClientPreference implements IPreference {
 
 	@Override
 	public Set<? extends IPreference> getChildren() {
-		final Set<RouterLoggerClientPreference> preferences = EnumSet.noneOf(RouterLoggerClientPreference.class);
-		for (final RouterLoggerClientPreference item : RouterLoggerClientPreference.values()) {
+		final Set<Preference> preferences = EnumSet.noneOf(Preference.class);
+		for (final Preference item : Preference.values()) {
 			if (this.equals(item.getParent())) {
 				preferences.add(item);
 			}
@@ -194,7 +194,7 @@ public enum RouterLoggerClientPreference implements IPreference {
 
 	public static IPreference forName(final String name) {
 		if (name != null) {
-			for (final IPreference preference : RouterLoggerClientPreference.values()) {
+			for (final IPreference preference : Preference.values()) {
 				if (name.equals(preference.getName())) {
 					return preference;
 				}
