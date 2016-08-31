@@ -1,31 +1,31 @@
 package it.albertus.router.client.gui.preference.page;
 
 import it.albertus.jface.preference.page.BasePreferencePage;
-import it.albertus.jface.preference.page.IPageDefinition;
-import it.albertus.jface.preference.page.PageDefinition;
-import it.albertus.jface.preference.page.PageDefinition.PageDefinitionBuilder;
+import it.albertus.jface.preference.page.IPreferencePageDefinition;
+import it.albertus.jface.preference.page.PreferencePageDefinition;
+import it.albertus.jface.preference.page.PreferencePageDefinition.PreferencePageDefinitionBuilder;
 import it.albertus.router.client.resources.Resources;
 import it.albertus.util.Localized;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-public enum RouterLoggerClientPage implements IPageDefinition {
-	GENERAL(new PageDefinitionBuilder().pageClass(GeneralPreferencePage.class).build()),
-	MQTT(new PageDefinitionBuilder().pageClass(MqttPreferencePage.class).build()),
-	MQTT_MESSAGES(new PageDefinitionBuilder().pageClass(RestartHeaderPreferencePage.class).parent(MQTT).build()),
-	MQTT_ADVANCED(new PageDefinitionBuilder().pageClass(AdvancedMqttPreferencePage.class).parent(MQTT).build()),
-	HTTP(new PageDefinitionBuilder().pageClass(RestartHeaderPreferencePage.class).build()),
-	APPEARANCE(new PageDefinitionBuilder().pageClass(RestartHeaderPreferencePage.class).build());
+public enum PageDefinition implements IPreferencePageDefinition {
+	GENERAL(new PreferencePageDefinitionBuilder().pageClass(GeneralPreferencePage.class).build()),
+	MQTT(new PreferencePageDefinitionBuilder().pageClass(MqttPreferencePage.class).build()),
+	MQTT_MESSAGES(new PreferencePageDefinitionBuilder().pageClass(RestartHeaderPreferencePage.class).parent(MQTT).build()),
+	MQTT_ADVANCED(new PreferencePageDefinitionBuilder().pageClass(AdvancedMqttPreferencePage.class).parent(MQTT).build()),
+	HTTP(new PreferencePageDefinitionBuilder().pageClass(RestartHeaderPreferencePage.class).build()),
+	APPEARANCE(new PreferencePageDefinitionBuilder().pageClass(RestartHeaderPreferencePage.class).build());
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";
 
-	private final PageDefinition pageDefinition;
+	private final IPreferencePageDefinition pageDefinition;
 
-	RouterLoggerClientPage() {
-		this(new PageDefinition());
+	PageDefinition() {
+		this(new PreferencePageDefinition());
 	}
 
-	RouterLoggerClientPage(final PageDefinition pageDefinition) {
+	PageDefinition(final PreferencePageDefinition pageDefinition) {
 		this.pageDefinition = pageDefinition;
 		if (pageDefinition.getNodeId() == null) {
 			pageDefinition.setNodeId(name().toLowerCase().replace('_', '.'));
@@ -56,7 +56,7 @@ public enum RouterLoggerClientPage implements IPageDefinition {
 	}
 
 	@Override
-	public IPageDefinition getParent() {
+	public IPreferencePageDefinition getParent() {
 		return pageDefinition.getParent();
 	}
 

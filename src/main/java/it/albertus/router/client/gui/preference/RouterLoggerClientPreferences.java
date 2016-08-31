@@ -1,11 +1,11 @@
 package it.albertus.router.client.gui.preference;
 
 import it.albertus.jface.preference.Preferences;
-import it.albertus.jface.preference.page.IPageDefinition;
+import it.albertus.jface.preference.page.IPreferencePageDefinition;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.gui.Images;
 import it.albertus.router.client.gui.RouterLoggerGui;
-import it.albertus.router.client.gui.preference.page.RouterLoggerClientPage;
+import it.albertus.router.client.gui.preference.page.PageDefinition;
 import it.albertus.router.client.resources.Resources;
 import it.albertus.router.client.resources.Resources.Language;
 
@@ -16,7 +16,7 @@ public class RouterLoggerClientPreferences extends Preferences {
 	private final RouterLoggerGui gui;
 
 	public RouterLoggerClientPreferences(final RouterLoggerGui gui) {
-		super(RouterLoggerClientConfiguration.getInstance(), RouterLoggerClientPage.values(), RouterLoggerClientPreference.values(), Images.MAIN_ICONS);
+		super(RouterLoggerClientConfiguration.getInstance(), PageDefinition.values(), RouterLoggerClientPreference.values(), Images.MAIN_ICONS);
 		this.gui = gui;
 	}
 
@@ -25,7 +25,7 @@ public class RouterLoggerClientPreferences extends Preferences {
 	}
 
 	@Override
-	public int openDialog(final Shell parentShell, final IPageDefinition selectedPage) {
+	public int openDialog(final Shell parentShell, final IPreferencePageDefinition selectedPage) {
 		final Language language = Resources.getLanguage();
 
 		final int returnCode = super.openDialog(parentShell, selectedPage);
