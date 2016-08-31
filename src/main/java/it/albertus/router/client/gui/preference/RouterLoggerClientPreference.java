@@ -1,13 +1,13 @@
 package it.albertus.router.client.gui.preference;
 
 import it.albertus.jface.TextConsole;
-import it.albertus.jface.preference.FieldEditorData;
-import it.albertus.jface.preference.FieldEditorData.FieldEditorDataBuilder;
+import it.albertus.jface.preference.FieldEditorDetails;
+import it.albertus.jface.preference.FieldEditorDetails.FieldEditorDetailsBuilder;
 import it.albertus.jface.preference.FieldEditorFactory;
 import it.albertus.jface.preference.LocalizedLabelsAndValues;
-import it.albertus.jface.preference.Preference;
-import it.albertus.jface.preference.PreferenceData;
-import it.albertus.jface.preference.PreferenceData.PreferenceDataBuilder;
+import it.albertus.jface.preference.IPreference;
+import it.albertus.jface.preference.PreferenceDetails;
+import it.albertus.jface.preference.PreferenceDetails.PreferenceDetailsBuilder;
 import it.albertus.jface.preference.field.DefaultBooleanFieldEditor;
 import it.albertus.jface.preference.field.DefaultComboFieldEditor;
 import it.albertus.jface.preference.field.DefaultDirectoryFieldEditor;
@@ -44,35 +44,35 @@ import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.widgets.Composite;
 
-public enum RouterLoggerClientPreference implements Preference {
+public enum RouterLoggerClientPreference implements IPreference {
 
-	LANGUAGE(PageDefinition.GENERAL, ComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(Locale.getDefault().getLanguage()).build(), new FieldEditorDataBuilder().labelsAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
-	CLIENT_PROTOCOL(PageDefinition.GENERAL, DefaultRadioGroupFieldEditor.class, new PreferenceDataBuilder().separator().defaultValue(RouterLoggerGui.Defaults.CLIENT_PROTOCOL).restartRequired().build(), new FieldEditorDataBuilder().labelsAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
-	DEBUG(PageDefinition.GENERAL, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().separator().defaultValue(Logger.Defaults.DEBUG).build()),
+	LANGUAGE(PageDefinition.GENERAL, ComboFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(Locale.getDefault().getLanguage()).build(), new FieldEditorDetailsBuilder().labelsAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
+	CLIENT_PROTOCOL(PageDefinition.GENERAL, DefaultRadioGroupFieldEditor.class, new PreferenceDetailsBuilder().separate().defaultValue(RouterLoggerGui.Defaults.CLIENT_PROTOCOL).restartRequired().build(), new FieldEditorDetailsBuilder().labelsAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
+	DEBUG(PageDefinition.GENERAL, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().separate().defaultValue(Logger.Defaults.DEBUG).build()),
 
-	MQTT_SERVER_URI(PageDefinition.MQTT, UriListEditor.class, new PreferenceDataBuilder().restartRequired().build(), new FieldEditorDataBuilder().build()),
-	MQTT_USERNAME(PageDefinition.MQTT, DefaultStringFieldEditor.class, new PreferenceDataBuilder().restartRequired().build()),
-	MQTT_PASSWORD(PageDefinition.MQTT, PasswordFieldEditor.class, new PreferenceDataBuilder().restartRequired().build()),
-	MQTT_CLIENT_ID(PageDefinition.MQTT, DefaultStringFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CLIENT_ID).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
-	MQTT_CONNECT_RETRY(PageDefinition.MQTT, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().restartRequired().separator().defaultValue(RouterLoggerClientMqttClient.Defaults.CONNECT_RETRY).build()),
-	MQTT_CONNECT_RETRY_INTERVAL_SECS(PageDefinition.MQTT, ScaleIntegerFieldEditor.class, new PreferenceDataBuilder().parent(MQTT_CONNECT_RETRY).defaultValue(RouterLoggerGui.Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS).build(), new FieldEditorDataBuilder().scaleMinimum(1).scaleMaximum(Byte.MAX_VALUE).scalePageIncrement(7).build()),
+	MQTT_SERVER_URI(PageDefinition.MQTT, UriListEditor.class, new PreferenceDetailsBuilder().restartRequired().build(), new FieldEditorDetailsBuilder().build()),
+	MQTT_USERNAME(PageDefinition.MQTT, DefaultStringFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().build()),
+	MQTT_PASSWORD(PageDefinition.MQTT, PasswordFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().build()),
+	MQTT_CLIENT_ID(PageDefinition.MQTT, DefaultStringFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CLIENT_ID).build(), new FieldEditorDetailsBuilder().emptyStringAllowed(false).build()),
+	MQTT_CONNECT_RETRY(PageDefinition.MQTT, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().separate().defaultValue(RouterLoggerClientMqttClient.Defaults.CONNECT_RETRY).build()),
+	MQTT_CONNECT_RETRY_INTERVAL_SECS(PageDefinition.MQTT, ScaleIntegerFieldEditor.class, new PreferenceDetailsBuilder().parent(MQTT_CONNECT_RETRY).defaultValue(RouterLoggerGui.Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS).build(), new FieldEditorDetailsBuilder().scaleMinimum(1).scaleMaximum(Byte.MAX_VALUE).scalePageIncrement(7).build()),
 
-	MQTT_DATA_TOPIC(PageDefinition.MQTT_MESSAGES, DefaultStringFieldEditor.class, new PreferenceDataBuilder().defaultValue(RouterLoggerClientMqttClient.Defaults.DATA_TOPIC).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
-	MQTT_DATA_QOS(PageDefinition.MQTT_MESSAGES, DefaultComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(RouterLoggerClientMqttClient.Defaults.DATA_QOS).build(), new FieldEditorDataBuilder().labelsAndValues(MqttPreferencePage.getMqttQosComboOptions()).build()),
-	MQTT_STATUS_TOPIC(PageDefinition.MQTT_MESSAGES, DefaultStringFieldEditor.class, new PreferenceDataBuilder().separator().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.STATUS_TOPIC).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
-	MQTT_STATUS_QOS(PageDefinition.MQTT_MESSAGES, DefaultComboFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.STATUS_QOS).build(), new FieldEditorDataBuilder().labelsAndValues(MqttPreferencePage.getMqttQosComboOptions()).build()),
-	MQTT_THRESHOLDS_TOPIC(PageDefinition.MQTT_MESSAGES, DefaultStringFieldEditor.class, new PreferenceDataBuilder().separator().defaultValue(RouterLoggerClientMqttClient.Defaults.THRESHOLDS_TOPIC).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
-	MQTT_THRESHOLDS_QOS(PageDefinition.MQTT_MESSAGES, DefaultComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(RouterLoggerClientMqttClient.Defaults.THRESHOLDS_QOS).build(), new FieldEditorDataBuilder().labelsAndValues(MqttPreferencePage.getMqttQosComboOptions()).build()),
+	MQTT_DATA_TOPIC(PageDefinition.MQTT_MESSAGES, DefaultStringFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(RouterLoggerClientMqttClient.Defaults.DATA_TOPIC).build(), new FieldEditorDetailsBuilder().emptyStringAllowed(false).build()),
+	MQTT_DATA_QOS(PageDefinition.MQTT_MESSAGES, DefaultComboFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(RouterLoggerClientMqttClient.Defaults.DATA_QOS).build(), new FieldEditorDetailsBuilder().labelsAndValues(MqttPreferencePage.getMqttQosComboOptions()).build()),
+	MQTT_STATUS_TOPIC(PageDefinition.MQTT_MESSAGES, DefaultStringFieldEditor.class, new PreferenceDetailsBuilder().separate().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.STATUS_TOPIC).build(), new FieldEditorDetailsBuilder().emptyStringAllowed(false).build()),
+	MQTT_STATUS_QOS(PageDefinition.MQTT_MESSAGES, DefaultComboFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.STATUS_QOS).build(), new FieldEditorDetailsBuilder().labelsAndValues(MqttPreferencePage.getMqttQosComboOptions()).build()),
+	MQTT_THRESHOLDS_TOPIC(PageDefinition.MQTT_MESSAGES, DefaultStringFieldEditor.class, new PreferenceDetailsBuilder().separate().defaultValue(RouterLoggerClientMqttClient.Defaults.THRESHOLDS_TOPIC).build(), new FieldEditorDetailsBuilder().emptyStringAllowed(false).build()),
+	MQTT_THRESHOLDS_QOS(PageDefinition.MQTT_MESSAGES, DefaultComboFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(RouterLoggerClientMqttClient.Defaults.THRESHOLDS_QOS).build(), new FieldEditorDetailsBuilder().labelsAndValues(MqttPreferencePage.getMqttQosComboOptions()).build()),
 
-	MQTT_CLEAN_SESSION(PageDefinition.MQTT_ADVANCED, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CLEAN_SESSION).build()),
-	MQTT_AUTOMATIC_RECONNECT(PageDefinition.MQTT_ADVANCED, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.AUTOMATIC_RECONNECT).build()),
-	MQTT_CONNECTION_TIMEOUT(PageDefinition.MQTT_ADVANCED, DefaultIntegerFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CONNECTION_TIMEOUT).build()),
-	MQTT_KEEP_ALIVE_INTERVAL(PageDefinition.MQTT_ADVANCED, DefaultIntegerFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.KEEP_ALIVE_INTERVAL).build()),
-	MQTT_MAX_INFLIGHT(PageDefinition.MQTT_ADVANCED, DefaultIntegerFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.MAX_INFLIGHT).build()),
-	MQTT_VERSION(PageDefinition.MQTT_ADVANCED, DefaultComboFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.MQTT_VERSION).build(), new FieldEditorDataBuilder().labelsAndValues(AdvancedMqttPreferencePage.getMqttVersionComboOptions()).build()),
-	MQTT_PERSISTENCE_FILE_ENABLED(PageDefinition.MQTT_ADVANCED, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.PERSISTENCE_FILE_ENABLED).build()),
-	MQTT_PERSISTENCE_FILE_CUSTOM(PageDefinition.MQTT_ADVANCED, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.PERSISTENCE_FILE_CUSTOM).parent(MQTT_PERSISTENCE_FILE_ENABLED).build()),
-	MQTT_PERSISTENCE_FILE_PATH(PageDefinition.MQTT_ADVANCED, DefaultDirectoryFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(System.getProperty("user.dir")).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).directoryDialogMessage(new Localized() {
+	MQTT_CLEAN_SESSION(PageDefinition.MQTT_ADVANCED, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CLEAN_SESSION).build()),
+	MQTT_AUTOMATIC_RECONNECT(PageDefinition.MQTT_ADVANCED, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.AUTOMATIC_RECONNECT).build()),
+	MQTT_CONNECTION_TIMEOUT(PageDefinition.MQTT_ADVANCED, DefaultIntegerFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CONNECTION_TIMEOUT).build()),
+	MQTT_KEEP_ALIVE_INTERVAL(PageDefinition.MQTT_ADVANCED, DefaultIntegerFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.KEEP_ALIVE_INTERVAL).build()),
+	MQTT_MAX_INFLIGHT(PageDefinition.MQTT_ADVANCED, DefaultIntegerFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.MAX_INFLIGHT).build()),
+	MQTT_VERSION(PageDefinition.MQTT_ADVANCED, DefaultComboFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.MQTT_VERSION).build(), new FieldEditorDetailsBuilder().labelsAndValues(AdvancedMqttPreferencePage.getMqttVersionComboOptions()).build()),
+	MQTT_PERSISTENCE_FILE_ENABLED(PageDefinition.MQTT_ADVANCED, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.PERSISTENCE_FILE_ENABLED).build()),
+	MQTT_PERSISTENCE_FILE_CUSTOM(PageDefinition.MQTT_ADVANCED, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.PERSISTENCE_FILE_CUSTOM).parent(MQTT_PERSISTENCE_FILE_ENABLED).build()),
+	MQTT_PERSISTENCE_FILE_PATH(PageDefinition.MQTT_ADVANCED, DefaultDirectoryFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(System.getProperty("user.dir")).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDetailsBuilder().emptyStringAllowed(false).directoryDialogMessage(new Localized() {
 		@Override
 		public String getString() {
 			return Resources.get("msg.preferences.directory.dialog.message.mqtt");
@@ -80,122 +80,91 @@ public enum RouterLoggerClientPreference implements Preference {
 	}).build()),
 
 	HTTP_HOST(PageDefinition.HTTP, DefaultStringFieldEditor.class),
-	HTTP_PORT(PageDefinition.HTTP, DefaultIntegerFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.PORT).build(), new FieldEditorDataBuilder().integerValidRange(1, 65535).emptyStringAllowed(false).build()),
-	HTTP_AUTHENTICATION(PageDefinition.HTTP, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.AUTHENTICATION).build()),
-	HTTP_USERNAME(PageDefinition.HTTP, DefaultStringFieldEditor.class, new PreferenceDataBuilder().parent(HTTP_AUTHENTICATION).build()),
-	HTTP_PASSWORD(PageDefinition.HTTP, PasswordFieldEditor.class, new PreferenceDataBuilder().parent(HTTP_AUTHENTICATION).build()),
-	HTTP_IGNORE_CERTIFICATE(PageDefinition.HTTP, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.IGNORE_CERTIFICATE).restartRequired().build()),
-	HTTP_CONNECTION_TIMEOUT(PageDefinition.HTTP, IntegerComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.CONNECTION_TIMEOUT).build(), new FieldEditorDataBuilder().labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
+	HTTP_PORT(PageDefinition.HTTP, DefaultIntegerFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(HttpPollingThread.Defaults.PORT).build(), new FieldEditorDetailsBuilder().integerValidRange(1, 65535).emptyStringAllowed(false).build()),
+	HTTP_AUTHENTICATION(PageDefinition.HTTP, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(HttpPollingThread.Defaults.AUTHENTICATION).build()),
+	HTTP_USERNAME(PageDefinition.HTTP, DefaultStringFieldEditor.class, new PreferenceDetailsBuilder().parent(HTTP_AUTHENTICATION).build()),
+	HTTP_PASSWORD(PageDefinition.HTTP, PasswordFieldEditor.class, new PreferenceDetailsBuilder().parent(HTTP_AUTHENTICATION).build()),
+	HTTP_IGNORE_CERTIFICATE(PageDefinition.HTTP, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(HttpPollingThread.Defaults.IGNORE_CERTIFICATE).restartRequired().build()),
+	HTTP_CONNECTION_TIMEOUT(PageDefinition.HTTP, IntegerComboFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(HttpPollingThread.Defaults.CONNECTION_TIMEOUT).build(), new FieldEditorDetailsBuilder().labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
 		@Override
 		public String getString() {
 			return Resources.get("lbl.preferences.http.timeout.infinite");
 		}
 	}, 0)).build()),
-	HTTP_READ_TIMEOUT(PageDefinition.HTTP, IntegerComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.READ_TIMEOUT).build(), new FieldEditorDataBuilder().labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
+	HTTP_READ_TIMEOUT(PageDefinition.HTTP, IntegerComboFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(HttpPollingThread.Defaults.READ_TIMEOUT).build(), new FieldEditorDetailsBuilder().labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
 		@Override
 		public String getString() {
 			return Resources.get("lbl.preferences.http.timeout.infinite");
 		}
 	}, 0)).build()),
-	HTTP_REFRESH_SECS(PageDefinition.HTTP, IntegerComboFieldEditor.class, new PreferenceDataBuilder().defaultValue(HttpPollingThread.Defaults.REFRESH_SECS).build(), new FieldEditorDataBuilder().labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
+	HTTP_REFRESH_SECS(PageDefinition.HTTP, IntegerComboFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(HttpPollingThread.Defaults.REFRESH_SECS).build(), new FieldEditorDetailsBuilder().labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
 		@Override
 		public String getString() {
 			return Resources.get("lbl.preferences.http.refresh.auto");
 		}
 	}, 0)).build()),
 
-	GUI_TABLE_ITEMS_MAX(PageDefinition.APPEARANCE, DefaultIntegerFieldEditor.class, new PreferenceDataBuilder().defaultValue(DataTable.Defaults.MAX_ITEMS).build(), new FieldEditorDataBuilder().textLimit(4).build()),
-	GUI_IMPORTANT_KEYS(PageDefinition.APPEARANCE, WrapStringFieldEditor.class, new FieldEditorDataBuilder().textHeight(3).build()),
-	GUI_IMPORTANT_KEYS_SEPARATOR(PageDefinition.APPEARANCE, DefaultStringFieldEditor.class, new PreferenceDataBuilder().defaultValue(RouterLoggerClientConfiguration.Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).build(), new FieldEditorDataBuilder().emptyStringAllowed(false).build()),
-	GUI_IMPORTANT_KEYS_COLOR(PageDefinition.APPEARANCE, ColorFieldEditor.class, new PreferenceDataBuilder().defaultValue(DataTable.Defaults.IMPORTANT_KEY_BACKGROUND_COLOR).build()),
-	GUI_THRESHOLDS_REACHED_COLOR(PageDefinition.APPEARANCE, ColorFieldEditor.class, new PreferenceDataBuilder().defaultValue(DataTable.Defaults.THRESHOLDS_REACHED_FOREGROUD_COLOR).build()),
-	GUI_TABLE_COLUMNS_PACK(PageDefinition.APPEARANCE, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(DataTable.Defaults.COLUMNS_PACK).build()),
-	GUI_TABLE_COLUMNS_PADDING_RIGHT(PageDefinition.APPEARANCE, ScaleIntegerFieldEditor.class, new PreferenceDataBuilder().restartRequired().defaultValue(DataTable.Defaults.COLUMNS_PADDING_RIGHT).build(), new FieldEditorDataBuilder().scaleMaximum(Byte.MAX_VALUE).scalePageIncrement(10).build()),
-	GUI_CONSOLE_MAX_CHARS(PageDefinition.APPEARANCE, DefaultIntegerFieldEditor.class, new PreferenceDataBuilder().defaultValue(TextConsole.Defaults.GUI_CONSOLE_MAX_CHARS).build(), new FieldEditorDataBuilder().textLimit(6).build()),
-	GUI_CLIPBOARD_MAX_CHARS(PageDefinition.APPEARANCE, DefaultIntegerFieldEditor.class, new PreferenceDataBuilder().defaultValue(RouterLoggerGui.Defaults.GUI_CLIPBOARD_MAX_CHARS).build(), new FieldEditorDataBuilder().integerValidRange(0, 128 * 1024).build()),
-	GUI_MINIMIZE_TRAY(PageDefinition.APPEARANCE, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(TrayIcon.Defaults.GUI_MINIMIZE_TRAY).build()),
-	GUI_TRAY_TOOLTIP(PageDefinition.APPEARANCE, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(TrayIcon.Defaults.GUI_TRAY_TOOLTIP).parent(GUI_MINIMIZE_TRAY).build()),
-	GUI_START_MINIMIZED(PageDefinition.APPEARANCE, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(RouterLoggerGui.Defaults.GUI_START_MINIMIZED).build()),
-	GUI_CONFIRM_CLOSE(PageDefinition.APPEARANCE, DefaultBooleanFieldEditor.class, new PreferenceDataBuilder().defaultValue(CloseMessageBox.Defaults.GUI_CONFIRM_CLOSE).build());
+	GUI_TABLE_ITEMS_MAX(PageDefinition.APPEARANCE, DefaultIntegerFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(DataTable.Defaults.MAX_ITEMS).build(), new FieldEditorDetailsBuilder().textLimit(4).build()),
+	GUI_IMPORTANT_KEYS(PageDefinition.APPEARANCE, WrapStringFieldEditor.class, new FieldEditorDetailsBuilder().textHeight(3).build()),
+	GUI_IMPORTANT_KEYS_SEPARATOR(PageDefinition.APPEARANCE, DefaultStringFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(RouterLoggerClientConfiguration.Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).build(), new FieldEditorDetailsBuilder().emptyStringAllowed(false).build()),
+	GUI_IMPORTANT_KEYS_COLOR(PageDefinition.APPEARANCE, ColorFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(DataTable.Defaults.IMPORTANT_KEY_BACKGROUND_COLOR).build()),
+	GUI_THRESHOLDS_REACHED_COLOR(PageDefinition.APPEARANCE, ColorFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(DataTable.Defaults.THRESHOLDS_REACHED_FOREGROUD_COLOR).build()),
+	GUI_TABLE_COLUMNS_PACK(PageDefinition.APPEARANCE, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(DataTable.Defaults.COLUMNS_PACK).build()),
+	GUI_TABLE_COLUMNS_PADDING_RIGHT(PageDefinition.APPEARANCE, ScaleIntegerFieldEditor.class, new PreferenceDetailsBuilder().restartRequired().defaultValue(DataTable.Defaults.COLUMNS_PADDING_RIGHT).build(), new FieldEditorDetailsBuilder().scaleMaximum(Byte.MAX_VALUE).scalePageIncrement(10).build()),
+	GUI_CONSOLE_MAX_CHARS(PageDefinition.APPEARANCE, DefaultIntegerFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(TextConsole.Defaults.GUI_CONSOLE_MAX_CHARS).build(), new FieldEditorDetailsBuilder().textLimit(6).build()),
+	GUI_CLIPBOARD_MAX_CHARS(PageDefinition.APPEARANCE, DefaultIntegerFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(RouterLoggerGui.Defaults.GUI_CLIPBOARD_MAX_CHARS).build(), new FieldEditorDetailsBuilder().integerValidRange(0, 128 * 1024).build()),
+	GUI_MINIMIZE_TRAY(PageDefinition.APPEARANCE, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(TrayIcon.Defaults.GUI_MINIMIZE_TRAY).build()),
+	GUI_TRAY_TOOLTIP(PageDefinition.APPEARANCE, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(TrayIcon.Defaults.GUI_TRAY_TOOLTIP).parent(GUI_MINIMIZE_TRAY).build()),
+	GUI_START_MINIMIZED(PageDefinition.APPEARANCE, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(RouterLoggerGui.Defaults.GUI_START_MINIMIZED).build()),
+	GUI_CONFIRM_CLOSE(PageDefinition.APPEARANCE, DefaultBooleanFieldEditor.class, new PreferenceDetailsBuilder().defaultValue(CloseMessageBox.Defaults.GUI_CONFIRM_CLOSE).build());
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";
 
 	private static final FieldEditorFactory fieldEditorFactory = new FieldEditorFactory();
 
-	private final IPreferencePageDefinition pageDefinition;
+	private final PreferenceDetails preferenceDetails;
+	private final FieldEditorDetails fieldEditorDetails;
 	private final Class<? extends FieldEditor> fieldEditorType;
-	private final String defaultValue;
-	private final FieldEditorData fieldEditorData;
-	private final Preference parent;
-	private final String configurationKey;
-	private final Localized label;
-	private final boolean restartRequired;
-	private final boolean separator;
+	private final IPreferencePageDefinition pageDefinition;
 
-	private RouterLoggerClientPreference(final IPreferencePageDefinition page, final Class<? extends FieldEditor> fieldEditorType) {
-		this(page, fieldEditorType, null, null);
+	RouterLoggerClientPreference(final IPreferencePageDefinition page, final Class<? extends FieldEditor> fieldEditorType) {
+		this(page, fieldEditorType, new PreferenceDetails(), null);
 	}
 
-	private RouterLoggerClientPreference(final IPreferencePageDefinition page, final Class<? extends FieldEditor> fieldEditorType, final PreferenceData preferenceData) {
+	RouterLoggerClientPreference(final IPreferencePageDefinition page, final Class<? extends FieldEditor> fieldEditorType, final PreferenceDetails preferenceData) {
 		this(page, fieldEditorType, preferenceData, null);
 	}
 
-	private RouterLoggerClientPreference(final IPreferencePageDefinition page, final Class<? extends FieldEditor> fieldEditorType, final FieldEditorData fieldEditorData) {
-		this(page, fieldEditorType, null, fieldEditorData);
+	RouterLoggerClientPreference(final IPreferencePageDefinition page, final Class<? extends FieldEditor> fieldEditorType, final FieldEditorDetails fieldEditorData) {
+		this(page, fieldEditorType, new PreferenceDetails(), fieldEditorData);
 	}
 
-	private RouterLoggerClientPreference(final IPreferencePageDefinition page, final Class<? extends FieldEditor> fieldEditorType, final PreferenceData preferenceData, final FieldEditorData fieldEditorData) {
-		if (preferenceData != null) {
-			final String configurationKey = preferenceData.getConfigurationKey();
-			if (configurationKey != null && !configurationKey.isEmpty()) {
-				this.configurationKey = configurationKey;
-			}
-			else {
-				this.configurationKey = name().toLowerCase().replace('_', '.');
-			}
-			final Localized label = preferenceData.getLabel();
-			if (label != null) {
-				this.label = label;
-			}
-			else {
-				this.label = new Localized() {
-					@Override
-					public String getString() {
-						return Resources.get(LABEL_KEY_PREFIX + RouterLoggerClientPreference.this.configurationKey);
-					}
-				};
-			}
-			this.defaultValue = preferenceData.getDefaultValue();
-			this.parent = preferenceData.getParent();
-			this.restartRequired = preferenceData.isRestartRequired();
-			this.separator = preferenceData.hasSeparator();
+	RouterLoggerClientPreference(final IPreferencePageDefinition page, final Class<? extends FieldEditor> fieldEditorType, final PreferenceDetails preferenceDetails, final FieldEditorDetails fieldEditorDetails) {
+		this.preferenceDetails = preferenceDetails;
+		if (preferenceDetails.getName() == null) {
+			preferenceDetails.setName(name().toLowerCase().replace('_', '.'));
 		}
-		else {
-			this.configurationKey = name().toLowerCase().replace('_', '.');
-			this.label = new Localized() {
+		if (preferenceDetails.getLabel() == null) {
+			preferenceDetails.setLabel(new Localized() {
 				@Override
 				public String getString() {
-					return Resources.get(LABEL_KEY_PREFIX + RouterLoggerClientPreference.this.configurationKey);
+					return Resources.get(LABEL_KEY_PREFIX + preferenceDetails.getName());
 				}
-			};
-			this.restartRequired = false;
-			this.defaultValue = null;
-			this.parent = null;
-			this.separator = false;
+			});
 		}
-		this.fieldEditorData = fieldEditorData;
-		this.fieldEditorType = fieldEditorType;
+		this.fieldEditorDetails = fieldEditorDetails;
 		this.pageDefinition = page;
+		this.fieldEditorType = fieldEditorType;
 	}
 
 	@Override
-	public String getConfigurationKey() {
-		return configurationKey;
+	public String getName() {
+		return preferenceDetails.getName();
 	}
 
 	@Override
 	public String getLabel() {
-		return label.getString();
+		return preferenceDetails.getLabel().getString();
 	}
 
 	@Override
@@ -205,26 +174,26 @@ public enum RouterLoggerClientPreference implements Preference {
 
 	@Override
 	public String getDefaultValue() {
-		return defaultValue;
+		return preferenceDetails.getDefaultValue();
 	}
 
 	@Override
-	public Preference getParent() {
-		return parent;
+	public IPreference getParent() {
+		return preferenceDetails.getParent();
 	}
 
 	@Override
 	public boolean isRestartRequired() {
-		return restartRequired;
+		return preferenceDetails.isRestartRequired();
 	}
 
 	@Override
-	public boolean hasSeparator() {
-		return separator;
+	public boolean isSeparate() {
+		return preferenceDetails.isSeparate();
 	}
 
 	@Override
-	public Set<? extends Preference> getChildren() {
+	public Set<? extends IPreference> getChildren() {
 		final Set<RouterLoggerClientPreference> preferences = EnumSet.noneOf(RouterLoggerClientPreference.class);
 		for (final RouterLoggerClientPreference item : RouterLoggerClientPreference.values()) {
 			if (this.equals(item.getParent())) {
@@ -236,13 +205,13 @@ public enum RouterLoggerClientPreference implements Preference {
 
 	@Override
 	public FieldEditor createFieldEditor(final Composite parent) {
-		return fieldEditorFactory.createFieldEditor(fieldEditorType, configurationKey, getLabel(), parent, fieldEditorData);
+		return fieldEditorFactory.createFieldEditor(fieldEditorType, getName(), getLabel(), parent, fieldEditorDetails);
 	}
 
-	public static Preference forConfigurationKey(final String configurationKey) {
+	public static IPreference forConfigurationKey(final String configurationKey) {
 		if (configurationKey != null) {
 			for (final RouterLoggerClientPreference preference : RouterLoggerClientPreference.values()) {
-				if (configurationKey.equals(preference.configurationKey)) {
+				if (configurationKey.equals(preference.getName())) {
 					return preference;
 				}
 			}
