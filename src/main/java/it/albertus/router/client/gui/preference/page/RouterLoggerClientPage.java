@@ -1,86 +1,68 @@
 package it.albertus.router.client.gui.preference.page;
 
 import it.albertus.jface.preference.page.BasePreferencePage;
+import it.albertus.jface.preference.page.IPageDefinition;
 import it.albertus.jface.preference.page.PageDefinition;
+import it.albertus.jface.preference.page.PageDefinition.PageDefinitionBuilder;
 import it.albertus.router.client.resources.Resources;
+import it.albertus.util.Localized;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-public enum RouterLoggerClientPage implements PageDefinition {
-	GENERAL(GeneralPreferencePage.class),
-	MQTT(MqttPreferencePage.class),
-	MQTT_MESSAGES(RestartHeaderPreferencePage.class, MQTT),
-	MQTT_ADVANCED(AdvancedMqttPreferencePage.class, MQTT),
-	HTTP(RestartHeaderPreferencePage.class),
-	APPEARANCE(RestartHeaderPreferencePage.class);
+public enum RouterLoggerClientPage implements IPageDefinition {
+	GENERAL(new PageDefinitionBuilder().pageClass(GeneralPreferencePage.class).build()),
+	MQTT(new PageDefinitionBuilder().pageClass(MqttPreferencePage.class).build()),
+	MQTT_MESSAGES(new PageDefinitionBuilder().pageClass(RestartHeaderPreferencePage.class).parent(MQTT).build()),
+	MQTT_ADVANCED(new PageDefinitionBuilder().pageClass(AdvancedMqttPreferencePage.class).parent(MQTT).build()),
+	HTTP(new PageDefinitionBuilder().pageClass(RestartHeaderPreferencePage.class).build()),
+	APPEARANCE(new PageDefinitionBuilder().pageClass(RestartHeaderPreferencePage.class).build());
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";
 
-	private final String nodeId;
-	private final String labelKey;
-	private final Class<? extends BasePreferencePage> pageClass;
-	private final PageDefinition parent;
+	private final PageDefinition pageDefinition;
 
-	private RouterLoggerClientPage(final Class<? extends BasePreferencePage> pageClass) {
-		this(null, null, pageClass, null);
+	RouterLoggerClientPage() {
+		this(new PageDefinition());
 	}
 
-	private RouterLoggerClientPage(final Class<? extends BasePreferencePage> pageClass, final PageDefinition parent) {
-		this(null, null, pageClass, parent);
-	}
-
-	private RouterLoggerClientPage(final String labelKey, final Class<? extends BasePreferencePage> pageClass) {
-		this(null, labelKey, pageClass, null);
-	}
-
-	private RouterLoggerClientPage(final String labelKey, final Class<? extends BasePreferencePage> pageClass, final PageDefinition parent) {
-		this(null, labelKey, pageClass, parent);
-	}
-
-	private RouterLoggerClientPage(final String nodeId, final String labelKey, final Class<? extends BasePreferencePage> pageClass) {
-		this(nodeId, labelKey, pageClass, null);
-	}
-
-	private RouterLoggerClientPage(final String nodeId, final String labelKey, final Class<? extends BasePreferencePage> pageClass, final PageDefinition parent) {
-		if (nodeId != null && !nodeId.isEmpty()) {
-			this.nodeId = nodeId;
+	RouterLoggerClientPage(final PageDefinition pageDefinition) {
+		this.pageDefinition = pageDefinition;
+		if (pageDefinition.getNodeId() == null) {
+			pageDefinition.setNodeId(name().toLowerCase().replace('_', '.'));
 		}
-		else {
-			this.nodeId = name().toLowerCase().replace('_', '.');
+		if (pageDefinition.getLabel() == null) {
+			pageDefinition.setLabel(new Localized() {
+				@Override
+				public String getString() {
+					return Resources.get(LABEL_KEY_PREFIX + pageDefinition.getNodeId());
+				}
+			});
 		}
-		if (labelKey != null && !labelKey.isEmpty()) {
-			this.labelKey = labelKey;
-		}
-		else {
-			this.labelKey = LABEL_KEY_PREFIX + this.nodeId;
-		}
-		this.pageClass = pageClass;
-		this.parent = parent;
 	}
 
 	@Override
 	public String getNodeId() {
-		return nodeId;
+		return pageDefinition.getNodeId();
 	}
 
 	@Override
-	public String getLabel() {
-		return Resources.get(labelKey);
+	public Localized getLabel() {
+		return pageDefinition.getLabel();
 	}
 
 	@Override
 	public Class<? extends BasePreferencePage> getPageClass() {
-		return pageClass;
+		return pageDefinition.getPageClass();
 	}
 
 	@Override
-	public PageDefinition getParent() {
-		return parent;
+	public IPageDefinition getParent() {
+		return pageDefinition.getParent();
 	}
 
 	@Override
 	public ImageDescriptor getImage() {
-		return null;
+		return pageDefinition.getImage();
 	}
 
 }
