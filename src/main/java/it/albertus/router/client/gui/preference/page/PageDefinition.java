@@ -5,7 +5,7 @@ import it.albertus.jface.preference.page.IPageDefinition;
 import it.albertus.jface.preference.page.PageDefinitionDetails;
 import it.albertus.jface.preference.page.PageDefinitionDetails.PageDefinitionDetailsBuilder;
 import it.albertus.jface.preference.page.RestartHeaderPreferencePage;
-import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.resources.Messages;
 import it.albertus.util.Localized;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -36,7 +36,7 @@ public enum PageDefinition implements IPageDefinition {
 			pageDefinitionDetails.setLabel(new Localized() {
 				@Override
 				public String getString() {
-					return Resources.get(LABEL_KEY_PREFIX + pageDefinitionDetails.getNodeId());
+					return Messages.get(LABEL_KEY_PREFIX + pageDefinitionDetails.getNodeId());
 				}
 			});
 		}

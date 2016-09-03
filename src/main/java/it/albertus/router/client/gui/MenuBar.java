@@ -12,7 +12,7 @@ import it.albertus.router.client.gui.listener.EditMenuBarArmListener;
 import it.albertus.router.client.gui.listener.PreferencesSelectionListener;
 import it.albertus.router.client.gui.listener.RestartSelectionListener;
 import it.albertus.router.client.gui.listener.SelectAllMenuBarSelectionListener;
-import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.resources.Messages;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
@@ -64,58 +64,58 @@ public class MenuBar {
 		/* File */
 		fileMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		fileMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
+		fileMenuHeader.setText(Messages.get("lbl.menu.header.file"));
 		fileMenuHeader.setMenu(fileMenu);
 
 		fileRestartItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileRestartItem.setText(Resources.get("lbl.menu.item.restart"));
+		fileRestartItem.setText(Messages.get("lbl.menu.item.restart"));
 		fileRestartItem.addSelectionListener(new RestartSelectionListener(gui));
 
 		new MenuItem(fileMenu, SWT.SEPARATOR);
 
 		fileExitItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileExitItem.setText(Resources.get("lbl.menu.item.exit"));
+		fileExitItem.setText(Messages.get("lbl.menu.item.exit"));
 		fileExitItem.addSelectionListener(new CloseListener(gui));
 
 		/* Edit */
 		editMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
+		editMenuHeader.setText(Messages.get("lbl.menu.header.edit"));
 		editMenuHeader.setMenu(editMenu);
 		editMenuHeader.addArmListener(new EditMenuBarArmListener(gui));
 
 		editCopyMenuItem = new MenuItem(editMenu, SWT.PUSH);
-		editCopyMenuItem.setText(Resources.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
+		editCopyMenuItem.setText(Messages.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
 		editCopyMenuItem.addSelectionListener(new CopyMenuBarSelectionListener(gui));
 		editCopyMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_COPY); // Vero!
 
 		editDeleteMenuItem = new MenuItem(editMenu, SWT.PUSH);
-		editDeleteMenuItem.setText(Resources.get("lbl.menu.item.delete") + SwtUtils.getShortcutLabel(Resources.get("lbl.menu.item.delete.key")));
+		editDeleteMenuItem.setText(Messages.get("lbl.menu.item.delete") + SwtUtils.getShortcutLabel(Messages.get("lbl.menu.item.delete.key")));
 		editDeleteMenuItem.addSelectionListener(new DeleteDataTableSelectionListener(gui));
 		editDeleteMenuItem.setAccelerator(SwtUtils.KEY_DELETE); // Vero!
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
 		editSelectAllMenuItem = new MenuItem(editMenu, SWT.PUSH);
-		editSelectAllMenuItem.setText(Resources.get("lbl.menu.item.select.all") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SELECT_ALL));
+		editSelectAllMenuItem.setText(Messages.get("lbl.menu.item.select.all") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SELECT_ALL));
 		editSelectAllMenuItem.addSelectionListener(new SelectAllMenuBarSelectionListener(gui));
 		editSelectAllMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_SELECT_ALL); // Vero!
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
 		editClearSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
-		editClearSubMenuItem.setText(Resources.get("lbl.menu.item.clear"));
+		editClearSubMenuItem.setText(Messages.get("lbl.menu.item.clear"));
 
 		editClearSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editClearSubMenuItem.setMenu(editClearSubMenu);
 		editClearSubMenuItem.addArmListener(new EditClearSubMenuArmListener(gui));
 
 		editClearDataTableMenuItem = new MenuItem(editClearSubMenu, SWT.PUSH);
-		editClearDataTableMenuItem.setText(Resources.get("lbl.menu.item.clear.table"));
+		editClearDataTableMenuItem.setText(Messages.get("lbl.menu.item.clear.table"));
 		editClearDataTableMenuItem.addSelectionListener(new ClearDataTableSelectionListener(gui));
 
 		editClearConsoleMenuItem = new MenuItem(editClearSubMenu, SWT.PUSH);
-		editClearConsoleMenuItem.setText(Resources.get("lbl.menu.item.clear.console"));
+		editClearConsoleMenuItem.setText(Messages.get("lbl.menu.item.clear.console"));
 		editClearConsoleMenuItem.addSelectionListener(new ClearConsoleSelectionListener(gui));
 
 		/* Connection */
@@ -138,44 +138,44 @@ public class MenuBar {
 		/* Tools */
 		toolsMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		toolsMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		toolsMenuHeader.setText(Resources.get("lbl.menu.header.tools"));
+		toolsMenuHeader.setText(Messages.get("lbl.menu.header.tools"));
 		toolsMenuHeader.setMenu(toolsMenu);
 
 		toolsPreferencesMenuItem = new MenuItem(toolsMenu, SWT.PUSH);
-		toolsPreferencesMenuItem.setText(Resources.get("lbl.menu.item.preferences"));
+		toolsPreferencesMenuItem.setText(Messages.get("lbl.menu.item.preferences"));
 		toolsPreferencesMenuItem.addSelectionListener(new PreferencesSelectionListener(gui));
 
 		/* Help */
 		helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		helpMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		helpMenuHeader.setText(Resources.get("lbl.menu.header.help"));
+		helpMenuHeader.setText(Messages.get("lbl.menu.header.help"));
 		helpMenuHeader.setMenu(helpMenu);
 
 		helpAboutItem = new MenuItem(helpMenu, SWT.PUSH);
-		helpAboutItem.setText(Resources.get("lbl.menu.item.about"));
+		helpAboutItem.setText(Messages.get("lbl.menu.item.about"));
 		helpAboutItem.addSelectionListener(new AboutSelectionListener(gui));
 
 		gui.getShell().setMenuBar(bar);
 	}
 
 	public void updateTexts() {
-		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
-		fileRestartItem.setText(Resources.get("lbl.menu.item.restart"));
-		fileExitItem.setText(Resources.get("lbl.menu.item.exit"));
-		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
-		editCopyMenuItem.setText(Resources.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
-		editDeleteMenuItem.setText(Resources.get("lbl.menu.item.delete") + SwtUtils.getShortcutLabel(Resources.get("lbl.menu.item.delete.key")));
-		editSelectAllMenuItem.setText(Resources.get("lbl.menu.item.select.all") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SELECT_ALL));
-		editClearSubMenuItem.setText(Resources.get("lbl.menu.item.clear"));
-		editClearDataTableMenuItem.setText(Resources.get("lbl.menu.item.clear.table"));
-		editClearConsoleMenuItem.setText(Resources.get("lbl.menu.item.clear.console"));
+		fileMenuHeader.setText(Messages.get("lbl.menu.header.file"));
+		fileRestartItem.setText(Messages.get("lbl.menu.item.restart"));
+		fileExitItem.setText(Messages.get("lbl.menu.item.exit"));
+		editMenuHeader.setText(Messages.get("lbl.menu.header.edit"));
+		editCopyMenuItem.setText(Messages.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
+		editDeleteMenuItem.setText(Messages.get("lbl.menu.item.delete") + SwtUtils.getShortcutLabel(Messages.get("lbl.menu.item.delete.key")));
+		editSelectAllMenuItem.setText(Messages.get("lbl.menu.item.select.all") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SELECT_ALL));
+		editClearSubMenuItem.setText(Messages.get("lbl.menu.item.clear"));
+		editClearDataTableMenuItem.setText(Messages.get("lbl.menu.item.clear.table"));
+		editClearConsoleMenuItem.setText(Messages.get("lbl.menu.item.clear.console"));
 		//		connectionMenuHeader.setText(Resources.get("lbl.menu.header.connection"));
 		//		connectionConnectItem.setText(Resources.get("lbl.menu.item.connect"));
 		//		connectionDisconnectItem.setText(Resources.get("lbl.menu.item.disconnect"));
-		toolsMenuHeader.setText(Resources.get("lbl.menu.header.tools"));
-		toolsPreferencesMenuItem.setText(Resources.get("lbl.menu.item.preferences"));
-		helpMenuHeader.setText(Resources.get("lbl.menu.header.help"));
-		helpAboutItem.setText(Resources.get("lbl.menu.item.about"));
+		toolsMenuHeader.setText(Messages.get("lbl.menu.header.tools"));
+		toolsPreferencesMenuItem.setText(Messages.get("lbl.menu.item.preferences"));
+		helpMenuHeader.setText(Messages.get("lbl.menu.header.help"));
+		helpAboutItem.setText(Messages.get("lbl.menu.item.about"));
 	}
 
 	public Menu getBar() {

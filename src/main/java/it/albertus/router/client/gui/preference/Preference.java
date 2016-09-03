@@ -35,7 +35,7 @@ import it.albertus.router.client.gui.preference.page.GeneralPreferencePage;
 import it.albertus.router.client.gui.preference.page.MqttPreferencePage;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
-import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 import it.albertus.util.Localized;
 
@@ -79,7 +79,7 @@ public enum Preference implements IPreference {
 	MQTT_PERSISTENCE_FILE_PATH(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(System.getProperty("user.dir")).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDetailsBuilder(DefaultDirectoryFieldEditor.class).emptyStringAllowed(false).directoryDialogMessage(new Localized() {
 		@Override
 		public String getString() {
-			return Resources.get("msg.preferences.directory.dialog.message.mqtt");
+			return Messages.get("msg.preferences.directory.dialog.message.mqtt");
 		}
 	}).build()),
 
@@ -92,19 +92,19 @@ public enum Preference implements IPreference {
 	HTTP_CONNECTION_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.CONNECTION_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
 		@Override
 		public String getString() {
-			return Resources.get("lbl.preferences.http.timeout.infinite");
+			return Messages.get("lbl.preferences.http.timeout.infinite");
 		}
 	}, 0)).build()),
 	HTTP_READ_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.READ_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
 		@Override
 		public String getString() {
-			return Resources.get("lbl.preferences.http.timeout.infinite");
+			return Messages.get("lbl.preferences.http.timeout.infinite");
 		}
 	}, 0)).build()),
 	HTTP_REFRESH_SECS(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.REFRESH_SECS).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
 		@Override
 		public String getString() {
-			return Resources.get("lbl.preferences.http.refresh.auto");
+			return Messages.get("lbl.preferences.http.refresh.auto");
 		}
 	}, 0)).build()),
 
@@ -137,7 +137,7 @@ public enum Preference implements IPreference {
 			preferenceDetails.setLabel(new Localized() {
 				@Override
 				public String getString() {
-					return Resources.get(LABEL_KEY_PREFIX + preferenceDetails.getName());
+					return Messages.get(LABEL_KEY_PREFIX + preferenceDetails.getName());
 				}
 			});
 		}

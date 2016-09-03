@@ -1,6 +1,6 @@
 package it.albertus.router.client.mqtt.listener;
 
-import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 
 public class MqttCallback extends MqttCallbackAdapter {
@@ -18,7 +18,7 @@ public class MqttCallback extends MqttCallbackAdapter {
 
 	@Override
 	public void connectComplete(final boolean reconnect, final String serverURI) {
-		Logger.getInstance().log(Resources.get("msg.mqtt.connected", serverURI, clientId));
+		Logger.getInstance().log(Messages.get("msg.mqtt.connected", serverURI, clientId));
 	}
 
 }

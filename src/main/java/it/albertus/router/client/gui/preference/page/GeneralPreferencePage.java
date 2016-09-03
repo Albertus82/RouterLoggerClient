@@ -4,8 +4,8 @@ import it.albertus.jface.preference.LocalizedLabelsAndValues;
 import it.albertus.jface.preference.StaticLabelsAndValues;
 import it.albertus.jface.preference.page.RestartHeaderPreferencePage;
 import it.albertus.router.client.engine.Protocol;
-import it.albertus.router.client.resources.Resources;
-import it.albertus.router.client.resources.Resources.Language;
+import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.resources.Messages.Language;
 import it.albertus.util.Localized;
 
 import java.util.Locale;
@@ -13,7 +13,7 @@ import java.util.Locale;
 public class GeneralPreferencePage extends RestartHeaderPreferencePage {
 
 	public static LocalizedLabelsAndValues getLanguageComboOptions() {
-		final Language[] values = Resources.Language.values();
+		final Language[] values = Messages.Language.values();
 		final LocalizedLabelsAndValues options = new LocalizedLabelsAndValues(values.length);
 		for (final Language language : values) {
 			final Locale locale = language.getLocale();

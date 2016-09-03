@@ -6,7 +6,7 @@ import it.albertus.router.client.gui.RouterLoggerGui;
 import it.albertus.router.client.mqtt.listener.DataMqttMessageListener;
 import it.albertus.router.client.mqtt.listener.StatusMqttMessageListener;
 import it.albertus.router.client.mqtt.listener.ThresholdsMqttMessageListener;
-import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
@@ -108,7 +108,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			final MqttConnectOptions options = new MqttConnectOptions();
 			final String[] serverURIs = configuration.getString(CFG_KEY_MQTT_SERVER_URI, "").split(UriListEditor.URI_SPLIT_REGEX);
 			if (serverURIs == null || serverURIs.length == 0 || serverURIs[0].trim().isEmpty()) {
-				throw new ConfigurationException(Resources.get("err.mqtt.cfg.error.uri"), CFG_KEY_MQTT_SERVER_URI);
+				throw new ConfigurationException(Messages.get("err.mqtt.cfg.error.uri"), CFG_KEY_MQTT_SERVER_URI);
 			}
 			options.setServerURIs(serverURIs);
 			final String username = configuration.getString(CFG_KEY_MQTT_USERNAME);
@@ -141,7 +141,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			else {
 				persistence = new MemoryPersistence();
 			}
-			Logger.getInstance().log(Resources.get("msg.mqtt.connecting", Arrays.toString(serverURIs), NewLine.SYSTEM_LINE_SEPARATOR + options.toString().trim() + "======"));
+			Logger.getInstance().log(Messages.get("msg.mqtt.connecting", Arrays.toString(serverURIs), NewLine.SYSTEM_LINE_SEPARATOR + options.toString().trim() + "======"));
 			doConnect(clientId, options, persistence, configuration.getBoolean(CFG_KEY_MQTT_CONNECT_RETRY, Defaults.CONNECT_RETRY));
 		}
 		catch (final Exception e) {
@@ -153,7 +153,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 	public void disconnect() {
 		try {
 			if (doDisconnect()) {
-				Logger.getInstance().log(Resources.get("msg.mqtt.disconnected"));
+				Logger.getInstance().log(Messages.get("msg.mqtt.disconnected"));
 			}
 		}
 		catch (final Exception e) {

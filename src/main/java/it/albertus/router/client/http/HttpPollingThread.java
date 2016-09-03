@@ -11,7 +11,7 @@ import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.RouterLoggerGui;
-import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
 
@@ -95,7 +95,7 @@ public class HttpPollingThread extends Thread {
 		String baseUrl = scheme + "://" + host + ":" + port;
 
 		final Logger logger = Logger.getInstance();
-		logger.log(Resources.get("msg.http.polling", scheme.toUpperCase(), baseUrl));
+		logger.log(Messages.get("msg.http.polling", scheme.toUpperCase(), baseUrl));
 
 		while (!exit) {
 			scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL).trim().toLowerCase();
@@ -146,7 +146,7 @@ public class HttpPollingThread extends Thread {
 
 				// Logging
 				if (logger.isDebugEnabled()) {
-					logger.log(Resources.get("msg.http.response.code", urlConnection.getResponseCode()));
+					logger.log(Messages.get("msg.http.response.code", urlConnection.getResponseCode()));
 				}
 
 				for (final String header : urlConnection.getHeaderFields().keySet()) {
@@ -189,7 +189,7 @@ public class HttpPollingThread extends Thread {
 			}
 			else {
 				if (refresh <= 0) {
-					logger.log(Resources.get("err.http.refresh.auto"));
+					logger.log(Messages.get("err.http.refresh.auto"));
 					break;
 				}
 				try {

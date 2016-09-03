@@ -11,7 +11,7 @@ import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
-import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
 import it.albertus.util.Configured;
@@ -160,7 +160,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 	protected void configureShell(final Shell shell) {
 		super.configureShell(shell);
 		shell.setMinimized(configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED));
-		shell.setText(Resources.get("lbl.window.title"));
+		shell.setText(Messages.get("lbl.window.title"));
 		shell.setImages(Images.MAIN_ICONS);
 	}
 
@@ -196,17 +196,17 @@ public class RouterLoggerGui extends ApplicationWindow {
 
 	protected void printWelcome() {
 		final Version version = Version.getInstance();
-		System.out.println(Resources.get("msg.welcome", Resources.get("msg.application.name"), Resources.get("msg.version", version.getNumber(), version.getDate()), Resources.get("msg.website")));
+		System.out.println(Messages.get("msg.welcome", Messages.get("msg.application.name"), Messages.get("msg.version", version.getNumber(), version.getDate()), Messages.get("msg.website")));
 		System.out.println();
-		System.out.println(Resources.get("msg.startup.date", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
+		System.out.println(Messages.get("msg.startup.date", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
 		if (configuration.getBoolean("console.show.configuration", Defaults.CONSOLE_SHOW_CONFIGURATION)) {
-			System.out.println(Resources.get("msg.settings", configuration));
+			System.out.println(Messages.get("msg.settings", configuration));
 		}
 		System.out.println();
 	}
 
 	protected void printGoodbye() {
-		System.out.println(Resources.get("msg.bye"));
+		System.out.println(Messages.get("msg.bye"));
 	}
 
 	@Override
@@ -309,7 +309,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 				}
 			}
 			if (print) {
-				Logger.getInstance().log(Resources.get("msg.thresholds.reached", message), thresholdsReached.getTimestamp());
+				Logger.getInstance().log(Messages.get("msg.thresholds.reached", message), thresholdsReached.getTimestamp());
 				if (trayIcon != null) {
 					trayIcon.showBalloonToolTip(thresholdsReached.getReached());
 				}

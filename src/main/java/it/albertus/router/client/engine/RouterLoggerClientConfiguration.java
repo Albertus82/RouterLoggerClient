@@ -1,7 +1,7 @@
 package it.albertus.router.client.engine;
 
-import it.albertus.jface.JFaceResources;
-import it.albertus.router.client.resources.Resources;
+import it.albertus.jface.JFaceMessages;
+import it.albertus.router.client.resources.Messages;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
 import it.albertus.util.StringUtils;
@@ -41,8 +41,8 @@ public class RouterLoggerClientConfiguration extends Configuration {
 		/* Impostazione lingua */
 		if (this.contains("language")) {
 			final String language = this.getString("language");
-			Resources.setLanguage(language);
-			JFaceResources.setLanguage(language);
+			Messages.setLanguage(language);
+			JFaceMessages.setLanguage(language);
 		}
 
 		/* Caricamento chiavi da evidenziare */
@@ -66,7 +66,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getLong(key);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Long.MIN_VALUE, Long.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Long.MIN_VALUE, Long.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -76,7 +76,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getLong(key, defaultValue);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Long.MIN_VALUE, Long.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Long.MIN_VALUE, Long.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getInt(key);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Integer.MIN_VALUE, Integer.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Integer.MIN_VALUE, Integer.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -96,7 +96,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getInt(key, defaultValue);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Integer.MIN_VALUE, Integer.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Integer.MIN_VALUE, Integer.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -106,7 +106,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getShort(key);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Short.MIN_VALUE, Short.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Short.MIN_VALUE, Short.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -116,7 +116,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getShort(key, defaultValue);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Short.MIN_VALUE, Short.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Short.MIN_VALUE, Short.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -126,7 +126,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getByte(key);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Byte.MIN_VALUE, Byte.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Byte.MIN_VALUE, Byte.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -136,7 +136,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getByte(key, defaultValue);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Byte.MIN_VALUE, Byte.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Byte.MIN_VALUE, Byte.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -146,7 +146,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getFloat(key);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Float.MIN_VALUE, Float.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Float.MIN_VALUE, Float.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -156,7 +156,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getFloat(key, defaultValue);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Float.MIN_VALUE, Float.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Float.MIN_VALUE, Float.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -166,7 +166,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getDouble(key);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Double.MIN_VALUE, Double.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Double.MIN_VALUE, Double.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -176,7 +176,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getDouble(key, defaultValue);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg.number", key, Double.MIN_VALUE, Double.MAX_VALUE) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg.number", key, Double.MIN_VALUE, Double.MAX_VALUE) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -186,7 +186,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getChar(key);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg", key) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg", key) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 
@@ -196,7 +196,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 			return super.getChar(key, defaultValue);
 		}
 		catch (final RuntimeException re) {
-			throw new ConfigurationException(Resources.get("err.invalid.cfg", key) + ' ' + Resources.get("err.review.cfg", getFileName()), re, key);
+			throw new ConfigurationException(Messages.get("err.invalid.cfg", key) + ' ' + Messages.get("err.review.cfg", getFileName()), re, key);
 		}
 	}
 

@@ -1,7 +1,7 @@
 package it.albertus.router.client.gui.preference.page;
 
 import it.albertus.jface.preference.LocalizedLabelsAndValues;
-import it.albertus.router.client.resources.Resources;
+import it.albertus.router.client.resources.Messages;
 import it.albertus.util.Localized;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -13,7 +13,7 @@ public class AdvancedMqttPreferencePage extends MqttPreferencePage {
 		Localized name = new Localized() {
 			@Override
 			public String getString() {
-				return Resources.get("lbl.mqtt.version.default");
+				return Messages.get("lbl.mqtt.version.default");
 			}
 		};
 		options.put(name, MqttConnectOptions.MQTT_VERSION_DEFAULT);
