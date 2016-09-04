@@ -184,6 +184,12 @@ public class HttpPollingThread extends Thread {
 			catch (final IOException ioe) {
 				ioe.printStackTrace();
 			}
+			finally {
+				try {
+					httpReader.close();
+				}
+				catch (final Exception e) {/* Ignore */}
+			}
 			if (exit) {
 				break;
 			}

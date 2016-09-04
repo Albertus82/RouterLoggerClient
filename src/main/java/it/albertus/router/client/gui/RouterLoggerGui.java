@@ -68,6 +68,21 @@ public class RouterLoggerGui extends ApplicationWindow {
 		String CLIENT_PROTOCOL = Protocol.MQTT.name();
 	}
 
+	public static void run() {
+		final Display display = Display.getDefault();
+		final RouterLoggerGui gui = new RouterLoggerGui(display);
+		gui.open();
+		gui.connect();
+		final Shell shell = gui.getShell();
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
+				Display.getCurrent().sleep();
+			}
+		}
+		gui.release();
+		display.dispose();
+	}
+
 	private class MqttConnectionThread extends Thread {
 		private MqttConnectionThread() {
 			super("mqttConnectionThread");
@@ -133,18 +148,6 @@ public class RouterLoggerGui extends ApplicationWindow {
 
 	public RouterLoggerGui(final Display display) {
 		super(null);
-		open();
-
-		connect();
-
-		final Shell shell = getShell();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				Display.getCurrent().sleep();
-			}
-		}
-
-		release();
 	}
 
 	private void connect() {
