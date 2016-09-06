@@ -94,7 +94,7 @@ public class ThresholdsManager {
 						if (ti.getText(1).equals(formatTimestamp(thresholdsReached.getTimestamp()))) {
 							for (final int index : indexes) {
 								ti.setForeground(index, dataTable.getThresholdsReachedForegroundColor());
-								ti.setBackground(index, dataTable.getThresholdsReachedBackgroundColor());
+//								ti.setBackground(index, dataTable.getThresholdsReachedBackgroundColor());
 							}
 							updated[0] = true;
 							break;
