@@ -121,10 +121,8 @@ public enum Preference implements IPreference {
 	GUI_IMPORTANT_KEYS_SEPARATOR(new PreferenceDetailsBuilder(APPEARANCE_TABLE).defaultValue(RouterLoggerClientConfiguration.Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).build(), new FieldEditorDetailsBuilder(DefaultStringFieldEditor.class).emptyStringAllowed(false).build()),
 	GUI_TABLE_COLUMNS_PACK(new PreferenceDetailsBuilder(APPEARANCE_TABLE).separate().restartRequired().defaultValue(DataTable.Defaults.COLUMNS_PACK).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	GUI_TABLE_COLUMNS_PADDING_RIGHT(new PreferenceDetailsBuilder(APPEARANCE_TABLE).restartRequired().defaultValue(DataTable.Defaults.COLUMNS_PADDING_RIGHT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMaximum(Byte.MAX_VALUE).scalePageIncrement(10).build()),
-//	GUI_IMPORTANT_KEYS_COLOR_FOREGROUND(new PreferenceDetailsBuilder(APPEARANCE_COLORS).defaultValue(DataTable.Defaults.IMPORTANT_KEYS_COLOR_FOREGROUND).build(), new FieldEditorDetailsBuilder(ColorFieldEditor.class).build()),
 	GUI_IMPORTANT_KEYS_COLOR_BACKGROUND(new PreferenceDetailsBuilder(APPEARANCE_TABLE).separate().defaultValue(DataTable.Defaults.IMPORTANT_KEYS_COLOR_BACKGROUND).build(), new FieldEditorDetailsBuilder(ColorFieldEditor.class).build()),
 	GUI_THRESHOLDS_REACHED_COLOR_FOREGROUND(new PreferenceDetailsBuilder(APPEARANCE_TABLE).defaultValue(DataTable.Defaults.THRESHOLDS_REACHED_COLOR_FOREGROUND).build(), new FieldEditorDetailsBuilder(ColorFieldEditor.class).build());
-//	GUI_THRESHOLDS_REACHED_COLOR_BACKGROUND(new PreferenceDetailsBuilder(APPEARANCE_COLORS).defaultValue(DataTable.Defaults.THRESHOLDS_REACHED_COLOR_BACKGROUND).build(), new FieldEditorDetailsBuilder(ColorFieldEditor.class).build());
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";
 
