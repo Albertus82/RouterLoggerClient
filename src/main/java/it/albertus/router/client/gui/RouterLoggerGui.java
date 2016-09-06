@@ -6,8 +6,6 @@ import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.Status;
-import it.albertus.router.client.engine.Threshold;
-import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
@@ -20,8 +18,6 @@ import it.albertus.util.Version;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
-import java.util.TreeMap;
 
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
@@ -47,6 +43,8 @@ public class RouterLoggerGui extends ApplicationWindow {
 
 	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 	private final RouterLoggerClientMqttClient mqttClient = RouterLoggerClientMqttClient.getInstance();
+
+	private final ThresholdsManager thresholdsManager;
 
 	private TrayIcon trayIcon;
 	private MenuBar menuBar;
@@ -148,6 +146,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 
 	public RouterLoggerGui(final Display display) {
 		super(null);
+		thresholdsManager = new ThresholdsManager(this);
 	}
 
 	private void connect() {
@@ -301,23 +300,8 @@ public class RouterLoggerGui extends ApplicationWindow {
 		}.start();
 	}
 
-	public void printThresholdsReached(final ThresholdsReached thresholdsReached) {
-		if (thresholdsReached != null && thresholdsReached.getReached() != null && !thresholdsReached.getReached().isEmpty()) {
-			final Map<String, String> message = new TreeMap<String, String>();
-			boolean print = false;
-			for (final Threshold threshold : thresholdsReached.getReached().keySet()) {
-				message.put(threshold.getKey(), thresholdsReached.getReached().get(threshold));
-				if (!threshold.isExcluded()) {
-					print = true;
-				}
-			}
-			if (print) {
-				Logger.getInstance().log(Messages.get("msg.thresholds.reached", message), thresholdsReached.getTimestamp());
-				if (trayIcon != null) {
-					trayIcon.showBalloonToolTip(thresholdsReached.getReached());
-				}
-			}
-		}
+	public ThresholdsManager getThresholdsManager() {
+		return thresholdsManager;
 	}
 
 }

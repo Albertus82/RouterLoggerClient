@@ -66,7 +66,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 
 		boolean THRESHOLDS_ENABLED = true;
 		String THRESHOLDS_TOPIC = "router/logger/thresholds";
-		byte THRESHOLDS_QOS = MqttQos.AT_MOST_ONCE.getValue();
+		byte THRESHOLDS_QOS = MqttQos.AT_LEAST_ONCE.getValue();
 
 		boolean STATUS_ENABLED = true;
 		String STATUS_TOPIC = "router/logger/status";

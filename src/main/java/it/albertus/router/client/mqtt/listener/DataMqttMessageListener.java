@@ -4,7 +4,9 @@ import it.albertus.router.client.dto.RouterDataDto;
 import it.albertus.router.client.dto.transformer.DataTransformer;
 import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.Threshold;
+import it.albertus.router.client.gui.DataTable;
 import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.ThresholdsManager;
 import it.albertus.router.client.mqtt.BaseMqttClient;
 
 import java.io.UnsupportedEncodingException;
@@ -30,7 +32,21 @@ public class DataMqttMessageListener implements IMqttMessageListener {
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
 		final RouterDataDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), RouterDataDto.class);
 		final RouterData data = DataTransformer.fromDto(dto);
-		gui.getDataTable().addRow(++iteration, data, Collections.<Threshold, String> emptyMap());
+
+		final ThresholdsManager thresholdsManager = gui.getThresholdsManager();
+		final DataTable dataTable = gui.getDataTable();
+		if (dataTable != null && dataTable.getTableViewer() != null && !dataTable.getTableViewer().getTable().isDisposed()) {
+			if (thresholdsManager.getThresholdsBuffer().containsKey(data.getTimestamp())) {
+				synchronized (thresholdsManager) {
+					dataTable.addRow(++iteration, data, thresholdsManager.getThresholdsBuffer().get(data.getTimestamp()).getReached());
+					thresholdsManager.getThresholdsBuffer().remove(data.getTimestamp());
+				}
+			}
+			else {
+				dataTable.addRow(++iteration, data, Collections.<Threshold, String> emptyMap());
+			}
+		}
+
 		gui.getTrayIcon().updateTrayItem(gui.getCurrentStatus() != null ? gui.getCurrentStatus().getStatus() : null, data);
 	}
 
