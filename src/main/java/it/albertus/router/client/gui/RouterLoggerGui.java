@@ -120,7 +120,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 				httpPollingThread.start();
 			}
 			else {
-				Logger.getInstance().log("Protocollo non valido."); // TODO
+				Logger.getInstance().log(Messages.get("err.invalid.protocol", protocol));
 			}
 		}
 	}
