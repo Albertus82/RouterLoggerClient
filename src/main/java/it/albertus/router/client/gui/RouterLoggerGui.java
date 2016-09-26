@@ -13,7 +13,6 @@ import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
 import it.albertus.util.Configured;
-import it.albertus.util.ThreadUtils;
 import it.albertus.util.Version;
 
 import java.text.SimpleDateFormat;
@@ -82,17 +81,31 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	private class MqttConnectionThread extends Thread {
+
+		private volatile boolean exit = false;
+
 		private MqttConnectionThread() {
 			super("mqttConnectionThread");
 			this.setDaemon(true);
 		}
 
 		@Override
+		public void interrupt() {
+			exit = true;
+			super.interrupt();
+		}
+
+		@Override
 		public void run() {
-			while (true) {
+			while (!exit) {
 				mqttClient.subscribeStatus();
 				if (mqttClient.getClient() == null) {
-					ThreadUtils.sleep(1000 * configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
+					try {
+						Thread.sleep(1000 * configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
+					}
+					catch (final InterruptedException ie) {
+						break;
+					}
 					continue; // Retry
 				}
 				mqttClient.subscribeData();
@@ -133,6 +146,13 @@ public class RouterLoggerGui extends ApplicationWindow {
 		@Override
 		public void run() {
 			mqttClient.disconnect();
+			if (mqttConnectionThread != null) {
+				mqttConnectionThread.interrupt();
+				try {
+					mqttConnectionThread.join();
+				}
+				catch (final InterruptedException ie) {/* Ignore */}
+			}
 			if (httpPollingThread != null) {
 				httpPollingThread.interrupt();
 				try {
