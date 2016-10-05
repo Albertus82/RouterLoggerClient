@@ -218,6 +218,9 @@ public class RouterLoggerGui extends ApplicationWindow {
 		return parent;
 	}
 
+	@Override
+	protected void initializeBounds() {/* Do not pack the shell */}
+
 	protected void printWelcome() {
 		final Version version = Version.getInstance();
 		System.out.println(Messages.get("msg.welcome", Messages.get("msg.application.name"), Messages.get("msg.version", version.getNumber(), version.getDate()), Messages.get("msg.website")));
