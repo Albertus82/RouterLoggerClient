@@ -1,20 +1,5 @@
 package it.albertus.router.client.gui;
 
-import it.albertus.jface.SwtThreadExecutor;
-import it.albertus.jface.TextConsole;
-import it.albertus.router.client.engine.Protocol;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
-import it.albertus.router.client.engine.RouterLoggerStatus;
-import it.albertus.router.client.engine.Status;
-import it.albertus.router.client.gui.listener.CloseListener;
-import it.albertus.router.client.http.HttpPollingThread;
-import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
-import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.util.Configuration;
-import it.albertus.util.Configured;
-import it.albertus.util.Version;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -30,6 +15,21 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import it.albertus.jface.SwtThreadExecutor;
+import it.albertus.jface.TextConsole;
+import it.albertus.router.client.engine.Protocol;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.RouterLoggerStatus;
+import it.albertus.router.client.engine.Status;
+import it.albertus.router.client.gui.listener.CloseListener;
+import it.albertus.router.client.http.HttpPollingThread;
+import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
+import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.util.Logger;
+import it.albertus.util.Configuration;
+import it.albertus.util.Configured;
+import it.albertus.util.Version;
 
 public class RouterLoggerGui extends ApplicationWindow {
 
@@ -66,6 +66,8 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	public static void run() {
+		Display.setAppName(Messages.get("msg.application.name"));
+		Display.setAppVersion(Version.getInstance().getNumber());
 		final Display display = Display.getDefault();
 		final RouterLoggerGui gui = new RouterLoggerGui(display);
 		gui.open();
