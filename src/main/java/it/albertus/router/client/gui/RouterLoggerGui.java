@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import it.albertus.jface.SwtThreadExecutor;
+import it.albertus.jface.SwtUtils;
 import it.albertus.jface.TextConsole;
 import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
@@ -181,28 +182,28 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	@Override
-	public int open() {
-		final int code = super.open();
-
-		// Fix invisible (transparent) shell bug with some Linux distibutions
-		if (isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
-			getShell().setMinimized(true);
-		}
-
-		return code;
-	}
-
-	@Override
 	protected void configureShell(final Shell shell) {
 		super.configureShell(shell);
 
 		// Fix invisible (transparent) shell bug with some Linux distibutions
-		if (!isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
+		if (!SwtUtils.isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
 			shell.setMinimized(true);
 		}
 
 		shell.setText(Messages.get("lbl.window.title"));
 		shell.setImages(Images.MAIN_ICONS);
+	}
+
+	@Override
+	public int open() {
+		final int code = super.open();
+
+		// Fix invisible (transparent) shell bug with some Linux distibutions
+		if (SwtUtils.isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
+			getShell().setMinimized(true);
+		}
+
+		return code;
 	}
 
 	@Override
@@ -259,10 +260,6 @@ public class RouterLoggerGui extends ApplicationWindow {
 
 	protected void printGoodbye() {
 		System.out.println(Messages.get("msg.bye"));
-	}
-
-	protected boolean isGtk() {
-		return SWT.getPlatform().toLowerCase().contains("gtk");
 	}
 
 	public TrayIcon getTrayIcon() {
