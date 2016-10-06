@@ -181,9 +181,26 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	@Override
+	public int open() {
+		final int code = super.open();
+
+		// Fix invisible (transparent) shell bug with some Linux distibutions
+		if (isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
+			getShell().setMinimized(true);
+		}
+
+		return code;
+	}
+
+	@Override
 	protected void configureShell(final Shell shell) {
 		super.configureShell(shell);
-		shell.setMinimized(configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED));
+
+		// Fix invisible (transparent) shell bug with some Linux distibutions
+		if (!isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
+			shell.setMinimized(true);
+		}
+
 		shell.setText(Messages.get("lbl.window.title"));
 		shell.setImages(Images.MAIN_ICONS);
 	}
@@ -232,10 +249,6 @@ public class RouterLoggerGui extends ApplicationWindow {
 		System.out.println();
 	}
 
-	protected void printGoodbye() {
-		System.out.println(Messages.get("msg.bye"));
-	}
-
 	@Override
 	protected Layout getLayout() {
 		return new GridLayout();
@@ -243,6 +256,14 @@ public class RouterLoggerGui extends ApplicationWindow {
 
 	@Override
 	protected void createTrimWidgets(final Shell shell) {/* Not needed */}
+
+	protected void printGoodbye() {
+		System.out.println(Messages.get("msg.bye"));
+	}
+
+	protected boolean isGtk() {
+		return SWT.getPlatform().toLowerCase().contains("gtk");
+	}
 
 	public TrayIcon getTrayIcon() {
 		return trayIcon;
