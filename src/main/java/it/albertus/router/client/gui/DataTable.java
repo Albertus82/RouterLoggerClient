@@ -357,6 +357,9 @@ public class DataTable {
 						while (table.getItemCount() > maxItems);
 						table.setRedraw(true);
 					}
+					if (SwtUtils.isGtk()) {
+						table.setTopIndex(table.getTopIndex() - 1);
+					}
 				}
 			}.start();
 			this.iteration = iteration;
