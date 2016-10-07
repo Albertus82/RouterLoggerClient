@@ -27,7 +27,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 	}
 
 	public static final String CFG_KEY_LANGUAGE = "language";
-	public static final String FILE_NAME = "routerloggerclient.cfg";
+	public static final String FILE_NAME = "routerlogger-client.cfg";
 
 	private final Set<String> guiImportantKeys = new LinkedHashSet<String>();
 
