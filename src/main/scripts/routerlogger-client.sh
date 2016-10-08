@@ -11,6 +11,6 @@ while [ -h "$PRG" ]; do
 done
 PRGDIR=`dirname "$PRG"`
 if [ "$JAVA_HOME" != "" ]
-  then "$JAVA_HOME/bin/java" -Xms4m -Xmx32m -classpath "$PRGDIR/routerlogger-client.jar:$PRGDIR/lib/*" it.albertus.router.client.RouterLoggerClient
-  else java -Xms4m -Xmx32m -classpath "$PRGDIR/routerlogger-client.jar:$PRGDIR/lib/*" it.albertus.router.client.RouterLoggerClient
+  then "$JAVA_HOME/bin/java" -Xms8m -Xmx32m -classpath "$PRGDIR/routerlogger-client.jar:$PRGDIR/lib/*" it.albertus.router.client.RouterLoggerClient
+  else java -Xms8m -Xmx32m -classpath "$PRGDIR/routerlogger-client.jar:$PRGDIR/lib/*" it.albertus.router.client.RouterLoggerClient
 fi
