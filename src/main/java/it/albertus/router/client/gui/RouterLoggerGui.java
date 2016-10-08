@@ -3,6 +3,7 @@ package it.albertus.router.client.gui;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.eclipse.jface.util.Util;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -17,7 +18,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import it.albertus.jface.SwtThreadExecutor;
-import it.albertus.jface.SwtUtils;
 import it.albertus.jface.TextConsole;
 import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
@@ -186,7 +186,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 		super.configureShell(shell);
 
 		// Fix invisible (transparent) shell bug with some Linux distibutions
-		if (!SwtUtils.isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
+		if (!Util.isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
 			shell.setMinimized(true);
 		}
 
@@ -199,7 +199,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 		final int code = super.open();
 
 		// Fix invisible (transparent) shell bug with some Linux distibutions
-		if (SwtUtils.isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
+		if (Util.isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
 			getShell().setMinimized(true);
 		}
 

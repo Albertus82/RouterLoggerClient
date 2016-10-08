@@ -1,19 +1,5 @@
 package it.albertus.router.client.gui;
 
-import it.albertus.jface.SwtThreadExecutor;
-import it.albertus.jface.SwtUtils;
-import it.albertus.router.client.engine.RouterData;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
-import it.albertus.router.client.engine.Threshold;
-import it.albertus.router.client.gui.listener.ClearDataTableSelectionListener;
-import it.albertus.router.client.gui.listener.CopyDataTableSelectionListener;
-import it.albertus.router.client.gui.listener.DataTableContextMenuDetectListener;
-import it.albertus.router.client.gui.listener.DeleteDataTableSelectionListener;
-import it.albertus.router.client.gui.listener.SelectAllDataTableSelectionListener;
-import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.util.NewLine;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -22,6 +8,7 @@ import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.StringConverter;
+import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
@@ -37,6 +24,20 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+
+import it.albertus.jface.SwtThreadExecutor;
+import it.albertus.jface.SwtUtils;
+import it.albertus.router.client.engine.RouterData;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.Threshold;
+import it.albertus.router.client.gui.listener.ClearDataTableSelectionListener;
+import it.albertus.router.client.gui.listener.CopyDataTableSelectionListener;
+import it.albertus.router.client.gui.listener.DataTableContextMenuDetectListener;
+import it.albertus.router.client.gui.listener.DeleteDataTableSelectionListener;
+import it.albertus.router.client.gui.listener.SelectAllDataTableSelectionListener;
+import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.util.Logger;
+import it.albertus.util.NewLine;
 
 public class DataTable {
 
@@ -357,7 +358,7 @@ public class DataTable {
 						while (table.getItemCount() > maxItems);
 						table.setRedraw(true);
 					}
-					if (SwtUtils.isGtk()) {
+					if (Util.isGtk()) {
 						table.setTopIndex(table.getTopIndex() - 1);
 					}
 				}
