@@ -2,6 +2,7 @@ package it.albertus.router.client.gui;
 
 import java.util.Map;
 
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -131,7 +132,9 @@ public class TrayIcon {
 					});
 
 					trayItem.addListener(SWT.DefaultSelection, trayRestoreListener);
-					gui.getShell().addShellListener(trayRestoreListener); // OS X
+					if (!Util.isLinux()) {
+						gui.getShell().addShellListener(trayRestoreListener);
+					}
 				}
 			}
 			catch (final Exception e) {
