@@ -1,15 +1,5 @@
 package it.albertus.router.client.gui;
 
-import it.albertus.router.client.engine.RouterData;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
-import it.albertus.router.client.engine.Status;
-import it.albertus.router.client.engine.Threshold;
-import it.albertus.router.client.gui.listener.CloseListener;
-import it.albertus.router.client.gui.listener.RestoreShellListener;
-import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.util.NewLine;
-
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -24,6 +14,16 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolTip;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
+
+import it.albertus.jface.listener.TrayRestoreListener;
+import it.albertus.router.client.engine.RouterData;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.Status;
+import it.albertus.router.client.engine.Threshold;
+import it.albertus.router.client.gui.listener.CloseListener;
+import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.util.Logger;
+import it.albertus.util.NewLine;
 
 public class TrayIcon {
 
@@ -103,18 +103,19 @@ public class TrayIcon {
 					trayItem.setImage(trayIcon);
 					toolTipText = getBaseToolTipText(gui.getCurrentStatus() != null ? gui.getCurrentStatus().getStatus() : null);
 					trayItem.setToolTipText(toolTipText);
+					final TrayRestoreListener trayRestoreListener = new TrayRestoreListener(gui.getShell(), trayItem);
 
 					toolTip = new ToolTip(gui.getShell(), SWT.BALLOON | SWT.ICON_WARNING);
 					toolTip.setText(Messages.get("lbl.tray.tooltip.thresholds.reached"));
 					toolTip.setVisible(false);
 					toolTip.setAutoHide(true);
-					toolTip.addListener(SWT.Selection, new RestoreShellListener(gui));
+					toolTip.addListener(SWT.Selection, trayRestoreListener);
 					trayItem.setToolTip(toolTip);
 
 					trayMenu = new Menu(gui.getShell(), SWT.POP_UP);
 					showMenuItem = new MenuItem(trayMenu, SWT.PUSH);
 					showMenuItem.setText(Messages.get("lbl.tray.show"));
-					showMenuItem.addListener(SWT.Selection, new RestoreShellListener(gui));
+					showMenuItem.addListener(SWT.Selection, trayRestoreListener);
 					trayMenu.setDefaultItem(showMenuItem);
 
 					new MenuItem(trayMenu, SWT.SEPARATOR);
@@ -129,10 +130,11 @@ public class TrayIcon {
 						}
 					});
 
-					trayItem.addListener(SWT.DefaultSelection, new RestoreShellListener(gui));
+					trayItem.addListener(SWT.DefaultSelection, trayRestoreListener);
+					gui.getShell().addShellListener(trayRestoreListener); // OS X
 				}
 			}
-			catch (Exception e) {
+			catch (final Exception e) {
 				Logger.getInstance().log(e);
 			}
 		}
