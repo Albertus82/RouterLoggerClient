@@ -7,6 +7,14 @@ import static it.albertus.router.client.gui.preference.page.PageDefinition.HTTP;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.MQTT;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.MQTT_ADVANCED;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.MQTT_MESSAGES;
+
+import java.util.EnumSet;
+import java.util.Set;
+
+import org.eclipse.jface.preference.ColorFieldEditor;
+import org.eclipse.jface.preference.FieldEditor;
+import org.eclipse.swt.widgets.Composite;
+
 import it.albertus.jface.TextConsole;
 import it.albertus.jface.preference.FieldEditorDetails;
 import it.albertus.jface.preference.FieldEditorDetails.FieldEditorDetailsBuilder;
@@ -40,17 +48,10 @@ import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 import it.albertus.util.Localized;
 
-import java.util.EnumSet;
-import java.util.Set;
-
-import org.eclipse.jface.preference.ColorFieldEditor;
-import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.swt.widgets.Composite;
-
 public enum Preference implements IPreference {
 
 	LANGUAGE(new PreferenceDetailsBuilder(GENERAL).defaultValue(RouterLoggerClientConfiguration.Defaults.LANGUAGE).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
-	CLIENT_PROTOCOL(new PreferenceDetailsBuilder(GENERAL).separate().defaultValue(RouterLoggerGui.Defaults.CLIENT_PROTOCOL).restartRequired().build(), new FieldEditorDetailsBuilder(DefaultRadioGroupFieldEditor.class).labelsAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
+	CLIENT_PROTOCOL(new PreferenceDetailsBuilder(GENERAL).separate().restartRequired().build(), new FieldEditorDetailsBuilder(DefaultRadioGroupFieldEditor.class).labelsAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
 	DEBUG(new PreferenceDetailsBuilder(GENERAL).separate().defaultValue(Logger.Defaults.DEBUG).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 
 	MQTT_SERVER_URI(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(UriListEditor.class).build()),

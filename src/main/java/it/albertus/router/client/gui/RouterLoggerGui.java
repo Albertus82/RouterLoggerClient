@@ -24,6 +24,7 @@ import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.Status;
 import it.albertus.router.client.gui.listener.CloseListener;
+import it.albertus.router.client.gui.listener.PreferencesSelectionListener;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Messages;
@@ -63,7 +64,6 @@ public class RouterLoggerGui extends ApplicationWindow {
 		int GUI_CLIPBOARD_MAX_CHARS = 100000;
 		boolean CONSOLE_SHOW_CONFIGURATION = false;
 		int MQTT_CONNECT_RETRY_INTERVAL_SECS = 5;
-		String CLIENT_PROTOCOL = Protocol.MQTT.name();
 	}
 
 	public static void run() {
@@ -72,8 +72,14 @@ public class RouterLoggerGui extends ApplicationWindow {
 		final Display display = Display.getDefault();
 		final RouterLoggerGui gui = new RouterLoggerGui(display);
 		gui.open();
-		gui.connect();
 		final Shell shell = gui.getShell();
+		try {
+			Protocol.valueOf(gui.configuration.getString("client.protocol"));
+			gui.connect();
+		}
+		catch (final RuntimeException re) {
+			new PreferencesSelectionListener(gui).widgetSelected(null);
+		}
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				Display.getCurrent().sleep();
@@ -125,7 +131,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 
 		@Override
 		public void run() {
-			final String protocol = configuration.getString("client.protocol", Defaults.CLIENT_PROTOCOL).trim();
+			final String protocol = configuration.getString("client.protocol").trim();
 			if (protocol.equalsIgnoreCase(Protocol.MQTT.toString())) { // MQTT
 				mqttClient.init(RouterLoggerGui.this);
 				mqttConnectionThread = new MqttConnectionThread();
