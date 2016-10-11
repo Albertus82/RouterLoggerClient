@@ -325,6 +325,9 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	public void restart() {
+		// Disable "Restart..." menu item...
+		menuBar.getFileRestartItem().setEnabled(false);
+
 		new Thread("resetThread") {
 			@Override
 			public void run() {
@@ -345,6 +348,14 @@ public class RouterLoggerGui extends ApplicationWindow {
 				}.start();
 
 				connect();
+
+				// Enable "Restart..." menu item...
+				new SwtThreadExecutor(getShell()) {
+					@Override
+					protected void run() {
+						menuBar.getFileRestartItem().setEnabled(true);
+					}
+				}.start();
 			}
 		}.start();
 	}
