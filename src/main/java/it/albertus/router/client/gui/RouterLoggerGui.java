@@ -24,7 +24,7 @@ import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.Status;
 import it.albertus.router.client.gui.listener.CloseListener;
-import it.albertus.router.client.gui.listener.PreferencesSelectionListener;
+import it.albertus.router.client.gui.listener.PreferencesListener;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Messages;
@@ -78,7 +78,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 			gui.connect();
 		}
 		catch (final RuntimeException re) {
-			new PreferencesSelectionListener(gui).widgetSelected(null);
+			new PreferencesListener(gui).widgetSelected(null);
 		}
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
