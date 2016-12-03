@@ -7,6 +7,7 @@ import org.eclipse.jface.util.Util;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -15,10 +16,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
 import it.albertus.jface.SwtThreadExecutor;
-import it.albertus.jface.TextConsole;
+import it.albertus.jface.console.StyledTextConsole;
 import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
@@ -51,7 +51,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 	private MenuBar menuBar;
 	private SashForm sashForm;
 	private DataTable dataTable;
-	private TextConsole textConsole;
+	private StyledTextConsole console;
 
 	private RouterLoggerStatus currentStatus;
 	private RouterLoggerStatus previousStatus;
@@ -233,12 +233,15 @@ public class RouterLoggerGui extends ApplicationWindow {
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		dataTable = new DataTable(sashForm, new GridData(SWT.FILL, SWT.FILL, true, true), this);
-		textConsole = new TextConsole(sashForm, new GridData(SWT.FILL, SWT.FILL, true, true), new Configured<Integer>() {
+
+		console = new StyledTextConsole(sashForm, new GridData(SWT.FILL, SWT.FILL, true, true), true);
+		console.setMaxChars(new Configured<Integer>() {
 			@Override
 			public Integer getValue() {
 				return configuration.getInt("gui.console.max.chars");
 			}
 		});
+
 		return parent;
 	}
 
@@ -290,22 +293,22 @@ public class RouterLoggerGui extends ApplicationWindow {
 		return dataTable;
 	}
 
-	public TextConsole getTextConsole() {
-		return textConsole;
+	public StyledTextConsole getConsole() {
+		return console;
 	}
 
 	public boolean canCopyConsole() {
-		final Text text = textConsole.getText();
+		final StyledText text = console.getScrollable();
 		return text != null && text.getSelectionCount() > 0 && (text.isFocusControl() || !dataTable.canCopy());
 	}
 
 	public boolean canSelectAllConsole() {
-		final Text text = textConsole.getText();
+		final StyledText text = console.getScrollable();
 		return text != null && !text.getText().isEmpty() && (text.isFocusControl() || !dataTable.canSelectAll());
 	}
 
 	public boolean canClearConsole() {
-		final Text text = textConsole.getText();
+		final StyledText text = console.getScrollable();
 		return text != null && !text.getText().isEmpty();
 	}
 
@@ -349,7 +352,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 					@Override
 					protected void run() {
 						dataTable.reset();
-						textConsole.clear();
+						console.clear();
 					}
 				}.start();
 
