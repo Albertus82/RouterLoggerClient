@@ -249,12 +249,12 @@ public class RouterLoggerGui extends ApplicationWindow {
 	protected void initializeBounds() {/* Do not pack the shell */}
 
 	protected void printWelcome() {
-		System.out.println("  ____             _            _                                   ____ _ _            _");
-		System.out.println(" |  _ \\ ___  _   _| |_ ___ _ __| |    ___   __ _  __ _  ___ _ __   / ___| (_) ___ _ __ | |_");
-		System.out.println(" | |_) / _ \\| | | | __/ _ \\ '__| |   / _ \\ / _` |/ _` |/ _ \\ '__| | |   | | |/ _ \\ '_ \\| __|");
-		System.out.println(" |  _ < (_) | |_| | ||  __/ |  | |__| (_) | (_| | (_| |  __/ |    | |___| | |  __/ | | | |_");
-		System.out.println(" |_| \\_\\___/ \\__,_|\\__\\___|_|  |_____\\___/ \\__, |\\__, |\\___|_|     \\____|_|_|\\___|_| |_|\\__|");
-		System.out.println("                                           |___/ |___/");
+		System.out.println(" ____             _            _                                   ____ _ _            _");
+		System.out.println("|  _ \\ ___  _   _| |_ ___ _ __| |    ___   __ _  __ _  ___ _ __   / ___| (_) ___ _ __ | |_");
+		System.out.println("| |_) / _ \\| | | | __/ _ \\ '__| |   / _ \\ / _` |/ _` |/ _ \\ '__| | |   | | |/ _ \\ '_ \\| __|");
+		System.out.println("|  _ < (_) | |_| | ||  __/ |  | |__| (_) | (_| | (_| |  __/ |    | |___| | |  __/ | | | |_");
+		System.out.println("|_| \\_\\___/ \\__,_|\\__\\___|_|  |_____\\___/ \\__, |\\__, |\\___|_|     \\____|_|_|\\___|_| |_|\\__|");
+		System.out.println("                                          |___/ |___/");
 		final Version version = Version.getInstance();
 		System.out.println(Messages.get("msg.welcome", Messages.get("msg.application.name"), Messages.get("msg.version", version.getNumber(), version.getDate()), Messages.get("msg.website")));
 		System.out.println();
