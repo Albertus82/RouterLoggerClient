@@ -7,7 +7,6 @@ import org.eclipse.jface.util.Util;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -298,18 +297,15 @@ public class RouterLoggerGui extends ApplicationWindow {
 	}
 
 	public boolean canCopyConsole() {
-		final StyledText text = console.getScrollable();
-		return text != null && text.getSelectionCount() > 0 && (text.isFocusControl() || !dataTable.canCopy());
+		return console.hasSelection() && (console.getScrollable().isFocusControl() || !dataTable.canCopy());
 	}
 
 	public boolean canSelectAllConsole() {
-		final StyledText text = console.getScrollable();
-		return text != null && text.getCharCount() > 0 && (text.isFocusControl() || !dataTable.canSelectAll());
+		return !console.isEmpty() && (console.getScrollable().isFocusControl() || !dataTable.canSelectAll());
 	}
 
 	public boolean canClearConsole() {
-		final StyledText text = console.getScrollable();
-		return text != null && text.getCharCount() > 0;
+		return !console.isEmpty();
 	}
 
 	public RouterLoggerStatus getCurrentStatus() {

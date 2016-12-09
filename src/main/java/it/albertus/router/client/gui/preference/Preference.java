@@ -38,6 +38,7 @@ import it.albertus.jface.preference.page.IPageDefinition;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.gui.CloseMessageBox;
 import it.albertus.router.client.gui.DataTable;
+import it.albertus.router.client.gui.Images;
 import it.albertus.router.client.gui.RouterLoggerGui;
 import it.albertus.router.client.gui.TrayIcon;
 import it.albertus.router.client.gui.preference.page.AdvancedMqttPreferencePage;
@@ -56,7 +57,7 @@ public enum Preference implements IPreference {
 	CLIENT_PROTOCOL(new PreferenceDetailsBuilder(GENERAL).separate().restartRequired().build(), new FieldEditorDetailsBuilder(DefaultRadioGroupFieldEditor.class).labelsAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
 	DEBUG(new PreferenceDetailsBuilder(GENERAL).separate().defaultValue(Logger.Defaults.DEBUG).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 
-	MQTT_SERVER_URI(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(UriListEditor.class).build()),
+	MQTT_SERVER_URI(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(UriListEditor.class).icons(Images.MAIN_ICONS).build()),
 	MQTT_USERNAME(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
 	MQTT_PASSWORD(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(PasswordFieldEditor.class).build()),
 	MQTT_CLIENT_ID(new PreferenceDetailsBuilder(MQTT).restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.CLIENT_ID).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).emptyStringAllowed(false).build()),
