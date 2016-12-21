@@ -1,11 +1,5 @@
 package it.albertus.router.client.gui;
 
-import it.albertus.jface.SwtThreadExecutor;
-import it.albertus.router.client.engine.Threshold;
-import it.albertus.router.client.engine.ThresholdsReached;
-import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,14 +12,20 @@ import java.util.TreeMap;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import it.albertus.jface.SwtThreadExecutor;
+import it.albertus.router.client.engine.Threshold;
+import it.albertus.router.client.engine.ThresholdsReached;
+import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.util.Logger;
+
 public class ThresholdsManager {
 
-	@Deprecated
-	private static final DateFormat timestampFormat = new SimpleDateFormat(DataTable.TIMESTAMP_PATTERN);
-
-	private static synchronized String formatTimestamp(final Date timestamp) {
-		return timestampFormat.format(timestamp);
-	}
+	private static final ThreadLocal<DateFormat> timestampFormat = new ThreadLocal<DateFormat>() {
+		@Override
+		protected DateFormat initialValue() {
+			return new SimpleDateFormat(DataTable.TIMESTAMP_PATTERN);
+		};
+	};
 
 	private final Map<Date, ThresholdsReached> thresholdsBuffer = new HashMap<>(2);
 	private final RouterLoggerGui gui;
@@ -91,10 +91,9 @@ public class ThresholdsManager {
 					}
 
 					for (final TableItem ti : dataTable.getTable().getItems()) {
-						if (ti.getText(1).equals(formatTimestamp(thresholdsReached.getTimestamp()))) {
+						if (ti.getText(1).equals(timestampFormat.get().format(thresholdsReached.getTimestamp()))) {
 							for (final int index : indexes) {
 								ti.setForeground(index, dataTable.getThresholdsReachedForegroundColor());
-//								ti.setBackground(index, dataTable.getThresholdsReachedBackgroundColor());
 							}
 							updated[0] = true;
 							break;
