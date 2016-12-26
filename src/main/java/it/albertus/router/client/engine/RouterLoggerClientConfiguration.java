@@ -50,7 +50,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 
 		/* Caricamento chiavi da evidenziare */
 		guiImportantKeys.clear();
-		for (final String importantKey : this.getString("gui.important.keys", "").split(this.getString("gui.important.keys.separator", Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).trim())) {
+		for (final String importantKey : this.getString("gui.important.keys", true).split(this.getString("gui.important.keys.separator", Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).trim())) {
 			if (StringUtils.isNotBlank(importantKey)) {
 				this.guiImportantKeys.add(importantKey.trim());
 			}
