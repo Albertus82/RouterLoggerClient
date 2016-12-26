@@ -10,8 +10,6 @@ public class RouterLoggerClientMqttCallback extends MqttCallbackAdapter {
 	private final String clientId;
 	private final RouterLoggerClientGui gui;
 
-	private volatile boolean connectionLost = false;
-
 	public RouterLoggerClientMqttCallback(final String clientId, final RouterLoggerClientGui gui) {
 		this.clientId = clientId;
 		this.gui = gui;
@@ -19,19 +17,17 @@ public class RouterLoggerClientMqttCallback extends MqttCallbackAdapter {
 
 	@Override
 	public void connectionLost(final Throwable cause) {
-		connectionLost = true;
 		Logger.getInstance().log(cause);
 	}
 
 	@Override
 	public void connectComplete(final boolean reconnect, final String serverURI) {
 		Logger.getInstance().log(Messages.get("msg.mqtt.connected", serverURI, clientId));
-		if (connectionLost) {
+		if (reconnect) {
 			new SwtThreadExecutor(gui.getShell()) {
 				@Override
 				protected void run() {
 					gui.reconnectAfterConnectionLoss();
-					connectionLost = false;
 				}
 			}.start();
 		}
