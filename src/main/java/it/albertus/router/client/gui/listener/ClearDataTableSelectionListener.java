@@ -1,14 +1,14 @@
 package it.albertus.router.client.gui.listener;
 
 import it.albertus.router.client.gui.DataTable;
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
 
 import org.eclipse.swt.events.SelectionEvent;
 
 public class ClearDataTableSelectionListener extends ClearSelectionListener {
 
-	public ClearDataTableSelectionListener(final RouterLoggerGui gui) {
+	public ClearDataTableSelectionListener(final RouterLoggerClientGui gui) {
 		super(gui);
 	}
 

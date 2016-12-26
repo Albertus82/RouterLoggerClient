@@ -5,7 +5,7 @@ import it.albertus.router.client.dto.transformer.DataTransformer;
 import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.gui.DataTable;
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.gui.ThresholdsManager;
 import it.albertus.router.client.mqtt.BaseMqttClient;
 
@@ -20,11 +20,11 @@ import com.google.gson.JsonSyntaxException;
 
 public class DataMqttMessageListener implements IMqttMessageListener {
 
-	private final RouterLoggerGui gui;
+	private final RouterLoggerClientGui gui;
 
 	private int iteration = 0;
 
-	public DataMqttMessageListener(final RouterLoggerGui gui) {
+	public DataMqttMessageListener(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 	}
 

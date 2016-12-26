@@ -94,7 +94,7 @@ public class DataTable {
 	 * combinazioni di tasti, gli acceleratori non funzioneranno e le relative
 	 * combinazioni di tasti saranno ignorate.
 	 */
-	protected DataTable(final Composite parent, final Object layoutData, final RouterLoggerGui gui) {
+	protected DataTable(final Composite parent, final Object layoutData, final RouterLoggerClientGui gui) {
 		tableViewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		final Table table = tableViewer.getTable();
 		table.setLayoutData(layoutData);
@@ -146,7 +146,7 @@ public class DataTable {
 					data.append(column.getText()).append(FIELD_SEPARATOR);
 				}
 				data.replace(data.length() - 1, data.length(), NewLine.SYSTEM_LINE_SEPARATOR);
-				if (data.length() > configuration.getInt(RouterLoggerGui.CFG_KEY_GUI_CLIPBOARD_MAX_CHARS, RouterLoggerGui.GUI_CLIPBOARD_MAX_CHARS)) {
+				if (data.length() > configuration.getInt(RouterLoggerClientGui.CFG_KEY_GUI_CLIPBOARD_MAX_CHARS, RouterLoggerClientGui.GUI_CLIPBOARD_MAX_CHARS)) {
 					final MessageBox messageBox = new MessageBox(table.getShell(), SWT.ICON_WARNING);
 					messageBox.setText(Messages.get("lbl.window.title"));
 					messageBox.setMessage(Messages.get("err.clipboard.cannot.copy"));
@@ -168,7 +168,7 @@ public class DataTable {
 							row.append(NewLine.SYSTEM_LINE_SEPARATOR);
 						}
 					}
-					if (row.length() + data.length() > configuration.getInt(RouterLoggerGui.CFG_KEY_GUI_CLIPBOARD_MAX_CHARS, RouterLoggerGui.GUI_CLIPBOARD_MAX_CHARS)) {
+					if (row.length() + data.length() > configuration.getInt(RouterLoggerClientGui.CFG_KEY_GUI_CLIPBOARD_MAX_CHARS, RouterLoggerClientGui.GUI_CLIPBOARD_MAX_CHARS)) {
 						limited = true;
 						break;
 					}

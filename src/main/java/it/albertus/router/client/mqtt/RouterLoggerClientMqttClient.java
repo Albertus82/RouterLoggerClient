@@ -10,7 +10,7 @@ import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 
 import it.albertus.jface.preference.field.UriListEditor;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.mqtt.listener.DataMqttMessageListener;
 import it.albertus.router.client.mqtt.listener.RouterLoggerClientMqttCallback;
 import it.albertus.router.client.mqtt.listener.StatusMqttMessageListener;
@@ -84,19 +84,19 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 
 	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 
-	private RouterLoggerGui gui;
+	private RouterLoggerClientGui gui;
 	private IMqttMessageListener dataMessageListener;
 	private IMqttMessageListener statusMessageListener;
 	private IMqttMessageListener thresholdsMessageListener;
 
 	private RouterLoggerClientMqttClient() {}
 
-	public void init(final RouterLoggerGui gui) {
+	public void init(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 		createListeners(gui);
 	}
 
-	protected void createListeners(final RouterLoggerGui gui) {
+	protected void createListeners(final RouterLoggerClientGui gui) {
 		dataMessageListener = new DataMqttMessageListener(gui);
 		statusMessageListener = new StatusMqttMessageListener(gui);
 		thresholdsMessageListener = new ThresholdsMqttMessageListener(gui);

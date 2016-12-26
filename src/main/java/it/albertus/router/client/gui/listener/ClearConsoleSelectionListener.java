@@ -1,13 +1,13 @@
 package it.albertus.router.client.gui.listener;
 
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
 
 import org.eclipse.swt.events.SelectionEvent;
 
 public class ClearConsoleSelectionListener extends ClearSelectionListener {
 
-	public ClearConsoleSelectionListener(final RouterLoggerGui gui) {
+	public ClearConsoleSelectionListener(final RouterLoggerClientGui gui) {
 		super(gui);
 	}
 

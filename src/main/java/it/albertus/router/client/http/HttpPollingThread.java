@@ -25,7 +25,7 @@ import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.ThresholdsReached;
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
@@ -59,14 +59,14 @@ public class HttpPollingThread extends Thread {
 	}
 
 	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
-	private final RouterLoggerGui gui;
+	private final RouterLoggerClientGui gui;
 
 	private int iteration = 0;
 	private String eTag;
 
 	private volatile boolean exit = false;
 
-	public HttpPollingThread(final RouterLoggerGui gui) {
+	public HttpPollingThread(final RouterLoggerClientGui gui) {
 		this.setDaemon(true);
 		this.gui = gui;
 		if (configuration.getBoolean(CFG_KEY_HTTP_IGNORE_CERTIFICATE, Defaults.IGNORE_CERTIFICATE)) {

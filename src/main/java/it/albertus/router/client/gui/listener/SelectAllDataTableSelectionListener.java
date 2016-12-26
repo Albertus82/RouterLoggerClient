@@ -1,16 +1,16 @@
 package it.albertus.router.client.gui.listener;
 
 import it.albertus.router.client.gui.DataTable;
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
 public class SelectAllDataTableSelectionListener extends SelectionAdapter {
 
-	private final RouterLoggerGui gui;
+	private final RouterLoggerClientGui gui;
 
-	public SelectAllDataTableSelectionListener(final RouterLoggerGui gui) {
+	public SelectAllDataTableSelectionListener(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 	}
 

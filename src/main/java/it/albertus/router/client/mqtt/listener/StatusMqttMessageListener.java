@@ -3,7 +3,7 @@ package it.albertus.router.client.mqtt.listener;
 import it.albertus.router.client.dto.StatusDto;
 import it.albertus.router.client.dto.transformer.StatusTransformer;
 import it.albertus.router.client.engine.RouterLoggerStatus;
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.mqtt.BaseMqttClient;
 
 import java.io.UnsupportedEncodingException;
@@ -16,9 +16,9 @@ import com.google.gson.JsonSyntaxException;
 
 public class StatusMqttMessageListener implements IMqttMessageListener {
 
-	private final RouterLoggerGui gui;
+	private final RouterLoggerClientGui gui;
 
-	public StatusMqttMessageListener(final RouterLoggerGui gui) {
+	public StatusMqttMessageListener(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 	}
 

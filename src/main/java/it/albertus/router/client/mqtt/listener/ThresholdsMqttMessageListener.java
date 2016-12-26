@@ -3,7 +3,7 @@ package it.albertus.router.client.mqtt.listener;
 import it.albertus.router.client.dto.ThresholdsDto;
 import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
 import it.albertus.router.client.engine.ThresholdsReached;
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.mqtt.BaseMqttClient;
 
 import java.io.UnsupportedEncodingException;
@@ -16,9 +16,9 @@ import com.google.gson.JsonSyntaxException;
 
 public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 
-	private final RouterLoggerGui gui;
+	private final RouterLoggerClientGui gui;
 
-	public ThresholdsMqttMessageListener(final RouterLoggerGui gui) {
+	public ThresholdsMqttMessageListener(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 	}
 

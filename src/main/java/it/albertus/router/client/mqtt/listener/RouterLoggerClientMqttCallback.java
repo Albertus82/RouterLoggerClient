@@ -1,18 +1,18 @@
 package it.albertus.router.client.mqtt.listener;
 
 import it.albertus.jface.SwtThreadExecutor;
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 
 public class RouterLoggerClientMqttCallback extends MqttCallbackAdapter {
 
 	private final String clientId;
-	private final RouterLoggerGui gui;
+	private final RouterLoggerClientGui gui;
 
 	private volatile boolean connectionLost = false;
 
-	public RouterLoggerClientMqttCallback(final String clientId, final RouterLoggerGui gui) {
+	public RouterLoggerClientMqttCallback(final String clientId, final RouterLoggerClientGui gui) {
 		this.clientId = clientId;
 		this.gui = gui;
 	}

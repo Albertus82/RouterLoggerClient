@@ -28,9 +28,9 @@ public class ThresholdsManager {
 	};
 
 	private final Map<Date, ThresholdsReached> thresholdsBuffer = new HashMap<>(2);
-	private final RouterLoggerGui gui;
+	private final RouterLoggerClientGui gui;
 
-	public ThresholdsManager(final RouterLoggerGui gui) {
+	public ThresholdsManager(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 	}
 

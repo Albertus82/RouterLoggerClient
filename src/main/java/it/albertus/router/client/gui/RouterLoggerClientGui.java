@@ -32,7 +32,7 @@ import it.albertus.util.Configuration;
 import it.albertus.util.Configured;
 import it.albertus.util.Version;
 
-public class RouterLoggerGui extends ApplicationWindow {
+public class RouterLoggerClientGui extends ApplicationWindow {
 
 	public static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = "gui.clipboard.max.chars";
 	public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
@@ -69,7 +69,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 		Display.setAppName(Messages.get("msg.application.name"));
 		Display.setAppVersion(Version.getInstance().getNumber());
 		final Display display = Display.getDefault();
-		final RouterLoggerGui gui = new RouterLoggerGui(display);
+		final RouterLoggerClientGui gui = new RouterLoggerClientGui(display);
 		gui.open();
 		final Shell shell = gui.getShell();
 		try {
@@ -132,12 +132,12 @@ public class RouterLoggerGui extends ApplicationWindow {
 		public void run() {
 			final String protocol = configuration.getString("client.protocol").trim();
 			if (protocol.equalsIgnoreCase(Protocol.MQTT.toString())) { // MQTT
-				mqttClient.init(RouterLoggerGui.this);
+				mqttClient.init(RouterLoggerClientGui.this);
 				mqttConnectionThread = new MqttConnectionThread();
 				mqttConnectionThread.start();
 			}
 			else if (protocol.toUpperCase().startsWith(Protocol.HTTP.toString().toUpperCase())) { // HTTP
-				httpPollingThread = new HttpPollingThread(RouterLoggerGui.this);
+				httpPollingThread = new HttpPollingThread(RouterLoggerClientGui.this);
 				httpPollingThread.start();
 			}
 			else {
@@ -172,7 +172,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 		}
 	}
 
-	public RouterLoggerGui(final Display display) {
+	public RouterLoggerClientGui(final Display display) {
 		super(null);
 		thresholdsManager = new ThresholdsManager(this);
 	}

@@ -34,7 +34,7 @@ public class TrayIcon {
 	}
 
 	private final RouterLoggerClientConfiguration configuration = RouterLoggerClientConfiguration.getInstance();
-	private final RouterLoggerGui gui;
+	private final RouterLoggerClientGui gui;
 
 	private Tray tray;
 	private TrayItem trayItem;
@@ -54,7 +54,7 @@ public class TrayIcon {
 		this.showToolTip = showToolTip;
 	}
 
-	protected TrayIcon(final RouterLoggerGui gui) {
+	protected TrayIcon(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 		gui.getShell().addShellListener(new ShellAdapter() {
 			@Override

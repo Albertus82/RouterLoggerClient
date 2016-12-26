@@ -1,11 +1,11 @@
 package it.albertus.router.client;
 
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 
 public class RouterLoggerClient {
 
 	public static void main(final String[] args) {
-		RouterLoggerGui.run();
+		RouterLoggerClientGui.run();
 	}
 
 }

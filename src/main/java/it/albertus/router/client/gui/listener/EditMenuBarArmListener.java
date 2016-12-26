@@ -1,6 +1,6 @@
 package it.albertus.router.client.gui.listener;
 
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 
 import org.eclipse.swt.events.ArmEvent;
 import org.eclipse.swt.events.ArmListener;
@@ -11,9 +11,9 @@ import org.eclipse.swt.events.ArmListener;
  */
 public class EditMenuBarArmListener implements ArmListener {
 
-	private final RouterLoggerGui gui;
+	private final RouterLoggerClientGui gui;
 
-	public EditMenuBarArmListener(final RouterLoggerGui gui) {
+	public EditMenuBarArmListener(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 	}
 

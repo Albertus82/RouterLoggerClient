@@ -60,7 +60,7 @@ public class MenuBar {
 	private MenuItem helpMenuHeader;
 	private MenuItem helpAboutItem;
 
-	protected MenuBar(final RouterLoggerGui gui) {
+	protected MenuBar(final RouterLoggerClientGui gui) {
 		final CloseListener closeListener = new CloseListener(gui);
 		final AboutListener aboutListener = new AboutListener(gui);
 		final PreferencesListener preferencesListener = new PreferencesListener(gui);

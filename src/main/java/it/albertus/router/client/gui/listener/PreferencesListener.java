@@ -8,16 +8,16 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 
 import it.albertus.jface.preference.Preferences;
-import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.gui.preference.RouterLoggerClientPreferences;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 
 public class PreferencesListener extends SelectionAdapter implements Listener {
 
-	private final RouterLoggerGui gui;
+	private final RouterLoggerClientGui gui;
 
-	public PreferencesListener(final RouterLoggerGui gui) {
+	public PreferencesListener(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 	}
 
