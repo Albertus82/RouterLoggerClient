@@ -1,13 +1,13 @@
 package it.albertus.router.client.mqtt;
 
-import it.albertus.router.client.mqtt.listener.MqttCallback;
-import it.albertus.router.client.util.Logger;
-
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+
+import it.albertus.router.client.util.Logger;
 
 public abstract class BaseMqttClient {
 
@@ -62,7 +62,7 @@ public abstract class BaseMqttClient {
 	protected synchronized void doConnect(final String clientId, final MqttConnectOptions options, final MqttClientPersistence persistence, final boolean retry) throws MqttException {
 		if (client == null) {
 			client = new MqttClient(options.getServerURIs()[0], clientId, persistence);
-			client.setCallback(new MqttCallback(clientId));
+			client.setCallback(createMqttCallback(clientId));
 			final Thread starter = new MqttClientStartThread(options, retry);
 			starter.start();
 			try {
@@ -71,6 +71,8 @@ public abstract class BaseMqttClient {
 			catch (final InterruptedException ie) {/* Ignore */}
 		}
 	}
+
+	protected abstract MqttCallback createMqttCallback(final String clientId);
 
 	protected synchronized void doSubscribe(final String topic, final int qos, final IMqttMessageListener listener) throws MqttException {
 		if (client == null) {

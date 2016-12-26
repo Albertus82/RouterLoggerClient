@@ -37,7 +37,7 @@ public class RouterLoggerGui extends ApplicationWindow {
 	public static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = "gui.clipboard.max.chars";
 	public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
 
-	//	public static final SSLSocketFactory defaultSSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
+	// public static final SSLSocketFactory defaultSSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
 
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
 
@@ -327,6 +327,10 @@ public class RouterLoggerGui extends ApplicationWindow {
 				}
 			}
 		}
+	}
+
+	public void reconnectAfterConnectionLoss() {
+		restart(); // FIXME
 	}
 
 	public void restart() {

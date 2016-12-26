@@ -1,20 +1,5 @@
 package it.albertus.router.client.http;
 
-import it.albertus.router.client.dto.RouterDataDto;
-import it.albertus.router.client.dto.StatusDto;
-import it.albertus.router.client.dto.ThresholdsDto;
-import it.albertus.router.client.dto.transformer.DataTransformer;
-import it.albertus.router.client.dto.transformer.StatusTransformer;
-import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
-import it.albertus.router.client.engine.RouterData;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
-import it.albertus.router.client.engine.RouterLoggerStatus;
-import it.albertus.router.client.engine.ThresholdsReached;
-import it.albertus.router.client.gui.RouterLoggerGui;
-import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.util.Configuration;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -30,6 +15,21 @@ import javax.xml.bind.DatatypeConverter;
 
 import com.google.gson.Gson;
 
+import it.albertus.router.client.dto.RouterDataDto;
+import it.albertus.router.client.dto.StatusDto;
+import it.albertus.router.client.dto.ThresholdsDto;
+import it.albertus.router.client.dto.transformer.DataTransformer;
+import it.albertus.router.client.dto.transformer.StatusTransformer;
+import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
+import it.albertus.router.client.engine.RouterData;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.RouterLoggerStatus;
+import it.albertus.router.client.engine.ThresholdsReached;
+import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.util.Logger;
+import it.albertus.util.Configuration;
+
 public class HttpPollingThread extends Thread {
 
 	private static final String CFG_KEY_CLIENT_PROTOCOL = "client.protocol";
@@ -42,14 +42,20 @@ public class HttpPollingThread extends Thread {
 	private static final String CFG_KEY_HTTP_CONNECTION_TIMEOUT = "http.connection.timeout";
 	private static final String CFG_KEY_HTTP_REFRESH_SECS = "http.refresh.secs";
 	private static final String CFG_KEY_HTTP_IGNORE_CERTIFICATE = "http.ignore.certificate";
+	private static final String CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS = "http.connection.retry.interval.secs";
 
-	public interface Defaults {
-		int REFRESH_SECS = 0;
-		boolean AUTHENTICATION = true;
-		int PORT = 8080;
-		boolean IGNORE_CERTIFICATE = false;
-		int CONNECTION_TIMEOUT = 0;
-		int READ_TIMEOUT = 0;
+	public static class Defaults {
+		public static final int REFRESH_SECS = 0;
+		public static final boolean AUTHENTICATION = true;
+		public static final int PORT = 8080;
+		public static final boolean IGNORE_CERTIFICATE = false;
+		public static final int CONNECTION_TIMEOUT = 0;
+		public static final int READ_TIMEOUT = 0;
+		public static final short CONNECTION_RETRY_INTERVAL_SECS = 30;
+
+		private Defaults() {
+			throw new IllegalAccessError("Constants class");
+		}
 	}
 
 	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
@@ -183,6 +189,7 @@ public class HttpPollingThread extends Thread {
 			}
 			catch (final IOException ioe) {
 				ioe.printStackTrace();
+				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
 			}
 			finally {
 				try {
@@ -201,7 +208,7 @@ public class HttpPollingThread extends Thread {
 				try {
 					Thread.sleep(refresh * 1000);
 				}
-				catch (final InterruptedException e) {
+				catch (final InterruptedException ie) {
 					break;
 				}
 			}

@@ -1,17 +1,5 @@
 package it.albertus.router.client.mqtt;
 
-import it.albertus.jface.preference.field.UriListEditor;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
-import it.albertus.router.client.gui.RouterLoggerGui;
-import it.albertus.router.client.mqtt.listener.DataMqttMessageListener;
-import it.albertus.router.client.mqtt.listener.StatusMqttMessageListener;
-import it.albertus.router.client.mqtt.listener.ThresholdsMqttMessageListener;
-import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.util.Configuration;
-import it.albertus.util.ConfigurationException;
-import it.albertus.util.NewLine;
-
 import java.util.Arrays;
 
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
@@ -19,6 +7,19 @@ import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
+
+import it.albertus.jface.preference.field.UriListEditor;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.gui.RouterLoggerGui;
+import it.albertus.router.client.mqtt.listener.DataMqttMessageListener;
+import it.albertus.router.client.mqtt.listener.RouterLoggerClientMqttCallback;
+import it.albertus.router.client.mqtt.listener.StatusMqttMessageListener;
+import it.albertus.router.client.mqtt.listener.ThresholdsMqttMessageListener;
+import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.util.Logger;
+import it.albertus.util.Configuration;
+import it.albertus.util.ConfigurationException;
+import it.albertus.util.NewLine;
 
 /** @Singleton */
 public class RouterLoggerClientMqttClient extends BaseMqttClient {
@@ -192,6 +193,11 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 		catch (final Exception e) {
 			Logger.getInstance().log(e);
 		}
+	}
+
+	@Override
+	protected RouterLoggerClientMqttCallback createMqttCallback(String clientId) {
+		return new RouterLoggerClientMqttCallback(clientId, gui);
 	}
 
 }
