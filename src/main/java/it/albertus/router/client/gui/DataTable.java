@@ -77,7 +77,7 @@ public class DataTable {
 
 	private final RouterLoggerClientConfiguration configuration = RouterLoggerClientConfiguration.getInstance();
 
-	private int iteration;
+	private volatile int iteration;
 
 	private final TableViewer tableViewer;
 
@@ -245,7 +245,7 @@ public class DataTable {
 		return tableViewer != null && tableViewer.getTable() != null && tableViewer.getTable().getItemCount() > 0;
 	}
 
-	public void addRow(final int iteration, final RouterData data, final Map<Threshold, String> thresholdsReached) {
+	public void addRow(final RouterData data, final Map<Threshold, String> thresholdsReached) {
 		if (data != null && data.getData() != null && !data.getData().isEmpty()) {
 			final Map<String, String> info = data.getData();
 			final String timestamp = dateFormatTable.format(data.getTimestamp());
@@ -285,7 +285,7 @@ public class DataTable {
 					// Dati...
 					int i = 0;
 					final TableItem item = new TableItem(table, SWT.NONE, 0);
-					item.setText(i++, Integer.toString(iteration));
+					item.setText(i++, Integer.toString(++iteration));
 					item.setText(i++, timestamp);
 					item.setText(i++, Integer.toString(data.getResponseTime()));
 
@@ -363,7 +363,6 @@ public class DataTable {
 					}
 				}
 			}.start();
-			this.iteration = iteration;
 		}
 	}
 

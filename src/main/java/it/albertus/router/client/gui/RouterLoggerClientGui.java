@@ -330,7 +330,25 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	}
 
 	public void reconnectAfterConnectionLoss() {
-		restart(); // FIXME
+		new Thread("resetThread") {
+			@Override
+			public void run() {
+				// Disconnect
+				mqttClient.disconnect();
+				if (mqttConnectionThread != null) {
+					mqttConnectionThread.interrupt();
+					try {
+						mqttConnectionThread.join();
+					}
+					catch (final InterruptedException ie) {/* Ignore */}
+				}
+
+				// Reconnect
+				mqttClient.init(RouterLoggerClientGui.this);
+				mqttConnectionThread = new MqttConnectionThread();
+				mqttConnectionThread.start();
+			}
+		}.start();
 	}
 
 	public void restart() {

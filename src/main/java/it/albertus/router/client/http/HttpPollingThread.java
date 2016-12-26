@@ -61,7 +61,6 @@ public class HttpPollingThread extends Thread {
 	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 	private final RouterLoggerClientGui gui;
 
-	private int iteration = 0;
 	private String eTag;
 
 	private volatile boolean exit = false;
@@ -182,7 +181,7 @@ public class HttpPollingThread extends Thread {
 					final ThresholdsReached thresholdsReached = ThresholdsTransformer.fromDto(thresholdsDto);
 
 					// Update GUI
-					gui.getDataTable().addRow(++iteration, data, thresholdsReached.getReached());
+					gui.getDataTable().addRow(data, thresholdsReached.getReached());
 					gui.getTrayIcon().updateTrayItem(rls.getStatus(), data);
 					gui.getThresholdsManager().printThresholdsReached(thresholdsReached);
 				}
