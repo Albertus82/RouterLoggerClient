@@ -28,9 +28,13 @@ import it.albertus.util.NewLine;
 
 public class TrayIcon {
 
-	public interface Defaults {
-		boolean GUI_MINIMIZE_TRAY = true;
-		boolean GUI_TRAY_TOOLTIP = true;
+	public static class Defaults {
+		public static final boolean GUI_MINIMIZE_TRAY = true;
+		public static final boolean GUI_TRAY_TOOLTIP = true;
+
+		private Defaults() {
+			throw new IllegalAccessError("Constants class");
+		}
 	}
 
 	private final RouterLoggerClientConfiguration configuration = RouterLoggerClientConfiguration.getInstance();
@@ -50,10 +54,6 @@ public class TrayIcon {
 
 	private boolean showToolTip;
 
-	public void setShowToolTip(boolean showToolTip) {
-		this.showToolTip = showToolTip;
-	}
-
 	protected TrayIcon(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 		gui.getShell().addShellListener(new ShellAdapter() {
@@ -64,6 +64,10 @@ public class TrayIcon {
 				}
 			}
 		});
+	}
+
+	public void setShowToolTip(boolean showToolTip) {
+		this.showToolTip = showToolTip;
 	}
 
 	private Image getTrayIcon(final Status status) {
@@ -188,7 +192,7 @@ public class TrayIcon {
 						}
 					});
 				}
-				catch (SWTException se) {}
+				catch (final SWTException se) {/* Ignore */}
 			}
 		}
 	}
@@ -212,7 +216,7 @@ public class TrayIcon {
 					}
 				});
 			}
-			catch (SWTException se) {}
+			catch (SWTException se) {/* Ignore */}
 		}
 	}
 

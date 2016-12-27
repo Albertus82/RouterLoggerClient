@@ -1,10 +1,10 @@
 package it.albertus.router.client.gui.listener;
 
-import it.albertus.router.client.gui.DataTable;
-import it.albertus.router.client.gui.RouterLoggerClientGui;
-
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
+
+import it.albertus.router.client.gui.DataTable;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 
 public class DataTableContextMenuDetectListener implements MenuDetectListener {
 

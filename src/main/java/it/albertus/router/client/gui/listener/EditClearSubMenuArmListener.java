@@ -1,9 +1,9 @@
 package it.albertus.router.client.gui.listener;
 
-import it.albertus.router.client.gui.RouterLoggerClientGui;
-
 import org.eclipse.swt.events.ArmEvent;
 import org.eclipse.swt.events.ArmListener;
+
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 
 /**
  * Attenzione: disabilitando gli elementi dei menu, vengono automaticamente

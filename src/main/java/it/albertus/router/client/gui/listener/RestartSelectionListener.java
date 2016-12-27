@@ -1,12 +1,12 @@
 package it.albertus.router.client.gui.listener;
 
-import it.albertus.router.client.gui.RouterLoggerClientGui;
-import it.albertus.router.client.resources.Messages;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MessageBox;
+
+import it.albertus.router.client.gui.RouterLoggerClientGui;
+import it.albertus.router.client.resources.Messages;
 
 public class RestartSelectionListener extends SelectionAdapter {
 

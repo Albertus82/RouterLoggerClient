@@ -1,9 +1,9 @@
 package it.albertus.router.client.gui.listener;
 
-import it.albertus.router.client.gui.RouterLoggerClientGui;
-
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 
 public class CopyMenuBarSelectionListener extends SelectionAdapter {
 

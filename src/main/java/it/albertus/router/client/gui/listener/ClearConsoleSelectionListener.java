@@ -1,9 +1,9 @@
 package it.albertus.router.client.gui.listener;
 
+import org.eclipse.swt.events.SelectionEvent;
+
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
-
-import org.eclipse.swt.events.SelectionEvent;
 
 public class ClearConsoleSelectionListener extends ClearSelectionListener {
 
@@ -13,10 +13,8 @@ public class ClearConsoleSelectionListener extends ClearSelectionListener {
 
 	@Override
 	public void widgetSelected(final SelectionEvent se) {
-		if (gui.canClearConsole()) {
-			if (confirm(Messages.get("msg.confirm.clear.console.text"), Messages.get("msg.confirm.clear.console.message"))) {
-				gui.getConsole().clear();
-			}
+		if (gui.canClearConsole() && confirm(Messages.get("msg.confirm.clear.console.text"), Messages.get("msg.confirm.clear.console.message"))) {
+			gui.getConsole().clear();
 		}
 	}
 

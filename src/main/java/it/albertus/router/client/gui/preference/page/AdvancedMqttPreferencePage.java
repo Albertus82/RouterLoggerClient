@@ -1,10 +1,10 @@
 package it.albertus.router.client.gui.preference.page;
 
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+
 import it.albertus.jface.preference.LocalizedLabelsAndValues;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.Localized;
-
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 public class AdvancedMqttPreferencePage extends MqttPreferencePage {
 

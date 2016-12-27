@@ -1,13 +1,13 @@
 package it.albertus.router.client.gui.listener;
 
-import it.albertus.router.client.gui.CloseMessageBox;
-
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+
+import it.albertus.router.client.gui.CloseMessageBox;
 
 public class CloseListener extends SelectionAdapter implements Listener {
 

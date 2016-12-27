@@ -1,5 +1,7 @@
 package it.albertus.router.client.gui.preference;
 
+import org.eclipse.swt.widgets.Shell;
+
 import it.albertus.jface.preference.Preferences;
 import it.albertus.jface.preference.page.IPageDefinition;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
@@ -8,8 +10,6 @@ import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.gui.preference.page.PageDefinition;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.resources.Messages.Language;
-
-import org.eclipse.swt.widgets.Shell;
 
 public class RouterLoggerClientPreferences extends Preferences {
 

@@ -12,32 +12,40 @@ import it.albertus.util.StringUtils;
 
 public class RouterLoggerClientConfiguration extends Configuration {
 
-	public interface Defaults {
-		String LANGUAGE = Locale.getDefault().getLanguage();
-		String GUI_IMPORTANT_KEYS_SEPARATOR = ",";
+	public static final String CFG_KEY_LANGUAGE = "language";
+	public static final String FILE_NAME = "routerlogger-client.cfg";
+
+	private final Set<String> guiImportantKeys = new LinkedHashSet<>();
+
+	private RouterLoggerClientConfiguration() {
+		/* Caricamento della configurazione... */
+		super(Messages.get("msg.application.name") + File.separator + FILE_NAME, true);
+		init();
+	}
+
+	public static class Defaults {
+		public static final String LANGUAGE = Locale.getDefault().getLanguage();
+		public static final String GUI_IMPORTANT_KEYS_SEPARATOR = ",";
+
+		private Defaults() {
+			throw new IllegalAccessError("Constants class");
+		}
 	}
 
 	private static class Singleton {
 		private static final RouterLoggerClientConfiguration instance = new RouterLoggerClientConfiguration();
+
+		private Singleton() {
+			throw new IllegalAccessError();
+		}
 	}
 
 	public static RouterLoggerClientConfiguration getInstance() {
 		return Singleton.instance;
 	}
 
-	public static final String CFG_KEY_LANGUAGE = "language";
-	public static final String FILE_NAME = "routerlogger-client.cfg";
-
-	private final Set<String> guiImportantKeys = new LinkedHashSet<String>();
-
 	public Set<String> getGuiImportantKeys() {
 		return guiImportantKeys;
-	}
-
-	private RouterLoggerClientConfiguration() {
-		/* Caricamento della configurazione... */
-		super(Messages.get("msg.application.name") + File.separator + FILE_NAME, true);
-		init();
 	}
 
 	private void init() {

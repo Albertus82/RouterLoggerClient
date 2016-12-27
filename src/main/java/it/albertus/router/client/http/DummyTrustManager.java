@@ -7,7 +7,7 @@ import javax.net.ssl.X509TrustManager;
 public class DummyTrustManager implements X509TrustManager {
 
 	@Override
-	public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+	public X509Certificate[] getAcceptedIssuers() {
 		return null;
 	}
 

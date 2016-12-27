@@ -1,5 +1,7 @@
 package it.albertus.router.client.gui.preference.page;
 
+import java.util.Locale;
+
 import it.albertus.jface.preference.LocalizedLabelsAndValues;
 import it.albertus.jface.preference.StaticLabelsAndValues;
 import it.albertus.jface.preference.page.RestartHeaderPreferencePage;
@@ -7,8 +9,6 @@ import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.resources.Messages.Language;
 import it.albertus.util.Localized;
-
-import java.util.Locale;
 
 public class GeneralPreferencePage extends RestartHeaderPreferencePage {
 

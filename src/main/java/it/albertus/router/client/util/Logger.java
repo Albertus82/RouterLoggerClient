@@ -1,8 +1,5 @@
 package it.albertus.router.client.util;
 
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
-import it.albertus.util.Configuration;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -10,39 +7,51 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.util.Configuration;
+
 public class Logger {
 
-	private static final DateFormat timestampFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	private static final ThreadLocal<DateFormat> timestampFormat = new ThreadLocal<DateFormat>() {
+		@Override
+		protected DateFormat initialValue() {
+			return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		}
+	};
 
-	private static synchronized String formatTimestamp(final Date timestamp) {
-		return timestampFormat.format(timestamp);
+	private final Configuration configuration;
+
+	private Logger() {
+		Configuration cfg;
+		try {
+			cfg = RouterLoggerClientConfiguration.getInstance();
+		}
+		catch (final Throwable t) {
+			t.printStackTrace();
+			cfg = null;
+		}
+		this.configuration = cfg;
 	}
 
 	private static class Singleton {
 		private static final Logger instance = new Logger();
+
+		private Singleton() {
+			throw new IllegalAccessError();
+		}
 	}
 
 	public static Logger getInstance() {
 		return Singleton.instance;
 	}
 
-	private Logger() {
-		Configuration configuration;
-		try {
-			configuration = RouterLoggerClientConfiguration.getInstance();
-		}
-		catch (final Throwable t) {
-			t.printStackTrace();
-			configuration = null;
-		}
-		this.configuration = configuration;
-	}
+	public static class Defaults {
+		public static final boolean DEBUG = false;
 
-	public interface Defaults {
-		boolean DEBUG = false;
+		private Defaults() {
+			throw new IllegalAccessError("Constants class");
+		}
 	}
-
-	private final Configuration configuration;
 
 	public boolean isDebugEnabled() {
 		return configuration != null ? configuration.getBoolean("debug", Defaults.DEBUG) : true;
@@ -53,13 +62,13 @@ public class Logger {
 	}
 
 	public void log(final String text, final Date timestamp) {
-		System.out.println(formatTimestamp(timestamp) + ' ' + text);
+		System.out.println(timestampFormat.get().format(timestamp) + ' ' + text);
 	}
 
 	public void log(final Throwable throwable) {
 		final Writer sw = new StringWriter();
 		throwable.printStackTrace(new PrintWriter(sw));
-		System.err.println(formatTimestamp(new Date()) + ' ' + sw.toString().trim());
+		System.err.println(timestampFormat.get().format(new Date()) + ' ' + sw.toString().trim());
 	}
 
 }

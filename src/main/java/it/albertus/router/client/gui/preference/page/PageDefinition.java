@@ -1,5 +1,7 @@
 package it.albertus.router.client.gui.preference.page;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+
 import it.albertus.jface.preference.page.BasePreferencePage;
 import it.albertus.jface.preference.page.IPageDefinition;
 import it.albertus.jface.preference.page.PageDefinitionDetails;
@@ -7,8 +9,6 @@ import it.albertus.jface.preference.page.PageDefinitionDetails.PageDefinitionDet
 import it.albertus.jface.preference.page.RestartHeaderPreferencePage;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.Localized;
-
-import org.eclipse.jface.resource.ImageDescriptor;
 
 public enum PageDefinition implements IPageDefinition {
 

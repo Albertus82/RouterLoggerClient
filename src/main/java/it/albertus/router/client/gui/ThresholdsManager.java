@@ -24,7 +24,7 @@ public class ThresholdsManager {
 		@Override
 		protected DateFormat initialValue() {
 			return new SimpleDateFormat(DataTable.TIMESTAMP_PATTERN);
-		};
+		}
 	};
 
 	private final Map<Date, ThresholdsReached> thresholdsBuffer = new HashMap<>(2);
@@ -40,7 +40,7 @@ public class ThresholdsManager {
 
 	public void printThresholdsReached(final ThresholdsReached thresholdsReached) {
 		if (thresholdsReached != null && thresholdsReached.getReached() != null && !thresholdsReached.getReached().isEmpty()) {
-			final Map<String, String> message = new TreeMap<String, String>();
+			final Map<String, String> message = new TreeMap<>();
 			boolean print = false;
 			for (final Threshold threshold : thresholdsReached.getReached().keySet()) {
 				message.put(threshold.getKey(), thresholdsReached.getReached().get(threshold));
@@ -77,7 +77,7 @@ public class ThresholdsManager {
 		final boolean[] updated = { false };
 		final DataTable dataTable = gui.getDataTable();
 		if (dataTable != null && dataTable.getTable() != null) {
-			final Set<Integer> indexes = new HashSet<Integer>(thresholdsReached.getReached().size());
+			final Set<Integer> indexes = new HashSet<>(thresholdsReached.getReached().size());
 			new SwtThreadExecutor(dataTable.getTable()) {
 				@Override
 				protected void run() {

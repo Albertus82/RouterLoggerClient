@@ -13,6 +13,10 @@ import org.eclipse.swt.widgets.Display;
 
 public class Images {
 
+	private Images() {
+		throw new IllegalAccessError();
+	}
+
 	// Icona principale dell'applicazione (in vari formati)
 	public static final Image[] MAIN_ICONS = loadIcons("main.ico");
 
@@ -38,7 +42,7 @@ public class Images {
 		try {
 			is.close();
 		}
-		catch (final IOException ioe) {}
+		catch (final IOException ioe) {/* Ignore */}
 		final Image[] icons = new Image[images.length];
 		int i = 0;
 		for (final ImageData id : images) {

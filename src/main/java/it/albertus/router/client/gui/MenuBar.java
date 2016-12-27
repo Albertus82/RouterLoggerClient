@@ -267,21 +267,21 @@ public class MenuBar {
 		return editClearConsoleMenuItem;
 	}
 
-	//	public Menu getConnectionMenu() {
-	//		return connectionMenu;
-	//	}
-	//
-	//	public MenuItem getConnectionMenuHeader() {
-	//		return connectionMenuHeader;
-	//	}
-	//
-	//	public MenuItem getConnectionConnectItem() {
-	//		return connectionConnectItem;
-	//	}
-	//
-	//	public MenuItem getConnectionDisconnectItem() {
-	//		return connectionDisconnectItem;
-	//	}
+//	public Menu getConnectionMenu() {
+//		return connectionMenu;
+//	}
+
+//	public MenuItem getConnectionMenuHeader() {
+//		return connectionMenuHeader;
+//	}
+
+//	public MenuItem getConnectionConnectItem() {
+//		return connectionConnectItem;
+//	}
+
+//	public MenuItem getConnectionDisconnectItem() {
+//		return connectionDisconnectItem;
+//	}
 
 	public Menu getToolsMenu() {
 		return toolsMenu;

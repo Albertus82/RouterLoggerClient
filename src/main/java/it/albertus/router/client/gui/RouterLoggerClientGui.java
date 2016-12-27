@@ -58,18 +58,27 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	private volatile Thread mqttConnectionThread;
 	private volatile Thread httpPollingThread;
 
-	public interface Defaults {
-		boolean GUI_START_MINIMIZED = false;
-		int GUI_CLIPBOARD_MAX_CHARS = 100000;
-		boolean CONSOLE_SHOW_CONFIGURATION = false;
-		int MQTT_CONNECT_RETRY_INTERVAL_SECS = 5;
+	public RouterLoggerClientGui() {
+		super(null);
+		thresholdsManager = new ThresholdsManager(this);
+	}
+
+	public static class Defaults {
+		public static final boolean GUI_START_MINIMIZED = false;
+		public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
+		public static final boolean CONSOLE_SHOW_CONFIGURATION = false;
+		public static final int MQTT_CONNECT_RETRY_INTERVAL_SECS = 5;
+
+		private Defaults() {
+			throw new IllegalAccessError("Constants class");
+		}
 	}
 
 	public static void run() {
 		Display.setAppName(Messages.get("msg.application.name"));
 		Display.setAppVersion(Version.getInstance().getNumber());
 		final Display display = Display.getDefault();
-		final RouterLoggerClientGui gui = new RouterLoggerClientGui(display);
+		final RouterLoggerClientGui gui = new RouterLoggerClientGui();
 		gui.open();
 		final Shell shell = gui.getShell();
 		try {
@@ -109,7 +118,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				mqttClient.subscribeStatus();
 				if (mqttClient.getClient() == null) {
 					try {
-						Thread.sleep(1000 * configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
+						Thread.sleep(1000L * configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
 					}
 					catch (final InterruptedException ie) {
 						break;
@@ -170,11 +179,6 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 			}
 			printGoodbye();
 		}
-	}
-
-	public RouterLoggerClientGui(final Display display) {
-		super(null);
-		thresholdsManager = new ThresholdsManager(this);
 	}
 
 	private void connect() {

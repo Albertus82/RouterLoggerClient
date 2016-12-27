@@ -6,6 +6,10 @@ import it.albertus.router.client.engine.Status;
 
 public class StatusTransformer {
 
+	private StatusTransformer() {
+		throw new IllegalAccessError();
+	}
+
 	public static RouterLoggerStatus fromDto(final StatusDto dto) {
 		return new RouterLoggerStatus(Status.valueOf(dto.getStatus()), dto.getTimestamp());
 	}

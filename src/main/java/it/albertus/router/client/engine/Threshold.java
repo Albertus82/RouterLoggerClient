@@ -16,7 +16,7 @@ public class Threshold implements Comparable<Threshold> {
 		GREATER_THAN(">", new String[] { "gt", ">" });
 
 		private final String description;
-		private final Set<String> abbreviations = new HashSet<String>();
+		private final Set<String> abbreviations = new HashSet<>();
 
 		private Type(String description, String[] abbreviations) {
 			this.description = description;
@@ -36,11 +36,11 @@ public class Threshold implements Comparable<Threshold> {
 			return description;
 		}
 
-		public static Type getEnum(String abbreviation) {
+		public static Type getEnum(final String abbreviation) {
 			if (abbreviation != null) {
-				abbreviation = abbreviation.trim().toLowerCase();
-				for (Type type : Type.values()) {
-					if (type.name().equalsIgnoreCase(abbreviation) || type.abbreviations.contains(abbreviation)) {
+				final String trimmedAbbreviation = abbreviation.trim().toLowerCase();
+				for (final Type type : Type.values()) {
+					if (type.name().equalsIgnoreCase(trimmedAbbreviation) || type.abbreviations.contains(trimmedAbbreviation)) {
 						return type;
 					}
 				}

@@ -3,7 +3,6 @@ package it.albertus.router.client.http;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.SecureRandom;
@@ -29,6 +28,7 @@ import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
+import it.albertus.util.IOUtils;
 
 public class HttpPollingThread extends Thread {
 
@@ -128,13 +128,14 @@ public class HttpPollingThread extends Thread {
 				authenticationHeader = null;
 			}
 
-			Reader httpReader = null;
+			InputStream is = null;
+			InputStreamReader httpReader = null;
 			int refresh = configuration.getInt(CFG_KEY_HTTP_REFRESH_SECS, Defaults.REFRESH_SECS);
 			try {
 				// RouterLoggerStatus
 				URL url = new URL(baseUrl + "/json/status");
 				HttpURLConnection urlConnection = openConnection(url, authenticationHeader, connectionTimeout, readTimeout);
-				InputStream is = urlConnection.getInputStream();
+				is = urlConnection.getInputStream();
 				httpReader = new InputStreamReader(is);
 				final StatusDto statusDto = new Gson().fromJson(httpReader, StatusDto.class);
 				httpReader.close();
@@ -156,10 +157,10 @@ public class HttpPollingThread extends Thread {
 
 				for (final String header : urlConnection.getHeaderFields().keySet()) {
 					if (header != null) {
-						if (header.equalsIgnoreCase("Etag")) {
+						if ("Etag".equalsIgnoreCase(header)) {
 							eTag = urlConnection.getHeaderField(header);
 						}
-						else if (refresh <= 0 && header.equalsIgnoreCase("Refresh")) {
+						else if (refresh <= 0 && "Refresh".equalsIgnoreCase(header)) {
 							refresh = Integer.parseInt(urlConnection.getHeaderField(header));
 						}
 					}
@@ -191,10 +192,8 @@ public class HttpPollingThread extends Thread {
 				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
 			}
 			finally {
-				try {
-					httpReader.close();
-				}
-				catch (final Exception e) {/* Ignore */}
+				IOUtils.closeQuietly(httpReader);
+				IOUtils.closeQuietly(is);
 			}
 			if (exit) {
 				break;
@@ -205,7 +204,7 @@ public class HttpPollingThread extends Thread {
 					break;
 				}
 				try {
-					Thread.sleep(refresh * 1000);
+					Thread.sleep(refresh * 1000L);
 				}
 				catch (final InterruptedException ie) {
 					break;

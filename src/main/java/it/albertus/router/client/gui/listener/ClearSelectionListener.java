@@ -1,11 +1,11 @@
 package it.albertus.router.client.gui.listener;
 
-import it.albertus.router.client.gui.RouterLoggerClientGui;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.MessageBox;
+
+import it.albertus.router.client.gui.RouterLoggerClientGui;
 
 public abstract class ClearSelectionListener implements SelectionListener {
 

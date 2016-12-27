@@ -1,11 +1,5 @@
 package it.albertus.router.client.mqtt.listener;
 
-import it.albertus.router.client.dto.ThresholdsDto;
-import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
-import it.albertus.router.client.engine.ThresholdsReached;
-import it.albertus.router.client.gui.RouterLoggerClientGui;
-import it.albertus.router.client.mqtt.BaseMqttClient;
-
 import java.io.UnsupportedEncodingException;
 
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
@@ -13,6 +7,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+
+import it.albertus.router.client.dto.ThresholdsDto;
+import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
+import it.albertus.router.client.engine.ThresholdsReached;
+import it.albertus.router.client.gui.RouterLoggerClientGui;
+import it.albertus.router.client.mqtt.BaseMqttClient;
 
 public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 
