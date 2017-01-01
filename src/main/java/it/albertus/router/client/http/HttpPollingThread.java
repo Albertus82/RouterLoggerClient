@@ -192,8 +192,7 @@ public class HttpPollingThread extends Thread {
 				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
 			}
 			finally {
-				IOUtils.closeQuietly(httpReader);
-				IOUtils.closeQuietly(is);
+				IOUtils.closeQuietly(httpReader, is);
 			}
 			if (exit) {
 				break;
