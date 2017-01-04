@@ -10,7 +10,12 @@ public class DataTransformer {
 	}
 
 	public static RouterData fromDto(final RouterDataDto dto) {
-		return new RouterData(dto.getTimestamp(), dto.getResponseTime(), dto.getData());
+		if (dto != null) {
+			return new RouterData(dto.getTimestamp(), dto.getResponseTime(), dto.getData());
+		}
+		else {
+			return null;
+		}
 	}
 
 }

@@ -11,7 +11,12 @@ public class StatusTransformer {
 	}
 
 	public static RouterLoggerStatus fromDto(final StatusDto dto) {
-		return new RouterLoggerStatus(Status.valueOf(dto.getStatus()), dto.getTimestamp());
+		if (dto != null) {
+			return new RouterLoggerStatus(Status.valueOf(dto.getStatus()), dto.getTimestamp());
+		}
+		else {
+			return null;
+		}
 	}
 
 }

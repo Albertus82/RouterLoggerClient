@@ -16,11 +16,16 @@ public class ThresholdsTransformer {
 	}
 
 	public static ThresholdsReached fromDto(final ThresholdsDto dto) {
-		final Map<Threshold, String> reached = new LinkedHashMap<>();
-		for (final ThresholdDto td : dto.getReached()) {
-			reached.put(new Threshold(td.getName(), td.getKey(), Type.valueOf(td.getType()), td.getValue(), td.isExcluded()), td.getDetected());
+		if (dto != null) {
+			final Map<Threshold, String> reached = new LinkedHashMap<>();
+			for (final ThresholdDto td : dto.getReached()) {
+				reached.put(new Threshold(td.getName(), td.getKey(), Type.valueOf(td.getType()), td.getValue(), td.isExcluded()), td.getDetected());
+			}
+			return new ThresholdsReached(reached, dto.getTimestamp());
 		}
-		return new ThresholdsReached(reached, dto.getTimestamp());
+		else {
+			return null;
+		}
 	}
 
 }
