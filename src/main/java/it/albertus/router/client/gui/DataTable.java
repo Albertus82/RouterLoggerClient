@@ -31,6 +31,7 @@ import it.albertus.jface.SwtUtils;
 import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.Threshold;
+import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.listener.ClearDataTableSelectionListener;
 import it.albertus.router.client.gui.listener.CopyDataTableSelectionListener;
 import it.albertus.router.client.gui.listener.DataTableContextMenuDetectListener;
@@ -252,7 +253,7 @@ public class DataTable {
 		return tableViewer != null && tableViewer.getTable() != null && tableViewer.getTable().getItemCount() > 0;
 	}
 
-	public void addRow(final RouterData data, final Map<Threshold, String> thresholdsReached) {
+	public void addRow(final RouterData data, final ThresholdsReached thresholdsReached) {
 		if (data != null && data.getData() != null && !data.getData().isEmpty()) {
 			final Map<String, String> info = data.getData();
 			final String timestamp = dateFormatTable.format(data.getTimestamp());
@@ -313,11 +314,13 @@ public class DataTable {
 						}
 
 						// Colore per i valori oltre soglia...
-						final Color thresholdsReachedForegroundColor = getThresholdsReachedForegroundColor();
-						for (final Threshold threshold : thresholdsReached.keySet()) {
-							if (entry.getKey().equals(threshold.getKey())) {
-								item.setForeground(i, thresholdsReachedForegroundColor);
-								break;
+						if (thresholdsReached != null && thresholdsReached.getReached() != null) {
+							final Color thresholdsReachedForegroundColor = getThresholdsReachedForegroundColor();
+							for (final Threshold threshold : thresholdsReached.getReached().keySet()) {
+								if (entry.getKey().equals(threshold.getKey())) {
+									item.setForeground(i, thresholdsReachedForegroundColor);
+									break;
+								}
 							}
 						}
 

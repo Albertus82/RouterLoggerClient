@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
@@ -40,6 +39,15 @@ import it.albertus.util.StringUtils;
 
 public class HttpPollingThread extends Thread {
 
+	private static final String HDR_KEY_AUTHORIZATION = "Authorization";
+	private static final String HDR_KEY_ACCEPT = "Accept";
+	private static final String HDR_KEY_ACCEPT_ENCODING = "Accept-Encoding";
+	private static final String HDR_KEY_REFRESH = "Refresh";
+	private static final String HDR_KEY_ETAG = "ETag";
+	private static final String HDR_KEY_IF_NONE_MATCH = "If-None-Match";
+
+	private static final String CHARSET = "UTF-8";
+
 	private static final String CFG_KEY_CLIENT_PROTOCOL = "client.protocol";
 	private static final String CFG_KEY_HTTP_HOST = "http.host";
 	private static final String CFG_KEY_HTTP_PORT = "http.port";
@@ -70,12 +78,12 @@ public class HttpPollingThread extends Thread {
 	private final RouterLoggerClientGui gui;
 
 	private final Logger logger = Logger.getInstance();
-
-	private String eTag;
-
 	private volatile boolean exit = false;
 
 	private int refresh;
+	private String eTagData;
+	private String eTagStatus;
+	private String eTagThresholds;
 
 	public HttpPollingThread(final RouterLoggerClientGui gui) {
 		this.setDaemon(true);
@@ -87,7 +95,7 @@ public class HttpPollingThread extends Thread {
 				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 			}
 			catch (final Exception e) {
-				e.printStackTrace();
+				logger.log(e);
 			}
 		}
 	}
@@ -100,7 +108,7 @@ public class HttpPollingThread extends Thread {
 
 	@Override
 	public void run() {
-		String scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL).trim().toLowerCase();
+		String scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL, true).trim().toLowerCase();
 
 		if (!scheme.contains("http")) {
 			return;
@@ -111,14 +119,14 @@ public class HttpPollingThread extends Thread {
 		logger.log(Messages.get("msg.http.polling", scheme.toUpperCase(), scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT)));
 
 		while (!exit) {
-			// Preparare i parametri
-			scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL).trim().toLowerCase();
+			// Prepare connection parameters
+			scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL, true).trim().toLowerCase();
 
 			if (!scheme.contains("http")) {
 				break;
 			}
 
-			host = configuration.getString(CFG_KEY_HTTP_HOST);
+			host = configuration.getString(CFG_KEY_HTTP_HOST, true);
 
 			final HttpConnectionParams params = new HttpConnectionParams(scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT), configuration.getInt(CFG_KEY_HTTP_CONNECTION_TIMEOUT, Defaults.CONNECTION_TIMEOUT), configuration.getInt(CFG_KEY_HTTP_READ_TIMEOUT, Defaults.READ_TIMEOUT), configuration.getString(CFG_KEY_HTTP_USERNAME), configuration.getCharArray(CFG_KEY_HTTP_PASSWORD));
 
@@ -135,19 +143,18 @@ public class HttpPollingThread extends Thread {
 				}
 
 				final RouterData routerData = getRouterData(params);
-				final ThresholdsReached thresholdsReached = getThresholdsReached(params);
-
-				// Update GUI
-				if (routerData != null && thresholdsReached != null) {
-					gui.getDataTable().addRow(routerData, thresholdsReached.getReached());
+				if (routerData != null) {
+					final ThresholdsReached thresholdsReached = getThresholdsReached(params);
+					gui.getDataTable().addRow(routerData, thresholdsReached);
+					gui.getThresholdsManager().printThresholdsReached(thresholdsReached);
 				}
+
 				if (status != null) {
 					gui.getTrayIcon().updateTrayItem(status.getStatus(), routerData);
 				}
-				gui.getThresholdsManager().printThresholdsReached(thresholdsReached);
 			}
 			catch (final IOException ioe) {
-				ioe.printStackTrace();
+				logger.log(ioe);
 				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
 			}
 			if (exit) {
@@ -162,120 +169,105 @@ public class HttpPollingThread extends Thread {
 					Thread.sleep(refresh * 1000L);
 				}
 				catch (final InterruptedException ie) {
-					break;
+					interrupt();
 				}
 			}
 		}
 	}
 
-	private RouterLoggerStatus getRouterLoggerStatus(final HttpConnectionParams params) throws MalformedURLException, IOException {
-		RouterLoggerStatus status = null;
+	private RouterLoggerStatus getRouterLoggerStatus(final HttpConnectionParams params) throws IOException {
 		final URL url = new URL(params.getBaseUrl() + "/json/status");
 		final HttpURLConnection urlConnection = openConnection(url, params.getConnectionTimeout(), params.getReadTimeout(), params.getUsername(), params.getPassword());
 
-		if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK || urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_AUTHORITATIVE) {
-			InputStream is = null;
-			GZIPInputStream gis = null;
-			InputStreamReader isr = null;
-			StatusDto statusDto = null;
-			try {
-				is = urlConnection.getInputStream();
-				if (isResponseCompressed(urlConnection)) {
-					gis = new GZIPInputStream(is);
-					isr = new InputStreamReader(gis);
-				}
-				else {
-					isr = new InputStreamReader(is);
-				}
-				statusDto = new Gson().fromJson(isr, StatusDto.class);
-			}
-			finally {
-				IOUtils.closeQuietly(isr, gis, is);
-			}
-			status = StatusTransformer.fromDto(statusDto);
+		if (eTagStatus != null) {
+			urlConnection.addRequestProperty(HDR_KEY_IF_NONE_MATCH, eTagStatus);
 		}
-		return status;
+		for (final String header : urlConnection.getHeaderFields().keySet()) {
+			if (header != null && HDR_KEY_ETAG.equalsIgnoreCase(header)) {
+				eTagStatus = urlConnection.getHeaderField(header);
+			}
+		}
+
+		final StatusDto dto = getDtoFromHttpResponse(urlConnection, StatusDto.class);
+		return StatusTransformer.fromDto(dto);
 	}
 
-	private RouterData getRouterData(final HttpConnectionParams params) throws MalformedURLException, IOException {
+	private RouterData getRouterData(final HttpConnectionParams params) throws IOException {
 		final URL url = new URL(params.getBaseUrl() + "/json/data");
 		final HttpURLConnection urlConnection = openConnection(url, params.getConnectionTimeout(), params.getReadTimeout(), params.getUsername(), params.getPassword());
 
-		if (eTag != null) {
-			urlConnection.addRequestProperty("If-None-Match", eTag);
-		}
-
-		if (logger.isDebugEnabled()) {
-			logger.log(Messages.get("msg.http.response.code", urlConnection.getResponseCode()));
+		if (eTagData != null) {
+			urlConnection.addRequestProperty(HDR_KEY_IF_NONE_MATCH, eTagData);
 		}
 
 		for (final String header : urlConnection.getHeaderFields().keySet()) {
 			if (header != null) {
-				if ("Etag".equalsIgnoreCase(header)) {
-					eTag = urlConnection.getHeaderField(header);
+				if (HDR_KEY_ETAG.equalsIgnoreCase(header)) {
+					eTagData = urlConnection.getHeaderField(header);
 				}
-				else if (refresh <= 0 && "Refresh".equalsIgnoreCase(header)) {
+				else if (refresh <= 0 && HDR_KEY_REFRESH.equalsIgnoreCase(header)) {
 					refresh = Integer.parseInt(urlConnection.getHeaderField(header));
 				}
 			}
 		}
 
-		RouterData data = null;
-		if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK || urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_AUTHORITATIVE) {
-			InputStream is = null;
-			GZIPInputStream gis = null;
-			InputStreamReader isr = null;
-			RouterDataDto dataDto = null;
-			try {
-				is = urlConnection.getInputStream();
-				if (isResponseCompressed(urlConnection)) {
-					gis = new GZIPInputStream(is);
-					isr = new InputStreamReader(gis);
-				}
-				else {
-					isr = new InputStreamReader(is);
-				}
-				dataDto = new Gson().fromJson(isr, RouterDataDto.class);
-			}
-			finally {
-				IOUtils.closeQuietly(isr, gis, is);
-			}
-			data = DataTransformer.fromDto(dataDto);
-		}
-		return data;
+		final RouterDataDto dto = getDtoFromHttpResponse(urlConnection, RouterDataDto.class);
+		return DataTransformer.fromDto(dto);
 	}
 
-	private ThresholdsReached getThresholdsReached(final HttpConnectionParams params) throws MalformedURLException, IOException {
-		ThresholdsReached tr = null;
+	private ThresholdsReached getThresholdsReached(final HttpConnectionParams params) throws IOException {
 		final URL url = new URL(params.getBaseUrl() + "/json/thresholds");
 		final HttpURLConnection urlConnection = openConnection(url, params.getConnectionTimeout(), params.getReadTimeout(), params.getUsername(), params.getPassword());
 
-		if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK || urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_AUTHORITATIVE) {
-			InputStream is = null;
-			GZIPInputStream gis = null;
-			InputStreamReader isr = null;
-			ThresholdsDto dto = null;
+		if (eTagThresholds != null) {
+			urlConnection.addRequestProperty(HDR_KEY_IF_NONE_MATCH, eTagThresholds);
+		}
+		for (final String header : urlConnection.getHeaderFields().keySet()) {
+			if (header != null && HDR_KEY_ETAG.equalsIgnoreCase(header)) {
+				eTagThresholds = urlConnection.getHeaderField(header);
+			}
+		}
+
+		final ThresholdsDto dto = getDtoFromHttpResponse(urlConnection, ThresholdsDto.class);
+		return ThresholdsTransformer.fromDto(dto);
+	}
+
+	private <T> T getDtoFromHttpResponse(final HttpURLConnection urlConnection, final Class<T> dtoClass) throws IOException {
+		if (logger.isDebugEnabled()) {
+			StringBuilder sb = new StringBuilder(String.valueOf(urlConnection.getURL()));
+			sb.append(" - ").append(urlConnection.getResponseCode());
+			if (urlConnection.getContentLength() != -1) {
+				sb.append(" - Content-Length: ").append(urlConnection.getContentLength());
+			}
+			if (urlConnection.getContentEncoding() != null) {
+				sb.append(" - Content-Encoding: " + urlConnection.getContentEncoding());
+			}
+			logger.log(sb.toString());
+		}
+
+		if (urlConnection.getContentLength() > 0 && (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK || urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_AUTHORITATIVE)) {
+			InputStream httpInputStream = null;
+			GZIPInputStream gzipInputStream = null;
+			InputStreamReader inputStreamReader = null;
 			try {
-				is = urlConnection.getInputStream();
+				httpInputStream = urlConnection.getInputStream();
 				if (isResponseCompressed(urlConnection)) {
-					gis = new GZIPInputStream(is);
-					isr = new InputStreamReader(gis);
+					gzipInputStream = new GZIPInputStream(httpInputStream);
 				}
-				else {
-					isr = new InputStreamReader(is);
-				}
-				dto = new Gson().fromJson(isr, ThresholdsDto.class);
+				inputStreamReader = new InputStreamReader(gzipInputStream != null ? gzipInputStream : httpInputStream);
+				return new Gson().fromJson(inputStreamReader, dtoClass);
 			}
 			finally {
-				IOUtils.closeQuietly(isr, gis, is);
+				IOUtils.closeQuietly(inputStreamReader, gzipInputStream, httpInputStream);
 			}
-			tr = ThresholdsTransformer.fromDto(dto);
 		}
-		return tr;
+		else {
+			return null;
+		}
 	}
 
 	private boolean isResponseCompressed(final URLConnection urlConnection) {
-		final String contentEncoding = urlConnection.getHeaderField("Content-Encoding");
+		final String contentEncoding = urlConnection.getContentEncoding();
 		return contentEncoding != null && contentEncoding.toLowerCase().contains("gzip");
 	}
 
@@ -283,22 +275,22 @@ public class HttpPollingThread extends Thread {
 		final HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 		urlConnection.setConnectTimeout(connectionTimeout);
 		urlConnection.setReadTimeout(readTimeout);
-		urlConnection.addRequestProperty("Accept", "application/json");
-		urlConnection.addRequestProperty("Accept-Encoding", "gzip");
+		urlConnection.addRequestProperty(HDR_KEY_ACCEPT, "application/json");
+		urlConnection.addRequestProperty(HDR_KEY_ACCEPT_ENCODING, "gzip");
 		if (configuration.getBoolean(CFG_KEY_HTTP_AUTHENTICATION, Defaults.AUTHENTICATION) && StringUtils.isNotEmpty(username) && password != null && password.length > 0) {
-			final byte[] un = username.getBytes("UTF-8");
+			final byte[] un = username.getBytes(CHARSET);
 			final byte[] pw = toBytes(password);
 			final ByteBuffer buffer = ByteBuffer.allocate(un.length + 1 + pw.length);
 			buffer.put(un);
 			buffer.put((byte) ':');
 			buffer.put(pw);
-			urlConnection.addRequestProperty("Authorization", "Basic " + DatatypeConverter.printBase64Binary(buffer.array()));
+			urlConnection.addRequestProperty(HDR_KEY_AUTHORIZATION, "Basic " + DatatypeConverter.printBase64Binary(buffer.array()));
 		}
 		return urlConnection;
 	}
 
 	private static byte[] toBytes(final char[] chars) {
-		final ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(CharBuffer.wrap(chars));
+		final ByteBuffer byteBuffer = Charset.forName(CHARSET).encode(CharBuffer.wrap(chars));
 		return Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
 	}
 
