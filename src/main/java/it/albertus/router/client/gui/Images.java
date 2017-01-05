@@ -1,6 +1,5 @@
 package it.albertus.router.client.gui;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -11,11 +10,9 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Display;
 
-public class Images {
+import it.albertus.util.IOUtils;
 
-	private Images() {
-		throw new IllegalAccessError();
-	}
+public class Images {
 
 	// Icona principale dell'applicazione (in vari formati)
 	public static final Image[] MAIN_ICONS = loadIcons("main.ico");
@@ -36,13 +33,14 @@ public class Images {
 	public static final Image TRAY_ICON_INACTIVE_CLOCK = new DecorationOverlayIcon(TRAY_ICON_INACTIVE, ImageDescriptor.createFromImage(Images.TRAY_ICON_OVERLAY_CLOCK), IDecoration.BOTTOM_RIGHT).createImage();
 	public static final Image TRAY_ICON_INACTIVE_ERROR = new DecorationOverlayIcon(TRAY_ICON_INACTIVE, ImageDescriptor.createFromImage(Images.TRAY_ICON_OVERLAY_ERROR), IDecoration.BOTTOM_RIGHT).createImage();
 
+	private Images() {
+		throw new IllegalAccessError();
+	}
+
 	private static Image[] loadIcons(final String fileName) {
 		final InputStream is = Images.class.getResourceAsStream(fileName);
 		final ImageData[] images = new ImageLoader().load(is);
-		try {
-			is.close();
-		}
-		catch (final IOException ioe) {/* Ignore */}
+		IOUtils.closeQuietly(is);
 		final Image[] icons = new Image[images.length];
 		int i = 0;
 		for (final ImageData id : images) {
