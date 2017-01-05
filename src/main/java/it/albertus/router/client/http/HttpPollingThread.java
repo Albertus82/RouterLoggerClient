@@ -34,7 +34,6 @@ import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
-import it.albertus.util.IOUtils;
 import it.albertus.util.StringUtils;
 
 public class HttpPollingThread extends Thread {
@@ -234,31 +233,21 @@ public class HttpPollingThread extends Thread {
 
 	private <T> T getDtoFromHttpResponse(final HttpURLConnection urlConnection, final Class<T> dtoClass) throws IOException {
 		if (logger.isDebugEnabled()) {
-			StringBuilder sb = new StringBuilder(String.valueOf(urlConnection.getURL()));
-			sb.append(" - ").append(urlConnection.getResponseCode());
+			final StringBuilder message = new StringBuilder(urlConnection.getRequestMethod());
+			message.append(' ').append(String.valueOf(urlConnection.getURL()));
+			message.append(" - ").append(urlConnection.getResponseCode());
 			if (urlConnection.getContentLength() != -1) {
-				sb.append(" - Content-Length: ").append(urlConnection.getContentLength());
+				message.append(" - Content-Length: ").append(urlConnection.getContentLength());
 			}
 			if (urlConnection.getContentEncoding() != null) {
-				sb.append(" - Content-Encoding: " + urlConnection.getContentEncoding());
+				message.append(" - Content-Encoding: ").append(urlConnection.getContentEncoding());
 			}
-			logger.log(sb.toString());
+			logger.log(message.toString());
 		}
 
 		if (urlConnection.getContentLength() > 0 && (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK || urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_AUTHORITATIVE)) {
-			InputStream httpInputStream = null;
-			GZIPInputStream gzipInputStream = null;
-			InputStreamReader inputStreamReader = null;
-			try {
-				httpInputStream = urlConnection.getInputStream();
-				if (isResponseCompressed(urlConnection)) {
-					gzipInputStream = new GZIPInputStream(httpInputStream);
-				}
-				inputStreamReader = new InputStreamReader(gzipInputStream != null ? gzipInputStream : httpInputStream);
+			try (final InputStream httpInputStream = urlConnection.getInputStream(); final GZIPInputStream gzipInputStream = isResponseCompressed(urlConnection) ? new GZIPInputStream(httpInputStream) : null; final InputStreamReader inputStreamReader = new InputStreamReader(gzipInputStream != null ? gzipInputStream : httpInputStream)) {
 				return new Gson().fromJson(inputStreamReader, dtoClass);
-			}
-			finally {
-				IOUtils.closeQuietly(inputStreamReader, gzipInputStream, httpInputStream);
 			}
 		}
 		else {
@@ -281,9 +270,7 @@ public class HttpPollingThread extends Thread {
 			final byte[] un = username.getBytes(CHARSET);
 			final byte[] pw = toBytes(password);
 			final ByteBuffer buffer = ByteBuffer.allocate(un.length + 1 + pw.length);
-			buffer.put(un);
-			buffer.put((byte) ':');
-			buffer.put(pw);
+			buffer.put(un).put((byte) ':').put(pw);
 			urlConnection.addRequestProperty(HDR_KEY_AUTHORIZATION, "Basic " + DatatypeConverter.printBase64Binary(buffer.array()));
 		}
 		return urlConnection;
