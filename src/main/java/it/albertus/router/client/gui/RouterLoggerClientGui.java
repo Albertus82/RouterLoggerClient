@@ -321,7 +321,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	}
 
 	public void setStatus(final RouterLoggerStatus newStatus) {
-		if (currentStatus == null || !currentStatus.getStatus().equals(newStatus.getStatus())) {
+		if (currentStatus == null || currentStatus.getStatus() == null || !currentStatus.getStatus().equals(newStatus.getStatus())) {
 			previousStatus = currentStatus;
 			currentStatus = newStatus;
 			if (trayIcon != null) {
