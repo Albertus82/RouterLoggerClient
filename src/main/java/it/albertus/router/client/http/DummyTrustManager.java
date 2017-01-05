@@ -8,13 +8,13 @@ public class DummyTrustManager implements X509TrustManager {
 
 	@Override
 	public X509Certificate[] getAcceptedIssuers() {
-		return null;
+		return new X509Certificate[0];
 	}
 
 	@Override
-	public void checkClientTrusted(final X509Certificate[] certs, final String authType) {}
+	public void checkClientTrusted(final X509Certificate[] certs, final String authType) {/* Ignore */}
 
 	@Override
-	public void checkServerTrusted(final X509Certificate[] certs, final String authType) {}
+	public void checkServerTrusted(final X509Certificate[] certs, final String authType) {/* Ignore */}
 
 }

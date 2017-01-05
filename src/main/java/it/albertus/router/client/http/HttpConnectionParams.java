@@ -36,4 +36,9 @@ public class HttpConnectionParams {
 		return password;
 	}
 
+	@Override
+	public String toString() {
+		return "HttpConnectionParams [baseUrl=" + baseUrl + ", connectionTimeout=" + connectionTimeout + ", readTimeout=" + readTimeout + ", username=" + username + "]";
+	}
+
 }
