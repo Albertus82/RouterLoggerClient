@@ -200,7 +200,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		}
 
 		shell.setText(Messages.get("lbl.window.title"));
-		shell.setImages(Images.MAIN_ICONS);
+		shell.setImages(Images.getMainIcons());
 	}
 
 	@Override

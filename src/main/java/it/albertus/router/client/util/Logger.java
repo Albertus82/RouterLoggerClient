@@ -19,18 +19,18 @@ public class Logger {
 		}
 	};
 
-	private final Configuration configuration;
+	private final Configuration configuration = getConfiguration();
 
-	private Logger() {
-		Configuration cfg;
+	private Logger() {}
+
+	private Configuration getConfiguration() {
 		try {
-			cfg = RouterLoggerClientConfiguration.getInstance();
+			return RouterLoggerClientConfiguration.getInstance();
 		}
-		catch (final Throwable t) {
-			t.printStackTrace();
-			cfg = null;
+		catch (final RuntimeException re) {
+			log(re);
+			return null;
 		}
-		this.configuration = cfg;
 	}
 
 	private static class Singleton {
