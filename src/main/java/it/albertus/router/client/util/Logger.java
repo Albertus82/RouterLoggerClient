@@ -1,18 +1,16 @@
 package it.albertus.router.client.util;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.util.Configuration;
+import it.albertus.util.ExceptionUtils;
 
 public class Logger {
 
-	private static final ThreadLocal<DateFormat> timestampFormat = new ThreadLocal<DateFormat>() {
+	static final ThreadLocal<DateFormat> timestampFormat = new ThreadLocal<DateFormat>() {
 		@Override
 		protected DateFormat initialValue() {
 			return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -66,9 +64,7 @@ public class Logger {
 	}
 
 	public void log(final Throwable throwable) {
-		final Writer sw = new StringWriter();
-		throwable.printStackTrace(new PrintWriter(sw));
-		System.err.println(timestampFormat.get().format(new Date()) + ' ' + sw.toString().trim());
+		System.err.println(timestampFormat.get().format(new Date()) + ' ' + ExceptionUtils.getStackTrace(throwable).trim());
 	}
 
 }
