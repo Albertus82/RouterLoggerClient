@@ -86,6 +86,10 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 			gui.connect();
 		}
 		catch (final RuntimeException re) {
+			final Logger logger = Logger.getInstance();
+			if (logger.isDebugEnabled()) {
+				logger.log(re);
+			}
 			new PreferencesListener(gui).widgetSelected(null);
 		}
 		while (!shell.isDisposed()) {
