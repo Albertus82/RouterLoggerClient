@@ -33,10 +33,13 @@ import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
+import it.albertus.router.client.util.LoggerFactory;
 import it.albertus.util.Configuration;
 import it.albertus.util.StringUtils;
 
 public class HttpPollingThread extends Thread {
+
+	private static final Logger logger = LoggerFactory.getLogger(HttpPollingThread.class);
 
 	private static final String HDR_KEY_AUTHORIZATION = "Authorization";
 	private static final String HDR_KEY_ACCEPT = "Accept";
@@ -76,7 +79,6 @@ public class HttpPollingThread extends Thread {
 	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 	private final RouterLoggerClientGui gui;
 
-	private final Logger logger = Logger.getInstance();
 	private volatile boolean exit = false;
 
 	private int refresh;

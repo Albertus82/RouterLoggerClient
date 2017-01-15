@@ -17,8 +17,6 @@ public class Logger {
 		}
 	};
 
-	private final Configuration configuration = getConfiguration();
-
 	private Logger() {}
 
 	private Configuration getConfiguration() {
@@ -39,7 +37,7 @@ public class Logger {
 		}
 	}
 
-	public static Logger getInstance() {
+	static Logger getInstance() {
 		return Singleton.instance;
 	}
 
@@ -52,6 +50,7 @@ public class Logger {
 	}
 
 	public boolean isDebugEnabled() {
+		final Configuration configuration = getConfiguration();
 		return configuration != null ? configuration.getBoolean("debug", Defaults.DEBUG) : true;
 	}
 

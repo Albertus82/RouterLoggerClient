@@ -28,11 +28,14 @@ import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
+import it.albertus.router.client.util.LoggerFactory;
 import it.albertus.util.Configuration;
 import it.albertus.util.Configured;
 import it.albertus.util.Version;
 
 public class RouterLoggerClientGui extends ApplicationWindow {
+
+	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientGui.class);
 
 	public static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = "gui.clipboard.max.chars";
 	public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
@@ -86,7 +89,6 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 			gui.connect();
 		}
 		catch (final RuntimeException re) {
-			final Logger logger = Logger.getInstance();
 			if (logger.isDebugEnabled()) {
 				logger.log(re);
 			}
@@ -125,6 +127,10 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 						Thread.sleep(1000L * configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
 					}
 					catch (final InterruptedException ie) {
+						if (logger.isDebugEnabled()) {
+							logger.log(ie);
+						}
+						Thread.currentThread().interrupt();
 						break;
 					}
 					continue; // Retry
@@ -154,7 +160,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				httpPollingThread.start();
 			}
 			else {
-				Logger.getInstance().log(Messages.get("err.invalid.protocol", protocol));
+				logger.log(Messages.get("err.invalid.protocol", protocol));
 			}
 		}
 	}
@@ -172,14 +178,24 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				try {
 					mqttConnectionThread.join();
 				}
-				catch (final InterruptedException ie) {/* Ignore */}
+				catch (final InterruptedException ie) {
+					if (logger.isDebugEnabled()) {
+						logger.log(ie);
+					}
+					Thread.currentThread().interrupt();
+				}
 			}
 			if (httpPollingThread != null) {
 				httpPollingThread.interrupt();
 				try {
 					httpPollingThread.join();
 				}
-				catch (final InterruptedException ie) {/* Ignore */}
+				catch (final InterruptedException ie) {
+					if (logger.isDebugEnabled()) {
+						logger.log(ie);
+					}
+					Thread.currentThread().interrupt();
+				}
 			}
 			printGoodbye();
 		}
@@ -348,7 +364,12 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					try {
 						mqttConnectionThread.join();
 					}
-					catch (final InterruptedException ie) {/* Ignore */}
+					catch (final InterruptedException ie) {
+						if (logger.isDebugEnabled()) {
+							logger.log(ie);
+						}
+						Thread.currentThread().interrupt();
+					}
 				}
 
 				// Reconnect
@@ -371,14 +392,21 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				try {
 					releaseThread.join();
 				}
-				catch (final InterruptedException ie) {/* Ignore */}
+				catch (final InterruptedException ie) {
+					if (logger.isDebugEnabled()) {
+						logger.log(ie);
+					}
+					Thread.currentThread().interrupt();
+				}
 
 				configuration.reload();
 				new SwtThreadExecutor(getShell()) {
 					@Override
 					protected void run() {
 						dataTable.reset();
-						console.clear();
+						if (!logger.isDebugEnabled()) {
+							console.clear();
+						}
 					}
 				}.start();
 

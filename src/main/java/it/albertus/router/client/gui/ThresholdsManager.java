@@ -17,8 +17,11 @@ import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
+import it.albertus.router.client.util.LoggerFactory;
 
 public class ThresholdsManager {
+
+	private static final Logger logger = LoggerFactory.getLogger(ThresholdsManager.class);
 
 	private static final ThreadLocal<DateFormat> timestampFormat = new ThreadLocal<DateFormat>() {
 		@Override
@@ -49,7 +52,7 @@ public class ThresholdsManager {
 				}
 			}
 			if (print) {
-				Logger.getInstance().log(Messages.get("msg.thresholds.reached", message), thresholdsReached.getTimestamp());
+				logger.log(Messages.get("msg.thresholds.reached", message), thresholdsReached.getTimestamp());
 				final TrayIcon trayIcon = gui.getTrayIcon();
 				if (trayIcon != null) {
 					trayIcon.showBalloonToolTip(thresholdsReached.getReached());

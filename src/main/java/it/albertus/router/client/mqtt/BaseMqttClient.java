@@ -8,8 +8,11 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import it.albertus.router.client.util.Logger;
+import it.albertus.router.client.util.LoggerFactory;
 
 public abstract class BaseMqttClient {
+
+	private static final Logger logger = LoggerFactory.getLogger(BaseMqttClient.class);
 
 	public static final String PREFERRED_CHARSET = "UTF-8";
 
@@ -33,7 +36,6 @@ public abstract class BaseMqttClient {
 				client.connect(options);
 			}
 			catch (final Exception e) {
-				final Logger logger = Logger.getInstance();
 				logger.log(e);
 				if (retry) {
 					try {
@@ -55,7 +57,7 @@ public abstract class BaseMqttClient {
 			doDisconnect();
 		}
 		catch (final Exception e) {
-			Logger.getInstance().log(e);
+			logger.log(e);
 		}
 	}
 
@@ -68,7 +70,12 @@ public abstract class BaseMqttClient {
 			try {
 				starter.join();
 			}
-			catch (final InterruptedException ie) {/* Ignore */}
+			catch (final InterruptedException ie) {
+				if (logger.isDebugEnabled()) {
+					logger.log(ie);
+				}
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 
@@ -90,7 +97,7 @@ public abstract class BaseMqttClient {
 					client.disconnect();
 				}
 				catch (final Exception e) {
-					Logger.getInstance().log(e);
+					logger.log(e);
 					client.disconnectForcibly();
 				}
 			}

@@ -39,9 +39,12 @@ import it.albertus.router.client.gui.listener.DeleteDataTableSelectionListener;
 import it.albertus.router.client.gui.listener.SelectAllDataTableSelectionListener;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
+import it.albertus.router.client.util.LoggerFactory;
 import it.albertus.util.NewLine;
 
 public class DataTable {
+
+	private static final Logger logger = LoggerFactory.getLogger(DataTable.class);
 
 	public static final String TIMESTAMP_PATTERN = "dd/MM/yyyy HH:mm:ss.SSS";
 
@@ -391,7 +394,6 @@ public class DataTable {
 			colorData = StringConverter.asRGB(colorKey);
 		}
 		catch (final RuntimeException re) {
-			final Logger logger = Logger.getInstance();
 			if (logger.isDebugEnabled()) {
 				logger.log(re);
 			}

@@ -25,9 +25,12 @@ import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
+import it.albertus.router.client.util.LoggerFactory;
 import it.albertus.util.NewLine;
 
 public class TrayIcon {
+
+	private static final Logger logger = LoggerFactory.getLogger(TrayIcon.class);
 
 	public static class Defaults {
 		public static final boolean GUI_MINIMIZE_TRAY = true;
@@ -37,8 +40,6 @@ public class TrayIcon {
 			throw new IllegalAccessError("Constants class");
 		}
 	}
-
-	private final Logger logger = Logger.getInstance();
 
 	private final RouterLoggerClientConfiguration configuration = RouterLoggerClientConfiguration.getInstance();
 	private final RouterLoggerClientGui gui;
@@ -145,7 +146,7 @@ public class TrayIcon {
 				}
 			}
 			catch (final Exception e) {
-				Logger.getInstance().log(e);
+				logger.log(e);
 			}
 		}
 
@@ -156,7 +157,7 @@ public class TrayIcon {
 			gui.getShell().setMinimized(false);
 		}
 		else {
-			Logger.getInstance().log("Tray not available.");
+			logger.log("Tray not available.");
 		}
 	}
 

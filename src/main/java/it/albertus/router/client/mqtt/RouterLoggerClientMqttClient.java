@@ -17,12 +17,15 @@ import it.albertus.router.client.mqtt.listener.StatusMqttMessageListener;
 import it.albertus.router.client.mqtt.listener.ThresholdsMqttMessageListener;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.Logger;
+import it.albertus.router.client.util.LoggerFactory;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
 import it.albertus.util.NewLine;
 
 /** @Singleton */
 public class RouterLoggerClientMqttClient extends BaseMqttClient {
+
+	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientMqttClient.class);
 
 	private static final String CFG_KEY_MQTT_CLEAN_SESSION = "mqtt.clean.session";
 	private static final String CFG_KEY_MQTT_MAX_INFLIGHT = "mqtt.max.inflight";
@@ -150,11 +153,11 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			else {
 				persistence = new MemoryPersistence();
 			}
-			Logger.getInstance().log(Messages.get("msg.mqtt.connecting", Arrays.toString(serverURIs), NewLine.SYSTEM_LINE_SEPARATOR + options.toString().trim() + "======"));
+			logger.log(Messages.get("msg.mqtt.connecting", Arrays.toString(serverURIs), NewLine.SYSTEM_LINE_SEPARATOR + options.toString().trim() + "======"));
 			doConnect(clientId, options, persistence, configuration.getBoolean(CFG_KEY_MQTT_CONNECT_RETRY, Defaults.CONNECT_RETRY));
 		}
 		catch (final Exception e) {
-			Logger.getInstance().log(e);
+			logger.log(e);
 		}
 	}
 
@@ -162,11 +165,11 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 	public void disconnect() {
 		try {
 			if (doDisconnect()) {
-				Logger.getInstance().log(Messages.get("msg.mqtt.disconnected"));
+				logger.log(Messages.get("msg.mqtt.disconnected"));
 			}
 		}
 		catch (final Exception e) {
-			Logger.getInstance().log(e);
+			logger.log(e);
 		}
 	}
 
@@ -177,7 +180,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, dataMessageListener);
 		}
 		catch (final Exception e) {
-			Logger.getInstance().log(e);
+			logger.log(e);
 		}
 	}
 
@@ -188,7 +191,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, statusMessageListener);
 		}
 		catch (final Exception e) {
-			Logger.getInstance().log(e);
+			logger.log(e);
 		}
 	}
 
@@ -199,7 +202,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, thresholdsMessageListener);
 		}
 		catch (final Exception e) {
-			Logger.getInstance().log(e);
+			logger.log(e);
 		}
 	}
 
