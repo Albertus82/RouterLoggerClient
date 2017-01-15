@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.jface.SwtUtils;
+import it.albertus.jface.cocoa.CocoaEnhancerException;
 import it.albertus.jface.cocoa.CocoaUIEnhancer;
 import it.albertus.router.client.gui.listener.AboutListener;
 import it.albertus.router.client.gui.listener.ClearConsoleSelectionListener;
@@ -67,8 +68,8 @@ public class MenuBar {
 				new CocoaUIEnhancer(gui.getShell().getDisplay()).hookApplicationMenu(closeListener, aboutListener, preferencesListener);
 				cocoaMenuCreated = true;
 			}
-			catch (final Throwable t) {
-				Logger.getInstance().log(t);
+			catch (final CocoaEnhancerException cce) {
+				Logger.getInstance().log(cce);
 			}
 		}
 
