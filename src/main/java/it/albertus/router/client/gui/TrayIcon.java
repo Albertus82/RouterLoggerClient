@@ -1,6 +1,7 @@
 package it.albertus.router.client.gui;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
@@ -36,6 +37,8 @@ public class TrayIcon {
 			throw new IllegalAccessError("Constants class");
 		}
 	}
+
+	private final Logger logger = Logger.getInstance();
 
 	private final RouterLoggerClientConfiguration configuration = RouterLoggerClientConfiguration.getInstance();
 	private final RouterLoggerClientGui gui;
@@ -192,7 +195,11 @@ public class TrayIcon {
 						}
 					});
 				}
-				catch (final SWTException se) {/* Ignore */}
+				catch (final SWTException se) {
+					if (logger.isDebugEnabled()) {
+						logger.log(se);
+					}
+				}
 			}
 		}
 	}
@@ -200,8 +207,8 @@ public class TrayIcon {
 	public void showBalloonToolTip(final Map<Threshold, String> thresholdsReached) {
 		if (configuration.getBoolean("gui.tray.tooltip", Defaults.GUI_TRAY_TOOLTIP) && showToolTip && thresholdsReached != null && !thresholdsReached.isEmpty() && toolTip != null && trayItem != null && gui != null && gui.getShell() != null && !gui.getShell().isDisposed() && !trayItem.isDisposed() && !toolTip.isDisposed()) {
 			final StringBuilder message = new StringBuilder();
-			for (final Threshold threshold : thresholdsReached.keySet()) {
-				message.append(threshold.getKey()).append('=').append(thresholdsReached.get(threshold)).append(NewLine.SYSTEM_LINE_SEPARATOR);
+			for (final Entry<Threshold, String> threshold : thresholdsReached.entrySet()) {
+				message.append(threshold.getKey().getKey()).append('=').append(threshold.getValue()).append(NewLine.SYSTEM_LINE_SEPARATOR);
 			}
 
 			try {
@@ -216,7 +223,11 @@ public class TrayIcon {
 					}
 				});
 			}
-			catch (SWTException se) {/* Ignore */}
+			catch (final SWTException se) {
+				if (logger.isDebugEnabled()) {
+					logger.log(se);
+				}
+			}
 		}
 	}
 
