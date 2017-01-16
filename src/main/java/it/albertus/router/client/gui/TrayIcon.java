@@ -146,7 +146,7 @@ public class TrayIcon {
 				}
 			}
 			catch (final Exception e) {
-				logger.log(e);
+				logger.error(e);
 			}
 		}
 
@@ -157,7 +157,7 @@ public class TrayIcon {
 			gui.getShell().setMinimized(false);
 		}
 		else {
-			logger.log("Tray not available.");
+			logger.info("Tray not available.");
 		}
 	}
 
@@ -197,9 +197,7 @@ public class TrayIcon {
 					});
 				}
 				catch (final SWTException se) {
-					if (logger.isDebugEnabled()) {
-						logger.log(se);
-					}
+					logger.debug(se);
 				}
 			}
 		}
@@ -225,9 +223,7 @@ public class TrayIcon {
 				});
 			}
 			catch (final SWTException se) {
-				if (logger.isDebugEnabled()) {
-					logger.log(se);
-				}
+				logger.debug(se);
 			}
 		}
 	}

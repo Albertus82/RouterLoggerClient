@@ -52,7 +52,7 @@ public class ThresholdsManager {
 				}
 			}
 			if (print) {
-				logger.log(Messages.get("msg.thresholds.reached", message), thresholdsReached.getTimestamp());
+				logger.info(Messages.get("msg.thresholds.reached", message), thresholdsReached.getTimestamp());
 				final TrayIcon trayIcon = gui.getTrayIcon();
 				if (trayIcon != null) {
 					trayIcon.showBalloonToolTip(thresholdsReached.getReached());

@@ -24,7 +24,7 @@ public class Logger {
 			return RouterLoggerClientConfiguration.getInstance();
 		}
 		catch (final RuntimeException re) {
-			log(re);
+			error(re);
 			return null;
 		}
 	}
@@ -54,15 +54,27 @@ public class Logger {
 		return configuration != null ? configuration.getBoolean("debug", Defaults.DEBUG) : true;
 	}
 
-	public void log(final String text) {
-		log(text, new Date());
+	public void debug(final String message) {
+		if (isDebugEnabled()) {
+			info(message);
+		}
 	}
 
-	public void log(final String text, final Date timestamp) {
-		System.out.println(timestampFormat.get().format(timestamp) + ' ' + text);
+	public void debug(final Throwable throwable) {
+		if (isDebugEnabled()) {
+			System.out.println(timestampFormat.get().format(new Date()) + ' ' + ExceptionUtils.getStackTrace(throwable).trim());
+		}
 	}
 
-	public void log(final Throwable throwable) {
+	public void info(final String message) {
+		info(message, new Date());
+	}
+
+	public void info(final String message, final Date timestamp) {
+		System.out.println(timestampFormat.get().format(timestamp) + ' ' + message);
+	}
+
+	public void error(final Throwable throwable) {
 		System.err.println(timestampFormat.get().format(new Date()) + ' ' + ExceptionUtils.getStackTrace(throwable).trim());
 	}
 

@@ -153,11 +153,11 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			else {
 				persistence = new MemoryPersistence();
 			}
-			logger.log(Messages.get("msg.mqtt.connecting", Arrays.toString(serverURIs), NewLine.SYSTEM_LINE_SEPARATOR + options.toString().trim() + "======"));
+			logger.info(Messages.get("msg.mqtt.connecting", Arrays.toString(serverURIs), NewLine.SYSTEM_LINE_SEPARATOR + options.toString().trim() + "======"));
 			doConnect(clientId, options, persistence, configuration.getBoolean(CFG_KEY_MQTT_CONNECT_RETRY, Defaults.CONNECT_RETRY));
 		}
 		catch (final Exception e) {
-			logger.log(e);
+			logger.error(e);
 		}
 	}
 
@@ -165,11 +165,11 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 	public void disconnect() {
 		try {
 			if (doDisconnect()) {
-				logger.log(Messages.get("msg.mqtt.disconnected"));
+				logger.info(Messages.get("msg.mqtt.disconnected"));
 			}
 		}
 		catch (final Exception e) {
-			logger.log(e);
+			logger.error(e);
 		}
 	}
 
@@ -180,7 +180,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, dataMessageListener);
 		}
 		catch (final Exception e) {
-			logger.log(e);
+			logger.error(e);
 		}
 	}
 
@@ -191,7 +191,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, statusMessageListener);
 		}
 		catch (final Exception e) {
-			logger.log(e);
+			logger.error(e);
 		}
 	}
 
@@ -202,7 +202,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, thresholdsMessageListener);
 		}
 		catch (final Exception e) {
-			logger.log(e);
+			logger.error(e);
 		}
 	}
 

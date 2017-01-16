@@ -96,7 +96,7 @@ public class HttpPollingThread extends Thread {
 				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 			}
 			catch (final Exception e) {
-				logger.log(e);
+				logger.error(e);
 			}
 		}
 	}
@@ -117,7 +117,7 @@ public class HttpPollingThread extends Thread {
 
 		String host = configuration.getString(CFG_KEY_HTTP_HOST);
 
-		logger.log(Messages.get("msg.http.polling", scheme.toUpperCase(), scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT)));
+		logger.info(Messages.get("msg.http.polling", scheme.toUpperCase(), scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT)));
 
 		while (!exit) {
 			// Prepare connection parameters
@@ -155,7 +155,7 @@ public class HttpPollingThread extends Thread {
 				}
 			}
 			catch (final IOException ioe) {
-				logger.log(ioe);
+				logger.error(ioe);
 				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
 			}
 			if (exit) {
@@ -163,7 +163,7 @@ public class HttpPollingThread extends Thread {
 			}
 			else {
 				if (refresh <= 0) {
-					logger.log(Messages.get("err.http.refresh.auto"));
+					logger.info(Messages.get("err.http.refresh.auto"));
 					break;
 				}
 				try {
@@ -244,7 +244,7 @@ public class HttpPollingThread extends Thread {
 			if (urlConnection.getContentEncoding() != null) {
 				message.append(" - Content-Encoding: ").append(urlConnection.getContentEncoding());
 			}
-			logger.log(message.toString());
+			logger.debug(message.toString());
 		}
 
 		if (urlConnection.getContentLength() > 0 && (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK || urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_AUTHORITATIVE)) {

@@ -89,9 +89,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 			gui.connect();
 		}
 		catch (final RuntimeException re) {
-			if (logger.isDebugEnabled()) {
-				logger.log(re);
-			}
+			logger.debug(re);
 			new PreferencesListener(gui).widgetSelected(null);
 		}
 		while (!shell.isDisposed()) {
@@ -127,9 +125,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 						Thread.sleep(1000L * configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
 					}
 					catch (final InterruptedException ie) {
-						if (logger.isDebugEnabled()) {
-							logger.log(ie);
-						}
+						logger.debug(ie);
 						Thread.currentThread().interrupt();
 						break;
 					}
@@ -160,7 +156,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				httpPollingThread.start();
 			}
 			else {
-				logger.log(Messages.get("err.invalid.protocol", protocol));
+				logger.info(Messages.get("err.invalid.protocol", protocol));
 			}
 		}
 	}
@@ -179,9 +175,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					mqttConnectionThread.join();
 				}
 				catch (final InterruptedException ie) {
-					if (logger.isDebugEnabled()) {
-						logger.log(ie);
-					}
+					logger.debug(ie);
 					Thread.currentThread().interrupt();
 				}
 			}
@@ -191,9 +185,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					httpPollingThread.join();
 				}
 				catch (final InterruptedException ie) {
-					if (logger.isDebugEnabled()) {
-						logger.log(ie);
-					}
+					logger.debug(ie);
 					Thread.currentThread().interrupt();
 				}
 			}
@@ -365,9 +357,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 						mqttConnectionThread.join();
 					}
 					catch (final InterruptedException ie) {
-						if (logger.isDebugEnabled()) {
-							logger.log(ie);
-						}
+						logger.debug(ie);
 						Thread.currentThread().interrupt();
 					}
 				}
@@ -394,7 +384,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				}
 				catch (final InterruptedException ie) {
 					if (logger.isDebugEnabled()) {
-						logger.log(ie);
+						logger.error(ie);
 					}
 					Thread.currentThread().interrupt();
 				}

@@ -50,7 +50,7 @@ public class LoggerTest {
 
 	@Test
 	public void logMessage() throws IOException {
-		logger.log(TEXT);
+		logger.info(TEXT);
 		final int expectedLength = Logger.timestampFormat.get().format(new Date()).length() + " ".length() + TEXT.length() + NewLine.SYSTEM_LINE_SEPARATOR.length();
 		Assert.assertEquals(expectedLength, baos.toString(CHARSET).length());
 		defaultSysOut.write(baos.toByteArray());
@@ -66,7 +66,7 @@ public class LoggerTest {
 		calendar.add(Calendar.HOUR_OF_DAY, 4);
 		calendar.add(Calendar.MINUTE, 5);
 		calendar.add(Calendar.SECOND, 6);
-		logger.log(TEXT, calendar.getTime());
+		logger.info(TEXT, calendar.getTime());
 		final String expectedString = Logger.timestampFormat.get().format(calendar.getTime()) + ' ' + TEXT + NewLine.SYSTEM_LINE_SEPARATOR;
 		Assert.assertEquals(expectedString, baos.toString(CHARSET));
 		defaultSysOut.write(baos.toByteArray());
@@ -75,7 +75,7 @@ public class LoggerTest {
 	@Test
 	public void logThrowable() throws IOException {
 		final Throwable t = new IllegalAccessError("Error message!");
-		logger.log(t);
+		logger.error(t);
 		final int expectedLength = Logger.timestampFormat.get().format(new Date()).length() + " ".length() + ExceptionUtils.getStackTrace(t).trim().length() + NewLine.SYSTEM_LINE_SEPARATOR.length();
 		Assert.assertEquals(expectedLength, baos.toString(CHARSET).length());
 		defaultSysErr.write(baos.toByteArray());

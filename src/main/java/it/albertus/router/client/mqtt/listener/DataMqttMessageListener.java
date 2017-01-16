@@ -15,8 +15,13 @@ import it.albertus.router.client.gui.DataTable;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.gui.ThresholdsManager;
 import it.albertus.router.client.mqtt.BaseMqttClient;
+import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.util.Logger;
+import it.albertus.router.client.util.LoggerFactory;
 
 public class DataMqttMessageListener implements IMqttMessageListener {
+
+	private static final Logger logger = LoggerFactory.getLogger(DataMqttMessageListener.class);
 
 	private final RouterLoggerClientGui gui;
 
@@ -26,6 +31,8 @@ public class DataMqttMessageListener implements IMqttMessageListener {
 
 	@Override
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
+		logger.debug(Messages.get("msg.mqtt.message.arrived", topic, message));
+
 		final RouterDataDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), RouterDataDto.class);
 		final RouterData data = DataTransformer.fromDto(dto);
 

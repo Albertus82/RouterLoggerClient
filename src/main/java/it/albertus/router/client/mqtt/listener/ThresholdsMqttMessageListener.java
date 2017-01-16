@@ -13,8 +13,13 @@ import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.mqtt.BaseMqttClient;
+import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.util.Logger;
+import it.albertus.router.client.util.LoggerFactory;
 
 public class ThresholdsMqttMessageListener implements IMqttMessageListener {
+
+	private static final Logger logger = LoggerFactory.getLogger(ThresholdsMqttMessageListener.class);
 
 	private final RouterLoggerClientGui gui;
 
@@ -24,6 +29,8 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 
 	@Override
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
+		logger.debug(Messages.get("msg.mqtt.message.arrived", topic, message));
+
 		final ThresholdsDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), ThresholdsDto.class);
 
 		if (dto != null && dto.getReached() != null && !dto.getReached().isEmpty()) {
