@@ -94,7 +94,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 		private static final RouterLoggerClientMqttClient instance = new RouterLoggerClientMqttClient();
 
 		private Singleton() {
-			throw new IllegalAccessError("Constants class");
+			throw new IllegalAccessError();
 		}
 	}
 
