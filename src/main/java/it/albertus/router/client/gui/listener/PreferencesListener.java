@@ -8,9 +8,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 
 import it.albertus.jface.preference.Preferences;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.gui.Images;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
-import it.albertus.router.client.gui.preference.RouterLoggerClientPreferences;
+import it.albertus.router.client.gui.preference.Preference;
+import it.albertus.router.client.gui.preference.page.PageDefinition;
 import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.resources.Messages.Language;
 import it.albertus.router.client.util.Logger;
 import it.albertus.router.client.util.LoggerFactory;
 
@@ -26,12 +30,19 @@ public class PreferencesListener extends SelectionAdapter implements Listener {
 
 	@Override
 	public void widgetSelected(final SelectionEvent se) {
-		final Preferences preferences = new RouterLoggerClientPreferences(gui);
+		final Language language = Messages.getLanguage();
+		final Preferences preferences = new Preferences(PageDefinition.values(), Preference.values(), RouterLoggerClientConfiguration.getInstance(), Images.getMainIcons());
 		try {
 			preferences.openDialog(gui.getShell());
 		}
 		catch (final Exception e) {
 			logger.error(e);
+		}
+
+		// Check if must update texts...
+		if (!language.equals(Messages.getLanguage())) {
+			gui.getMenuBar().updateTexts();
+			gui.getDataTable().updateTexts();
 		}
 		if (preferences.isRestartRequired()) {
 			final MessageBox messageBox = new MessageBox(gui.getShell(), SWT.ICON_WARNING | SWT.YES | SWT.NO);

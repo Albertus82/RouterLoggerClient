@@ -1,5 +1,6 @@
 package it.albertus.router.client.gui;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -389,7 +390,12 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					Thread.currentThread().interrupt();
 				}
 
-				configuration.reload();
+				try {
+					configuration.reload();
+				}
+				catch (final IOException ioe) {
+					logger.error(ioe);
+				}
 				new SwtThreadExecutor(getShell()) {
 					@Override
 					protected void run() {

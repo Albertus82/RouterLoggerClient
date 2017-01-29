@@ -1,6 +1,7 @@
 package it.albertus.router.client.engine;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -17,7 +18,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 
 	private final Set<String> guiImportantKeys = new LinkedHashSet<>();
 
-	private RouterLoggerClientConfiguration() {
+	private RouterLoggerClientConfiguration() throws IOException {
 		/* Caricamento della configurazione... */
 		super(Messages.get("msg.application.name") + File.separator + FILE_NAME, true);
 		init();
@@ -33,7 +34,16 @@ public class RouterLoggerClientConfiguration extends Configuration {
 	}
 
 	private static class Singleton {
-		private static final RouterLoggerClientConfiguration instance = new RouterLoggerClientConfiguration();
+		private static final RouterLoggerClientConfiguration instance;
+
+		static {
+			try {
+				instance = new RouterLoggerClientConfiguration();
+			}
+			catch (final IOException ioe) {
+				throw new ExceptionInInitializerError(ioe);
+			}
+		}
 
 		private Singleton() {
 			throw new IllegalAccessError();
@@ -66,7 +76,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 	}
 
 	@Override
-	public void reload() {
+	public void reload() throws IOException {
 		super.reload();
 		init();
 	}
