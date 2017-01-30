@@ -4,7 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.router.client.resources.Messages;
 
 public class CloseMessageBox {
@@ -30,7 +30,7 @@ public class CloseMessageBox {
 	}
 
 	public static boolean show() {
-		return RouterLoggerClientConfiguration.getInstance().getBoolean("gui.confirm.close", Defaults.GUI_CONFIRM_CLOSE);
+		return RouterLoggerClient.getConfiguration().getBoolean("gui.confirm.close", Defaults.GUI_CONFIRM_CLOSE);
 	}
 
 }

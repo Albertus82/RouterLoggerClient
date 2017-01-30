@@ -9,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 
 import it.albertus.jface.preference.field.UriListEditor;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.mqtt.listener.DataMqttMessageListener;
 import it.albertus.router.client.mqtt.listener.RouterLoggerClientMqttCallback;
@@ -26,6 +26,8 @@ import it.albertus.util.NewLine;
 public class RouterLoggerClientMqttClient extends BaseMqttClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientMqttClient.class);
+
+	private static final Configuration configuration = RouterLoggerClient.getConfiguration();
 
 	private static final String CFG_KEY_MQTT_CLEAN_SESSION = "mqtt.clean.session";
 	private static final String CFG_KEY_MQTT_MAX_INFLIGHT = "mqtt.max.inflight";
@@ -80,8 +82,6 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			throw new IllegalAccessError("Constants class");
 		}
 	}
-
-	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 
 	private RouterLoggerClientGui gui;
 	private IMqttMessageListener dataMessageListener;

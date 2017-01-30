@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.util.Util;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
@@ -17,10 +18,12 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.jface.SwtThreadExecutor;
 import it.albertus.jface.console.StyledTextConsole;
+import it.albertus.router.client.RouterLoggerClient;
+import it.albertus.router.client.RouterLoggerClient.InitializationException;
 import it.albertus.router.client.engine.Protocol;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.Status;
 import it.albertus.router.client.gui.listener.CloseListener;
@@ -45,7 +48,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
 
-	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
+	private static final Configuration configuration = RouterLoggerClient.getConfiguration();
+
 	private final RouterLoggerClientMqttClient mqttClient = RouterLoggerClientMqttClient.getInstance();
 
 	private final ThresholdsManager thresholdsManager;
@@ -78,27 +82,33 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		}
 	}
 
-	public static void run() {
+	public static void run(final InitializationException ie) {
 		Display.setAppName(Messages.get("msg.application.name"));
 		Display.setAppVersion(Version.getInstance().getNumber());
 		final Display display = Display.getDefault();
-		final RouterLoggerClientGui gui = new RouterLoggerClientGui();
-		gui.open();
-		final Shell shell = gui.getShell();
-		try {
-			Protocol.valueOf(gui.configuration.getString("client.protocol"));
-			gui.connect();
+
+		if (ie != null) { // Display error dialog and exit.
+			EnhancedErrorDialog.openError(null, Messages.get("lbl.window.title"), ie.getLocalizedMessage() != null ? ie.getLocalizedMessage() : ie.getMessage(), IStatus.ERROR, ie.getCause() != null ? ie.getCause() : ie, Images.getMainIcons());
 		}
-		catch (final RuntimeException re) {
-			logger.debug(re);
-			new PreferencesListener(gui).widgetSelected(null);
-		}
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				Display.getCurrent().sleep();
+		else {
+			final RouterLoggerClientGui gui = new RouterLoggerClientGui();
+			gui.open();
+			final Shell shell = gui.getShell();
+			try {
+				Protocol.valueOf(configuration.getString("client.protocol"));
+				gui.connect();
 			}
+			catch (final RuntimeException re) {
+				logger.debug(re);
+				new PreferencesListener(gui).widgetSelected(null);
+			}
+			while (!shell.isDisposed()) {
+				if (!display.readAndDispatch()) {
+					Display.getCurrent().sleep();
+				}
+			}
+			gui.release();
 		}
-		gui.release();
 		display.dispose();
 	}
 

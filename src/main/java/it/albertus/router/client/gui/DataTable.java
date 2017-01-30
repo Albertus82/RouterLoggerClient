@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import it.albertus.jface.SwtThreadExecutor;
 import it.albertus.jface.SwtUtils;
+import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.Threshold;
@@ -45,6 +46,8 @@ import it.albertus.util.NewLine;
 public class DataTable {
 
 	private static final Logger logger = LoggerFactory.getLogger(DataTable.class);
+
+	private static final RouterLoggerClientConfiguration configuration = RouterLoggerClient.getConfiguration();
 
 	public static final String TIMESTAMP_PATTERN = "dd/MM/yyyy HH:mm:ss.SSS";
 
@@ -85,8 +88,6 @@ public class DataTable {
 			return type;
 		}
 	}
-
-	private final RouterLoggerClientConfiguration configuration = RouterLoggerClientConfiguration.getInstance();
 
 	private volatile int iteration;
 
