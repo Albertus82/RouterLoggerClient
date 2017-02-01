@@ -11,6 +11,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -80,8 +81,6 @@ public class HttpPollingThread extends Thread {
 
 	private final RouterLoggerClientGui gui;
 
-	private volatile boolean exit = false; // FIXME
-
 	private int refresh;
 	private String eTagData;
 	private String eTagStatus;
@@ -103,12 +102,6 @@ public class HttpPollingThread extends Thread {
 	}
 
 	@Override
-	public void interrupt() { // FIXME
-		exit = true;
-		super.interrupt();
-	}
-
-	@Override
 	public void run() {
 		String scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL, true).trim().toLowerCase();
 
@@ -120,7 +113,7 @@ public class HttpPollingThread extends Thread {
 
 		logger.info(Messages.get("msg.http.polling", scheme.toUpperCase(), scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT)));
 
-		while (!exit) { // FIXME
+		while (!Thread.interrupted()) {
 			// Prepare connection parameters
 			scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL, true).trim().toLowerCase();
 
@@ -159,7 +152,7 @@ public class HttpPollingThread extends Thread {
 				logger.error(ioe);
 				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
 			}
-			if (exit) { // FIXME
+			if (Thread.interrupted()) {
 				break;
 			}
 			else {
@@ -168,7 +161,7 @@ public class HttpPollingThread extends Thread {
 					break;
 				}
 				try {
-					Thread.sleep(refresh * 1000L);
+					TimeUnit.SECONDS.sleep(refresh);
 				}
 				catch (final InterruptedException ie) {
 					interrupt();
