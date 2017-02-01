@@ -3,6 +3,7 @@ package it.albertus.router.client.gui;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.util.Util;
@@ -114,31 +115,22 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private class MqttConnectionThread extends Thread {
 
-		private volatile boolean exit = false;
-
 		private MqttConnectionThread() {
 			super("mqttConnectionThread");
 			this.setDaemon(true);
 		}
 
 		@Override
-		public void interrupt() {
-			exit = true;
-			super.interrupt();
-		}
-
-		@Override
 		public void run() {
-			while (!exit) {
+			while (!Thread.interrupted()) {
 				mqttClient.subscribeStatus();
 				if (mqttClient.getClient() == null) {
 					try {
-						Thread.sleep(1000L * configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
+						TimeUnit.SECONDS.sleep(configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
 					}
 					catch (final InterruptedException ie) {
 						logger.debug(ie);
-						Thread.currentThread().interrupt();
-						break;
+						interrupt();
 					}
 					continue; // Retry
 				}
@@ -187,7 +179,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				}
 				catch (final InterruptedException ie) {
 					logger.debug(ie);
-					Thread.currentThread().interrupt();
+					interrupt();
 				}
 			}
 			if (httpPollingThread != null) {
@@ -197,7 +189,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				}
 				catch (final InterruptedException ie) {
 					logger.debug(ie);
-					Thread.currentThread().interrupt();
+					interrupt();
 				}
 			}
 			printGoodbye();
@@ -369,7 +361,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					}
 					catch (final InterruptedException ie) {
 						logger.debug(ie);
-						Thread.currentThread().interrupt();
+						interrupt();
 					}
 				}
 
@@ -397,7 +389,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					if (logger.isDebugEnabled()) {
 						logger.error(ie);
 					}
-					Thread.currentThread().interrupt();
+					interrupt();
 				}
 
 				try {
