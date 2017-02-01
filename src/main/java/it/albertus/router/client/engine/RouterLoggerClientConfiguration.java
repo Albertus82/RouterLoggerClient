@@ -1,6 +1,7 @@
 package it.albertus.router.client.engine;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -12,17 +13,6 @@ import it.albertus.util.StringUtils;
 
 public class RouterLoggerClientConfiguration extends Configuration {
 
-	public static final String CFG_KEY_LANGUAGE = "language";
-	public static final String FILE_NAME = "routerlogger-client.cfg";
-
-	private final Set<String> guiImportantKeys = new LinkedHashSet<>();
-
-	private RouterLoggerClientConfiguration() {
-		/* Caricamento della configurazione... */
-		super(Messages.get("msg.application.name") + File.separator + FILE_NAME, true);
-		init();
-	}
-
 	public static class Defaults {
 		public static final String LANGUAGE = Locale.getDefault().getLanguage();
 		public static final String GUI_IMPORTANT_KEYS_SEPARATOR = ",";
@@ -32,16 +22,15 @@ public class RouterLoggerClientConfiguration extends Configuration {
 		}
 	}
 
-	private static class Singleton {
-		private static final RouterLoggerClientConfiguration instance = new RouterLoggerClientConfiguration();
+	public static final String CFG_KEY_LANGUAGE = "language";
+	public static final String FILE_NAME = "routerlogger-client.cfg";
 
-		private Singleton() {
-			throw new IllegalAccessError();
-		}
-	}
+	private final Set<String> guiImportantKeys = new LinkedHashSet<>();
 
-	public static RouterLoggerClientConfiguration getInstance() {
-		return Singleton.instance;
+	public RouterLoggerClientConfiguration() throws IOException {
+		/* Caricamento della configurazione... */
+		super(Messages.get("msg.application.name") + File.separator + FILE_NAME, true);
+		init();
 	}
 
 	public Set<String> getGuiImportantKeys() {
@@ -66,7 +55,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 	}
 
 	@Override
-	public void reload() {
+	public void reload() throws IOException {
 		super.reload();
 		init();
 	}

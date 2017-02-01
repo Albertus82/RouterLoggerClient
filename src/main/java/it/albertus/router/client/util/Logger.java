@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.util.Configuration;
 import it.albertus.util.ExceptionUtils;
 
@@ -18,16 +18,6 @@ public class Logger {
 	};
 
 	private Logger() {}
-
-	private Configuration getConfiguration() {
-		try {
-			return RouterLoggerClientConfiguration.getInstance();
-		}
-		catch (final RuntimeException re) {
-			error(re);
-			return null;
-		}
-	}
 
 	private static class Singleton {
 		private static final Logger instance = new Logger();
@@ -50,7 +40,7 @@ public class Logger {
 	}
 
 	public boolean isDebugEnabled() {
-		final Configuration configuration = getConfiguration();
+		final Configuration configuration = RouterLoggerClient.getConfiguration();
 		return configuration != null ? configuration.getBoolean("debug", Defaults.DEBUG) : true;
 	}
 
