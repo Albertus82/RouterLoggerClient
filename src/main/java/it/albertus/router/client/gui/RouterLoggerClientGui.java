@@ -103,8 +103,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				new PreferencesListener(gui).widgetSelected(null);
 			}
 			while (!shell.isDisposed()) {
-				if (!display.readAndDispatch()) {
-					Display.getCurrent().sleep();
+				if (!display.isDisposed() && !display.readAndDispatch()) {
+					display.sleep();
 				}
 			}
 			gui.release();
