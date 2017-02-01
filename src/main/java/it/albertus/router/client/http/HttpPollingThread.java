@@ -80,7 +80,7 @@ public class HttpPollingThread extends Thread {
 
 	private final RouterLoggerClientGui gui;
 
-	private volatile boolean exit = false;
+	private volatile boolean exit = false; // FIXME
 
 	private int refresh;
 	private String eTagData;
@@ -103,7 +103,7 @@ public class HttpPollingThread extends Thread {
 	}
 
 	@Override
-	public void interrupt() {
+	public void interrupt() { // FIXME
 		exit = true;
 		super.interrupt();
 	}
@@ -120,7 +120,7 @@ public class HttpPollingThread extends Thread {
 
 		logger.info(Messages.get("msg.http.polling", scheme.toUpperCase(), scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT)));
 
-		while (!exit) {
+		while (!exit) { // FIXME
 			// Prepare connection parameters
 			scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL, true).trim().toLowerCase();
 
@@ -159,7 +159,7 @@ public class HttpPollingThread extends Thread {
 				logger.error(ioe);
 				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
 			}
-			if (exit) {
+			if (exit) { // FIXME
 				break;
 			}
 			else {
