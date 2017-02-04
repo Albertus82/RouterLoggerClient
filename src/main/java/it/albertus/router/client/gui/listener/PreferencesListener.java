@@ -1,6 +1,8 @@
 package it.albertus.router.client.gui.listener;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
@@ -19,8 +21,7 @@ import it.albertus.router.client.gui.preference.Preference;
 import it.albertus.router.client.gui.preference.page.PageDefinition;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.resources.Messages.Language;
-import it.albertus.router.client.util.Logger;
-import it.albertus.router.client.util.LoggerFactory;
+import it.albertus.util.logging.LoggerFactory;
 
 public class PreferencesListener extends SelectionAdapter implements Listener {
 
@@ -40,7 +41,7 @@ public class PreferencesListener extends SelectionAdapter implements Listener {
 			preferences.openDialog(gui.getShell());
 		}
 		catch (final IOException ioe) {
-			logger.error(ioe);
+			logger.log(Level.SEVERE, "", ioe); // TODO message
 			EnhancedErrorDialog.openError(gui.getShell(), Messages.get("lbl.window.title"), Messages.get("err.preferences.dialog.open"), IStatus.WARNING, ioe, Images.getMainIcons());
 		}
 

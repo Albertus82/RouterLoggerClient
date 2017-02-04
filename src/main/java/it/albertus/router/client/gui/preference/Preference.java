@@ -49,7 +49,6 @@ import it.albertus.router.client.gui.preference.page.MqttPreferencePage;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
 import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
 import it.albertus.util.Configuration;
 import it.albertus.util.Localized;
 
@@ -57,7 +56,7 @@ public enum Preference implements IPreference {
 
 	LANGUAGE(new PreferenceDetailsBuilder(GENERAL).defaultValue(RouterLoggerClientConfiguration.Defaults.LANGUAGE).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
 	CLIENT_PROTOCOL(new PreferenceDetailsBuilder(GENERAL).separate().restartRequired().build(), new FieldEditorDetailsBuilder(DefaultRadioGroupFieldEditor.class).labelsAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
-	DEBUG(new PreferenceDetailsBuilder(GENERAL).separate().defaultValue(Logger.Defaults.DEBUG).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
+	LOGGING_LEVEL(new PreferenceDetailsBuilder(GENERAL).separate().defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_LEVEL.intValue()).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLoggingComboOptions()).build()),
 
 	MQTT_SERVER_URI(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(UriListEditor.class).icons(Images.getMainIcons()).build()),
 	MQTT_USERNAME(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),

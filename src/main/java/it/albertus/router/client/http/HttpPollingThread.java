@@ -12,6 +12,8 @@ import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -33,10 +35,9 @@ import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.router.client.util.LoggerFactory;
 import it.albertus.util.Configuration;
 import it.albertus.util.StringUtils;
+import it.albertus.util.logging.LoggerFactory;
 
 public class HttpPollingThread extends Thread {
 
@@ -96,7 +97,7 @@ public class HttpPollingThread extends Thread {
 				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 			}
 			catch (final Exception e) {
-				logger.error(e);
+				logger.log(Level.SEVERE, "", e); // TODO message
 			}
 		}
 	}
@@ -149,7 +150,7 @@ public class HttpPollingThread extends Thread {
 				}
 			}
 			catch (final IOException ioe) {
-				logger.error(ioe);
+				logger.log(Level.SEVERE, "", ioe); // TODO message
 				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
 			}
 			if (Thread.interrupted()) {
@@ -228,7 +229,7 @@ public class HttpPollingThread extends Thread {
 	}
 
 	private <T> T getDtoFromHttpResponse(final HttpURLConnection urlConnection, final Class<T> dtoClass) throws IOException {
-		if (logger.isDebugEnabled()) {
+		if (logger.isLoggable(Level.FINE)) {
 			final StringBuilder message = new StringBuilder(urlConnection.getRequestMethod());
 			message.append(' ').append(String.valueOf(urlConnection.getURL()));
 			message.append(" - ").append(urlConnection.getResponseCode());
@@ -238,7 +239,7 @@ public class HttpPollingThread extends Thread {
 			if (urlConnection.getContentEncoding() != null) {
 				message.append(" - Content-Encoding: ").append(urlConnection.getContentEncoding());
 			}
-			logger.debug(message.toString());
+			logger.fine(message.toString());
 		}
 
 		if (urlConnection.getContentLength() > 0 && (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK || urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_AUTHORITATIVE)) {

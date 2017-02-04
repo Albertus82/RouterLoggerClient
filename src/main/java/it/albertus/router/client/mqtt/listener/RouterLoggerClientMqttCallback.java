@@ -1,5 +1,8 @@
 package it.albertus.router.client.mqtt.listener;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -7,8 +10,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import it.albertus.jface.SwtThreadExecutor;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.router.client.util.LoggerFactory;
+import it.albertus.util.logging.LoggerFactory;
 
 public class RouterLoggerClientMqttCallback implements MqttCallbackExtended {
 
@@ -24,7 +26,7 @@ public class RouterLoggerClientMqttCallback implements MqttCallbackExtended {
 
 	@Override
 	public void connectionLost(final Throwable cause) {
-		logger.error(cause);
+		logger.log(Level.WARNING, "", cause); // TODO message
 	}
 
 	@Override
@@ -42,12 +44,12 @@ public class RouterLoggerClientMqttCallback implements MqttCallbackExtended {
 
 	@Override
 	public void messageArrived(final String topic, final MqttMessage message) throws Exception {
-		logger.debug(Messages.get("msg.mqtt.message.arrived", topic, message));
+		logger.fine(Messages.get("msg.mqtt.message.arrived", topic, message));
 	}
 
 	@Override
 	public void deliveryComplete(final IMqttDeliveryToken token) {
-		logger.debug(Messages.get("msg.mqtt.message.delivered", token));
+		logger.fine(Messages.get("msg.mqtt.message.delivered", token));
 	}
 
 }

@@ -5,16 +5,24 @@ import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import it.albertus.jface.JFaceMessages;
+import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.Configuration;
 import it.albertus.util.StringUtils;
+import it.albertus.util.logging.LoggerFactory;
+import it.albertus.util.logging.LoggingSupport;
 
 public class RouterLoggerClientConfiguration extends Configuration {
 
+	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientConfiguration.class);
+
 	public static class Defaults {
 		public static final String LANGUAGE = Locale.getDefault().getLanguage();
+		public static final Level LOGGING_LEVEL = Level.INFO;
 		public static final String GUI_IMPORTANT_KEYS_SEPARATOR = ",";
 
 		private Defaults() {
@@ -23,6 +31,8 @@ public class RouterLoggerClientConfiguration extends Configuration {
 	}
 
 	public static final String CFG_KEY_LANGUAGE = "language";
+	public static final String CFG_KEY_LOGGING_LEVEL = "logging.level";
+
 	public static final String FILE_NAME = "routerlogger-client.cfg";
 
 	private final Set<String> guiImportantKeys = new LinkedHashSet<>();
@@ -38,11 +48,21 @@ public class RouterLoggerClientConfiguration extends Configuration {
 	}
 
 	private void init() {
-		/* Impostazione lingua */
-		if (this.contains("language")) {
+		/* Language */
+		if (this.contains(CFG_KEY_LANGUAGE)) {
 			final String language = getString(CFG_KEY_LANGUAGE, Defaults.LANGUAGE);
 			Messages.setLanguage(language);
 			JFaceMessages.setLanguage(language);
+		}
+
+		/* Logging */
+		if (this.contains(CFG_KEY_LOGGING_LEVEL)) {
+			try {
+				LoggingSupport.setLevel(RouterLoggerClient.class.getPackage().getName(), Level.parse(getString(CFG_KEY_LOGGING_LEVEL, Defaults.LOGGING_LEVEL.getName())));
+			}
+			catch (final IllegalArgumentException iae) {
+				logger.log(Level.WARNING, "", iae); // TODO message
+			}
 		}
 
 		/* Caricamento chiavi da evidenziare */

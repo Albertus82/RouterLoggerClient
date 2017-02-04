@@ -2,6 +2,8 @@ package it.albertus.router.client.gui;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
@@ -25,9 +27,8 @@ import it.albertus.router.client.engine.Status;
 import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.router.client.util.LoggerFactory;
 import it.albertus.util.NewLine;
+import it.albertus.util.logging.LoggerFactory;
 
 public class TrayIcon {
 
@@ -148,7 +149,7 @@ public class TrayIcon {
 				}
 			}
 			catch (final Exception e) {
-				logger.error(e);
+				logger.log(Level.SEVERE, "", e); // TODO message
 			}
 		}
 
@@ -199,7 +200,7 @@ public class TrayIcon {
 					});
 				}
 				catch (final SWTException se) {
-					logger.debug(se);
+					logger.log(Level.FINE, "", se); // TODO message
 				}
 			}
 		}
@@ -225,7 +226,7 @@ public class TrayIcon {
 				});
 			}
 			catch (final SWTException se) {
-				logger.debug(se);
+				logger.log(Level.FINE, "", se); // TODO message
 			}
 		}
 	}

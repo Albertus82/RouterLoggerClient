@@ -1,6 +1,8 @@
 package it.albertus.router.client.mqtt;
 
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
@@ -16,11 +18,10 @@ import it.albertus.router.client.mqtt.listener.RouterLoggerClientMqttCallback;
 import it.albertus.router.client.mqtt.listener.StatusMqttMessageListener;
 import it.albertus.router.client.mqtt.listener.ThresholdsMqttMessageListener;
 import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.router.client.util.LoggerFactory;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
 import it.albertus.util.NewLine;
+import it.albertus.util.logging.LoggerFactory;
 
 /** @Singleton */
 public class RouterLoggerClientMqttClient extends BaseMqttClient {
@@ -157,7 +158,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doConnect(clientId, options, persistence, configuration.getBoolean(CFG_KEY_MQTT_CONNECT_RETRY, Defaults.CONNECT_RETRY));
 		}
 		catch (final Exception e) {
-			logger.error(e);
+			logger.log(Level.SEVERE, "", e); // TODO message
 		}
 	}
 
@@ -169,7 +170,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			}
 		}
 		catch (final Exception e) {
-			logger.error(e);
+			logger.log(Level.SEVERE, "", e); // TODO message
 		}
 	}
 
@@ -180,7 +181,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, dataMessageListener);
 		}
 		catch (final Exception e) {
-			logger.error(e);
+			logger.log(Level.SEVERE, "", e); // TODO message
 		}
 	}
 
@@ -191,7 +192,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, statusMessageListener);
 		}
 		catch (final Exception e) {
-			logger.error(e);
+			logger.log(Level.SEVERE, "", e); // TODO message
 		}
 	}
 
@@ -202,7 +203,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, thresholdsMessageListener);
 		}
 		catch (final Exception e) {
-			logger.error(e);
+			logger.log(Level.SEVERE, "", e); // TODO message
 		}
 	}
 

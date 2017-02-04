@@ -1,6 +1,7 @@
 package it.albertus.router.client.mqtt.listener;
 
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Logger;
 
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -14,8 +15,7 @@ import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.mqtt.BaseMqttClient;
 import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.router.client.util.LoggerFactory;
+import it.albertus.util.logging.LoggerFactory;
 
 public class StatusMqttMessageListener implements IMqttMessageListener {
 
@@ -29,7 +29,7 @@ public class StatusMqttMessageListener implements IMqttMessageListener {
 
 	@Override
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
-		logger.debug(Messages.get("msg.mqtt.message.arrived", topic, message));
+		logger.fine(Messages.get("msg.mqtt.message.arrived", topic, message));
 
 		final StatusDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), StatusDto.class);
 		final RouterLoggerStatus rls = StatusTransformer.fromDto(dto);

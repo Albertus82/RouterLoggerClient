@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -16,8 +19,7 @@ import it.albertus.jface.SwtThreadExecutor;
 import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.resources.Messages;
-import it.albertus.router.client.util.Logger;
-import it.albertus.router.client.util.LoggerFactory;
+import it.albertus.util.logging.LoggerFactory;
 
 public class ThresholdsManager {
 
@@ -52,7 +54,9 @@ public class ThresholdsManager {
 				}
 			}
 			if (print) {
-				logger.info(Messages.get("msg.thresholds.reached", message), thresholdsReached.getTimestamp());
+				final LogRecord record = new LogRecord(Level.INFO, Messages.get("msg.thresholds.reached", message));
+				record.setMillis(thresholdsReached.getTimestamp().getTime());
+				logger.log(record);
 				final TrayIcon trayIcon = gui.getTrayIcon();
 				if (trayIcon != null) {
 					trayIcon.showBalloonToolTip(thresholdsReached.getReached());
