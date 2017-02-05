@@ -149,7 +149,7 @@ public class TrayIcon {
 				}
 			}
 			catch (final Exception e) {
-				logger.log(Level.SEVERE, "", e); // TODO message
+				logger.log(Level.SEVERE, e.toString(), e);
 			}
 		}
 
@@ -200,7 +200,7 @@ public class TrayIcon {
 					});
 				}
 				catch (final SWTException se) {
-					logger.log(Level.FINE, "", se); // TODO message
+					logger.log(Level.FINE, se.toString(), se);
 				}
 			}
 		}
@@ -226,7 +226,7 @@ public class TrayIcon {
 				});
 			}
 			catch (final SWTException se) {
-				logger.log(Level.FINE, "", se); // TODO message
+				logger.log(Level.FINE, se.toString(), se);
 			}
 		}
 	}

@@ -15,6 +15,7 @@ import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.Configuration;
 import it.albertus.util.StringUtils;
+import it.albertus.util.logging.FileHandlerBuilder;
 import it.albertus.util.logging.LoggerFactory;
 import it.albertus.util.logging.LoggingSupport;
 
@@ -45,7 +46,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 	private final Set<String> guiImportantKeys = new LinkedHashSet<>();
 
 	private FileHandler fileHandler;
-	private FileHandlerBuilder fileHandlerDetails;
+	private FileHandlerBuilder fileHandlerBuilder;
 
 	public RouterLoggerClientConfiguration() throws IOException {
 		/* Caricamento della configurazione... */
@@ -71,15 +72,15 @@ public class RouterLoggerClientConfiguration extends Configuration {
 				LoggingSupport.setLevel(RouterLoggerClient.class.getPackage().getName(), Level.parse(getString(CFG_KEY_LOGGING_LEVEL, Defaults.LOGGING_LEVEL.getName())));
 			}
 			catch (final IllegalArgumentException iae) {
-				logger.log(Level.WARNING, "", iae); // TODO message
+				logger.log(Level.WARNING, iae.toString(), iae);
 			}
 		}
 
-		if (getBoolean("logging.files.enabled", Defaults.LOGGING_FILES_ENABLED)) {
-			final String loggingPath = getString("logging.files.path", Defaults.LOGGING_FILES_PATH);
+		if (this.getBoolean("logging.files.enabled", Defaults.LOGGING_FILES_ENABLED)) {
+			final String loggingPath = this.getString("logging.files.path", Defaults.LOGGING_FILES_PATH);
 			if (loggingPath != null && !loggingPath.isEmpty()) {
-				final FileHandlerBuilder fhd = new FileHandlerBuilder(loggingPath + File.separator + LOG_FILE_NAME, getInt("logging.files.limit", Defaults.LOGGING_FILES_LIMIT) * 1024, getInt("logging.files.count", Defaults.LOGGING_FILES_COUNT), true, new SimpleFormatter());
-				if (fileHandlerDetails == null || !fhd.equals(fileHandlerDetails)) {
+				final FileHandlerBuilder builder = new FileHandlerBuilder().pattern(loggingPath + File.separator + LOG_FILE_NAME).limit(this.getInt("logging.files.limit", Defaults.LOGGING_FILES_LIMIT) * 1024).count(this.getInt("logging.files.count", Defaults.LOGGING_FILES_COUNT)).append(true).formatter(new SimpleFormatter());
+				if (fileHandlerBuilder == null || !builder.equals(fileHandlerBuilder)) {
 					if (fileHandler != null) {
 						LoggingSupport.getRootLogger().removeHandler(fileHandler);
 						fileHandler.close();
@@ -87,9 +88,8 @@ public class RouterLoggerClientConfiguration extends Configuration {
 					}
 					try {
 						new File(loggingPath).mkdirs();
-						fileHandlerDetails = fhd;
-						fileHandler = new FileHandler(fileHandlerDetails.getPattern(), fileHandlerDetails.getLimit(), fileHandlerDetails.getCount(), fileHandlerDetails.isAppend());
-						fileHandler.setFormatter(fileHandlerDetails.getFormatter());
+						fileHandlerBuilder = builder;
+						fileHandler = builder.build();
 						LoggingSupport.getRootLogger().addHandler(fileHandler);
 					}
 					catch (final IOException ioe) {
@@ -103,7 +103,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 				LoggingSupport.getRootLogger().removeHandler(fileHandler);
 				fileHandler.close();
 				fileHandler = null;
-				fileHandlerDetails = null;
+				fileHandlerBuilder = null;
 			}
 		}
 

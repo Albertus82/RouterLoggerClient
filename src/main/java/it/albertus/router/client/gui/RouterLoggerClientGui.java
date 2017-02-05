@@ -46,8 +46,6 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	public static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = "gui.clipboard.max.chars";
 	public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
 
-	// public static final SSLSocketFactory defaultSSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
-
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
 
 	private static final Configuration configuration = RouterLoggerClient.getConfiguration();
@@ -101,7 +99,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				gui.connect();
 			}
 			catch (final RuntimeException re) {
-				logger.log(Level.FINE, "", re); // TODO message
+				logger.log(Level.FINE, re.toString(), re);
 				new PreferencesListener(gui).widgetSelected(null);
 			}
 			while (!shell.isDisposed()) {
@@ -130,7 +128,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 						TimeUnit.SECONDS.sleep(configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
 					}
 					catch (final InterruptedException ie) {
-						logger.log(Level.FINER, "", ie); // TODO message
+						logger.log(Level.FINER, ie.toString(), ie);
 						interrupt();
 					}
 					continue; // Retry
@@ -179,7 +177,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					mqttConnectionThread.join();
 				}
 				catch (final InterruptedException ie) {
-					logger.log(Level.FINER, "", ie); // TODO message
+					logger.log(Level.FINER, ie.toString(), ie);
 					interrupt();
 				}
 			}
@@ -189,7 +187,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					httpPollingThread.join();
 				}
 				catch (final InterruptedException ie) {
-					logger.log(Level.FINER, "", ie); // TODO message
+					logger.log(Level.FINER, ie.toString(), ie);
 					interrupt();
 				}
 			}
@@ -361,7 +359,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 						mqttConnectionThread.join();
 					}
 					catch (final InterruptedException ie) {
-						logger.log(Level.FINER, "", ie); // TODO message
+						logger.log(Level.FINER, ie.toString(), ie);
 						interrupt();
 					}
 				}
@@ -387,7 +385,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					releaseThread.join();
 				}
 				catch (final InterruptedException ie) {
-					logger.log(Level.FINE, "", ie); // TODO message
+					logger.log(Level.FINE, ie.toString(), ie);
 					interrupt();
 				}
 
@@ -395,7 +393,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					configuration.reload();
 				}
 				catch (final IOException ioe) {
-					logger.log(Level.SEVERE, "", ioe); // TODO message
+					logger.log(Level.SEVERE, ioe.toString(), ioe);
 				}
 				new SwtThreadExecutor(getShell()) {
 					@Override

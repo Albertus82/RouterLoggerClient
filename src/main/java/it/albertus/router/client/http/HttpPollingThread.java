@@ -97,7 +97,7 @@ public class HttpPollingThread extends Thread {
 				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 			}
 			catch (final Exception e) {
-				logger.log(Level.SEVERE, "", e); // TODO message
+				logger.log(Level.SEVERE, e.toString(), e);
 			}
 		}
 	}
@@ -150,7 +150,7 @@ public class HttpPollingThread extends Thread {
 				}
 			}
 			catch (final IOException ioe) {
-				logger.log(Level.SEVERE, "", ioe); // TODO message
+				logger.log(Level.SEVERE, ioe.toString(), ioe);
 				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
 			}
 			if (Thread.interrupted()) {

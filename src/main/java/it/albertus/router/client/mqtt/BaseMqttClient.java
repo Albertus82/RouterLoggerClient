@@ -38,13 +38,13 @@ public abstract class BaseMqttClient {
 				client.connect(options);
 			}
 			catch (final Exception e) {
-				logger.log(Level.SEVERE, "", e); // TODO message
+				logger.log(Level.SEVERE, e.toString(), e);
 				if (retry) {
 					try {
 						client.close();
 					}
 					catch (final MqttException me) {
-						logger.log(Level.SEVERE, "", me); // TODO message
+						logger.log(Level.SEVERE, me.toString(), me);
 					}
 					client = null;
 				}
@@ -59,7 +59,7 @@ public abstract class BaseMqttClient {
 			doDisconnect();
 		}
 		catch (final Exception e) {
-			logger.log(Level.SEVERE, "", e); // TODO message
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 
@@ -73,7 +73,7 @@ public abstract class BaseMqttClient {
 				starter.join();
 			}
 			catch (final InterruptedException ie) {
-				logger.log(Level.FINER, "", ie); // TODO message
+				logger.log(Level.FINER, ie.toString(), ie);
 				Thread.currentThread().interrupt();
 			}
 		}
@@ -97,7 +97,7 @@ public abstract class BaseMqttClient {
 					client.disconnect();
 				}
 				catch (final Exception e) {
-					logger.log(Level.SEVERE, "", e); // TODO message
+					logger.log(Level.SEVERE, e.toString(), e);
 					client.disconnectForcibly();
 				}
 			}

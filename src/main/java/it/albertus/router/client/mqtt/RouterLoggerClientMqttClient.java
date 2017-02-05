@@ -158,7 +158,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doConnect(clientId, options, persistence, configuration.getBoolean(CFG_KEY_MQTT_CONNECT_RETRY, Defaults.CONNECT_RETRY));
 		}
 		catch (final Exception e) {
-			logger.log(Level.SEVERE, "", e); // TODO message
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 
@@ -170,7 +170,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			}
 		}
 		catch (final Exception e) {
-			logger.log(Level.SEVERE, "", e); // TODO message
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 
@@ -181,7 +181,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, dataMessageListener);
 		}
 		catch (final Exception e) {
-			logger.log(Level.SEVERE, "", e); // TODO message
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 
@@ -192,7 +192,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, statusMessageListener);
 		}
 		catch (final Exception e) {
-			logger.log(Level.SEVERE, "", e); // TODO message
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 
@@ -203,7 +203,7 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 			doSubscribe(topic, qos, thresholdsMessageListener);
 		}
 		catch (final Exception e) {
-			logger.log(Level.SEVERE, "", e); // TODO message
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 

@@ -74,7 +74,7 @@ public class MenuBar {
 				cocoaMenuCreated = true;
 			}
 			catch (final CocoaEnhancerException cce) {
-				logger.log(Level.SEVERE, "", cce); // TODO message
+				logger.log(Level.SEVERE, cce.toString(), cce);
 			}
 		}
 

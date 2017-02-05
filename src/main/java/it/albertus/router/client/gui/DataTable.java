@@ -396,7 +396,7 @@ public class DataTable {
 			colorData = StringConverter.asRGB(colorKey);
 		}
 		catch (final RuntimeException re) {
-			logger.log(Level.FINE, "", re); // TODO message
+			logger.log(Level.FINE, re.toString(), re);
 			logger.log(Level.INFO, Messages.get("err.invalid.color", colorKey));
 			colorKey = defaultColorKey;
 			colorData = StringConverter.asRGB(colorKey);

@@ -41,7 +41,7 @@ public class PreferencesListener extends SelectionAdapter implements Listener {
 			preferences.openDialog(gui.getShell());
 		}
 		catch (final IOException ioe) {
-			logger.log(Level.SEVERE, "", ioe); // TODO message
+			logger.log(Level.SEVERE, ioe.toString(), ioe);
 			EnhancedErrorDialog.openError(gui.getShell(), Messages.get("lbl.window.title"), Messages.get("err.preferences.dialog.open"), IStatus.WARNING, ioe, Images.getMainIcons());
 		}
 
