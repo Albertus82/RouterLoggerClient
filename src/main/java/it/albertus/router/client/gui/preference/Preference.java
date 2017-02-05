@@ -57,6 +57,15 @@ public enum Preference implements IPreference {
 	LANGUAGE(new PreferenceDetailsBuilder(GENERAL).defaultValue(RouterLoggerClientConfiguration.Defaults.LANGUAGE).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
 	CLIENT_PROTOCOL(new PreferenceDetailsBuilder(GENERAL).separate().restartRequired().build(), new FieldEditorDetailsBuilder(DefaultRadioGroupFieldEditor.class).labelsAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
 	LOGGING_LEVEL(new PreferenceDetailsBuilder(GENERAL).separate().defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_LEVEL.intValue()).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLoggingComboOptions()).build()),
+	LOGGING_FILES_ENABLED(new PreferenceDetailsBuilder(GENERAL).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
+	LOGGING_FILES_PATH(new PreferenceDetailsBuilder(GENERAL).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_PATH).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryMustExist(false).directoryDialogMessage(new Localized() {
+		@Override
+		public String getString() {
+			return Messages.get("msg.preferences.directory.dialog.message.log");
+		}
+	}).build()),
+	LOGGING_FILES_LIMIT(new PreferenceDetailsBuilder(GENERAL).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_LIMIT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(64).scaleMaximum(8192).scalePageIncrement(512).build()),
+	LOGGING_FILES_COUNT(new PreferenceDetailsBuilder(GENERAL).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_COUNT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(1).scaleMaximum(9).scalePageIncrement(1).build()),
 
 	MQTT_SERVER_URI(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(UriListEditor.class).icons(Images.getMainIcons()).build()),
 	MQTT_USERNAME(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
@@ -80,7 +89,7 @@ public enum Preference implements IPreference {
 	MQTT_VERSION(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.MQTT_VERSION).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(AdvancedMqttPreferencePage.getMqttVersionComboOptions()).build()),
 	MQTT_PERSISTENCE_FILE_ENABLED(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.PERSISTENCE_FILE_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	MQTT_PERSISTENCE_FILE_CUSTOM(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(RouterLoggerClientMqttClient.Defaults.PERSISTENCE_FILE_CUSTOM).parent(MQTT_PERSISTENCE_FILE_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
-	MQTT_PERSISTENCE_FILE_PATH(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(Configuration.getOsSpecificUserAppDataDir() + File.separator + Messages.get("msg.application.name")).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryDialogMessage(new Localized() {
+	MQTT_PERSISTENCE_FILE_PATH(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(Configuration.getOsSpecificLocalAppDataDir() + File.separator + Messages.get("msg.application.name")).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryDialogMessage(new Localized() {
 		@Override
 		public String getString() {
 			return Messages.get("msg.preferences.directory.dialog.message.mqtt");

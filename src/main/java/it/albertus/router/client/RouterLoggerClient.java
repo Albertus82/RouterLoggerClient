@@ -35,7 +35,7 @@ public class RouterLoggerClient {
 		}
 		catch (final IOException ioe) {
 			logger.log(Level.SEVERE, ioe.toString(), ioe);
-			initializationException = new InitializationException(Messages.get("err.open.cfg", RouterLoggerClientConfiguration.FILE_NAME), ioe);
+			initializationException = new InitializationException(Messages.get("err.open.cfg", RouterLoggerClientConfiguration.CFG_FILE_NAME), ioe);
 		}
 	}
 
