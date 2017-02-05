@@ -8,6 +8,7 @@ import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.logging.LoggerFactory;
+import it.albertus.util.logging.LoggingSupport;
 
 public class RouterLoggerClient {
 
@@ -26,12 +27,14 @@ public class RouterLoggerClient {
 	private static InitializationException initializationException = null;
 
 	static {
-		System.setProperty("java.util.logging.SimpleFormatter.format", "%1$td/%1$tm/%1$tY %1$tH:%1$tM:%1$tS %4$s: %5$s%6$s%n");
+		if (LoggingSupport.getFormat() == null) {
+			LoggingSupport.setFormat("%1$td/%1$tm/%1$tY %1$tH:%1$tM:%1$tS %4$s: %5$s%6$s%n");
+		}
 		try {
 			configuration = new RouterLoggerClientConfiguration();
 		}
 		catch (final IOException ioe) {
-			logger.log(Level.SEVERE, "", ioe); // TODO message
+			logger.log(Level.SEVERE, ioe.toString(), ioe);
 			initializationException = new InitializationException(Messages.get("err.open.cfg", RouterLoggerClientConfiguration.FILE_NAME), ioe);
 		}
 	}
