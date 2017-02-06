@@ -64,7 +64,7 @@ public enum Preference implements IPreference {
 			return Messages.get("msg.preferences.directory.dialog.message.log");
 		}
 	}).build()),
-	LOGGING_FILES_LIMIT(new PreferenceDetailsBuilder(GENERAL).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_LIMIT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(64).scaleMaximum(8192).scalePageIncrement(512).build()),
+	LOGGING_FILES_LIMIT(new PreferenceDetailsBuilder(GENERAL).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_LIMIT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(128).scaleMaximum(8192).scalePageIncrement(512).build()),
 	LOGGING_FILES_COUNT(new PreferenceDetailsBuilder(GENERAL).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_COUNT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(1).scaleMaximum(9).scalePageIncrement(1).build()),
 
 	MQTT_SERVER_URI(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(UriListEditor.class).icons(Images.getMainIcons()).build()),
