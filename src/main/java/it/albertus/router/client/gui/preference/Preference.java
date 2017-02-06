@@ -4,6 +4,7 @@ import static it.albertus.router.client.gui.preference.page.PageDefinition.APPEA
 import static it.albertus.router.client.gui.preference.page.PageDefinition.APPEARANCE_TABLE;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.GENERAL;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.HTTP;
+import static it.albertus.router.client.gui.preference.page.PageDefinition.LOGGING;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.MQTT;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.MQTT_ADVANCED;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.MQTT_MESSAGES;
@@ -58,16 +59,6 @@ public enum Preference implements IPreference {
 
 	LANGUAGE(new PreferenceDetailsBuilder(GENERAL).defaultValue(Messages.Defaults.LANGUAGE).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLanguageComboOptions()).build()),
 	CLIENT_PROTOCOL(new PreferenceDetailsBuilder(GENERAL).separate().restartRequired().build(), new FieldEditorDetailsBuilder(DefaultRadioGroupFieldEditor.class).labelsAndValues(GeneralPreferencePage.getProtocolComboOptions()).radioNumColumns(1).radioUseGroup(true).build()),
-	LOGGING_LEVEL(new PreferenceDetailsBuilder(GENERAL).separate().defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_LEVEL.intValue()).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLoggingComboOptions()).build()),
-	LOGGING_FILES_ENABLED(new PreferenceDetailsBuilder(GENERAL).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
-	LOGGING_FILES_PATH(new PreferenceDetailsBuilder(GENERAL).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_PATH).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryMustExist(false).directoryDialogMessage(new Localized() {
-		@Override
-		public String getString() {
-			return Messages.get("msg.preferences.directory.dialog.message.log");
-		}
-	}).build()),
-	LOGGING_FILES_LIMIT(new PreferenceDetailsBuilder(GENERAL).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_LIMIT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(128).scaleMaximum(8192).scalePageIncrement(512).build()),
-	LOGGING_FILES_COUNT(new PreferenceDetailsBuilder(GENERAL).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_COUNT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(1).scaleMaximum(9).scalePageIncrement(1).build()),
 
 	MQTT_SERVER_URI(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(UriListEditor.class).icons(Images.getMainIcons()).build()),
 	MQTT_USERNAME(new PreferenceDetailsBuilder(MQTT).restartRequired().build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
@@ -138,7 +129,18 @@ public enum Preference implements IPreference {
 	GUI_TABLE_COLUMNS_PACK(new PreferenceDetailsBuilder(APPEARANCE_TABLE).separate().restartRequired().defaultValue(DataTable.Defaults.COLUMNS_PACK).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	GUI_TABLE_COLUMNS_PADDING_RIGHT(new PreferenceDetailsBuilder(APPEARANCE_TABLE).restartRequired().defaultValue(DataTable.Defaults.COLUMNS_PADDING_RIGHT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMaximum(Byte.MAX_VALUE).scalePageIncrement(10).build()),
 	GUI_IMPORTANT_KEYS_COLOR_BACKGROUND(new PreferenceDetailsBuilder(APPEARANCE_TABLE).separate().defaultValue(DataTable.Defaults.IMPORTANT_KEYS_COLOR_BACKGROUND).build(), new FieldEditorDetailsBuilder(ColorFieldEditor.class).build()),
-	GUI_THRESHOLDS_REACHED_COLOR_FOREGROUND(new PreferenceDetailsBuilder(APPEARANCE_TABLE).defaultValue(DataTable.Defaults.THRESHOLDS_REACHED_COLOR_FOREGROUND).build(), new FieldEditorDetailsBuilder(ColorFieldEditor.class).build());
+	GUI_THRESHOLDS_REACHED_COLOR_FOREGROUND(new PreferenceDetailsBuilder(APPEARANCE_TABLE).defaultValue(DataTable.Defaults.THRESHOLDS_REACHED_COLOR_FOREGROUND).build(), new FieldEditorDetailsBuilder(ColorFieldEditor.class).build()),
+
+	LOGGING_LEVEL(new PreferenceDetailsBuilder(LOGGING).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_LEVEL.intValue()).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLoggingComboOptions()).build()),
+	LOGGING_FILES_ENABLED(new PreferenceDetailsBuilder(LOGGING).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
+	LOGGING_FILES_PATH(new PreferenceDetailsBuilder(LOGGING).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_PATH).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryMustExist(false).directoryDialogMessage(new Localized() {
+		@Override
+		public String getString() {
+			return Messages.get("msg.preferences.directory.dialog.message.log");
+		}
+	}).build()),
+	LOGGING_FILES_LIMIT(new PreferenceDetailsBuilder(LOGGING).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_LIMIT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(512).scaleMaximum(8192).scalePageIncrement(512).build()),
+	LOGGING_FILES_COUNT(new PreferenceDetailsBuilder(LOGGING).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_COUNT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(1).scaleMaximum(9).scalePageIncrement(1).build());
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";
 

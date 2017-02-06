@@ -60,20 +60,16 @@ public class RouterLoggerClientConfiguration extends Configuration {
 
 	private void init() {
 		/* Language */
-		if (this.contains(CFG_KEY_LANGUAGE)) {
-			final String language = getString(CFG_KEY_LANGUAGE, Defaults.LANGUAGE);
-			Messages.setLanguage(language);
-			JFaceMessages.setLanguage(language);
-		}
+		final String language = this.getString(CFG_KEY_LANGUAGE, Defaults.LANGUAGE);
+		Messages.setLanguage(language);
+		JFaceMessages.setLanguage(language);
 
 		/* Logging */
-		if (this.contains(CFG_KEY_LOGGING_LEVEL)) {
-			try {
-				LoggingSupport.setLevel(RouterLoggerClient.class.getPackage().getName(), Level.parse(getString(CFG_KEY_LOGGING_LEVEL, Defaults.LOGGING_LEVEL.getName())));
-			}
-			catch (final IllegalArgumentException iae) {
-				logger.log(Level.WARNING, iae.toString(), iae);
-			}
+		try {
+			LoggingSupport.setLevel(RouterLoggerClient.class.getPackage().getName(), Level.parse(this.getString(CFG_KEY_LOGGING_LEVEL, Defaults.LOGGING_LEVEL.getName())));
+		}
+		catch (final IllegalArgumentException iae) {
+			logger.log(Level.WARNING, iae.toString(), iae);
 		}
 
 		if (this.getBoolean("logging.files.enabled", Defaults.LOGGING_FILES_ENABLED)) {

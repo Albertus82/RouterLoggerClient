@@ -18,7 +18,8 @@ public enum PageDefinition implements IPageDefinition {
 	MQTT_ADVANCED(new PageDefinitionDetailsBuilder().pageClass(AdvancedMqttPreferencePage.class).parent(MQTT).build()),
 	HTTP(new PageDefinitionDetailsBuilder().pageClass(RestartHeaderPreferencePage.class).build()),
 	APPEARANCE(new PageDefinitionDetailsBuilder().build()),
-	APPEARANCE_TABLE(new PageDefinitionDetailsBuilder().pageClass(RestartHeaderPreferencePage.class).parent(APPEARANCE).build());
+	APPEARANCE_TABLE(new PageDefinitionDetailsBuilder().pageClass(RestartHeaderPreferencePage.class).parent(APPEARANCE).build()),
+	LOGGING(new PageDefinitionDetailsBuilder().build());
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";
 
