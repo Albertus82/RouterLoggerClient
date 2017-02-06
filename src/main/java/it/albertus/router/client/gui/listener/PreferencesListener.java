@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -43,6 +44,12 @@ public class PreferencesListener extends SelectionAdapter implements Listener {
 		catch (final IOException ioe) {
 			logger.log(Level.SEVERE, ioe.toString(), ioe);
 			EnhancedErrorDialog.openError(gui.getShell(), Messages.get("lbl.window.title"), Messages.get("err.preferences.dialog.open"), IStatus.WARNING, ioe, Images.getMainIcons());
+		}
+
+		// Update console font...
+		final String fontDataString = RouterLoggerClient.getConfiguration().getString("gui.console.font", true);
+		if (!fontDataString.isEmpty()) {
+			gui.getConsole().setFont(PreferenceConverter.readFontData(fontDataString));
 		}
 
 		// Check if must update texts...

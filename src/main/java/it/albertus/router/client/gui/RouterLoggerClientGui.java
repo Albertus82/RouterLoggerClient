@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.util.Util;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
@@ -252,6 +253,10 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		dataTable = new DataTable(sashForm, new GridData(SWT.FILL, SWT.FILL, true, true), this);
 
 		console = new StyledTextConsole(sashForm, new GridData(SWT.FILL, SWT.FILL, true, true), true);
+		final String fontDataString = configuration.getString("gui.console.font", true);
+		if (!fontDataString.isEmpty()) {
+			console.setFont(PreferenceConverter.readFontData(fontDataString));
+		}
 		console.setLimit(new Configured<Integer>() {
 			@Override
 			public Integer getValue() {
