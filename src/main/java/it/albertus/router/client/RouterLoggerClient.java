@@ -12,7 +12,7 @@ import it.albertus.util.logging.LoggingSupport;
 
 public class RouterLoggerClient {
 
-	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClient.class);
+	private static final Logger logger;
 
 	public static class InitializationException extends Exception {
 		private static final long serialVersionUID = 6431588267552911987L;
@@ -22,20 +22,23 @@ public class RouterLoggerClient {
 		}
 	}
 
-	private static RouterLoggerClientConfiguration configuration = null;
+	private static final String LOG_FORMAT_CONSOLE = "%1$td/%1$tm/%1$tY %1$tH:%1$tM:%1$tS.%tL %4$s: %5$s%6$s%n";
 
-	private static InitializationException initializationException = null;
+	private static RouterLoggerClientConfiguration configuration;
+	private static InitializationException initializationException;
 
 	static {
 		if (LoggingSupport.getFormat() == null) {
-			LoggingSupport.setFormat("%1$td/%1$tm/%1$tY %1$tH:%1$tM:%1$tS %4$s: %5$s%6$s%n");
+			LoggingSupport.setFormat(LOG_FORMAT_CONSOLE);
 		}
+		logger = LoggerFactory.getLogger(RouterLoggerClient.class);
 		try {
 			configuration = new RouterLoggerClientConfiguration();
 		}
 		catch (final IOException ioe) {
-			logger.log(Level.SEVERE, ioe.toString(), ioe);
-			initializationException = new InitializationException(Messages.get("err.open.cfg", RouterLoggerClientConfiguration.CFG_FILE_NAME), ioe);
+			final String message = Messages.get("err.open.cfg", RouterLoggerClientConfiguration.CFG_FILE_NAME);
+			logger.log(Level.SEVERE, message, ioe);
+			initializationException = new InitializationException(message, ioe);
 		}
 	}
 
