@@ -132,7 +132,7 @@ public enum Preference implements IPreference {
 	GUI_THRESHOLDS_REACHED_COLOR_FOREGROUND(new PreferenceDetailsBuilder(APPEARANCE_TABLE).defaultValue(DataTable.Defaults.THRESHOLDS_REACHED_COLOR_FOREGROUND).build(), new FieldEditorDetailsBuilder(ColorFieldEditor.class).build()),
 
 	LOGGING_LEVEL(new PreferenceDetailsBuilder(LOGGING).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_LEVEL.intValue()).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLoggingComboOptions()).build()),
-	LOGGING_FILES_ENABLED(new PreferenceDetailsBuilder(LOGGING).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
+	LOGGING_FILES_ENABLED(new PreferenceDetailsBuilder(LOGGING).separate().defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	LOGGING_FILES_PATH(new PreferenceDetailsBuilder(LOGGING).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_PATH).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryMustExist(false).directoryDialogMessage(new Localized() {
 		@Override
 		public String getString() {
