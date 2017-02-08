@@ -50,61 +50,20 @@ public class RouterLoggerClientConfiguration extends Configuration {
 	private FileHandlerBuilder fileHandlerBuilder;
 
 	public RouterLoggerClientConfiguration() throws IOException {
-		/* Caricamento della configurazione... */
 		super(Messages.get("msg.application.name") + File.separator + CFG_FILE_NAME, true);
 		init();
 	}
 
-	public Set<String> getGuiImportantKeys() {
-		return guiImportantKeys;
+	@Override
+	public void reload() throws IOException {
+		super.reload();
+		init();
 	}
 
 	private void init() {
-		/* Language */
-		final String language = this.getString(CFG_KEY_LANGUAGE, Defaults.LANGUAGE);
-		Messages.setLanguage(language);
-		JFaceMessages.setLanguage(language);
+		updateLanguage();
+		updateLogging();
 
-		/* Logging */
-		try {
-			LoggingSupport.setLevel(LoggingSupport.getRootLogger().getName(), Level.parse(this.getString(CFG_KEY_LOGGING_LEVEL, Defaults.LOGGING_LEVEL.getName())));
-		}
-		catch (final IllegalArgumentException iae) {
-			logger.log(Level.WARNING, iae.toString(), iae);
-		}
-
-		if (this.getBoolean("logging.files.enabled", Defaults.LOGGING_FILES_ENABLED)) {
-			final String loggingPath = this.getString("logging.files.path", Defaults.LOGGING_FILES_PATH);
-			if (loggingPath != null && !loggingPath.isEmpty()) {
-				final FileHandlerBuilder builder = new FileHandlerBuilder().pattern(loggingPath + File.separator + LOG_FILE_NAME).limit(this.getInt("logging.files.limit", Defaults.LOGGING_FILES_LIMIT) * 1024).count(this.getInt("logging.files.count", Defaults.LOGGING_FILES_COUNT)).append(true).formatter(new CustomFormatter(LOG_FORMAT_FILE));
-				if (fileHandlerBuilder == null || !builder.equals(fileHandlerBuilder)) {
-					if (fileHandler != null) {
-						LoggingSupport.getRootLogger().removeHandler(fileHandler);
-						fileHandler.close();
-						fileHandler = null;
-					}
-					try {
-						new File(loggingPath).mkdirs();
-						fileHandlerBuilder = builder;
-						fileHandler = builder.build();
-						LoggingSupport.getRootLogger().addHandler(fileHandler);
-					}
-					catch (final IOException ioe) {
-						logger.log(Level.SEVERE, ioe.toString(), ioe);
-					}
-				}
-			}
-		}
-		else {
-			if (fileHandler != null) {
-				LoggingSupport.getRootLogger().removeHandler(fileHandler);
-				fileHandler.close();
-				fileHandler = null;
-				fileHandlerBuilder = null;
-			}
-		}
-
-		/* Caricamento chiavi da evidenziare */
 		guiImportantKeys.clear();
 		for (final String importantKey : this.getString("gui.important.keys", true).split(this.getString("gui.important.keys.separator", Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).trim())) {
 			if (StringUtils.isNotBlank(importantKey)) {
@@ -113,10 +72,68 @@ public class RouterLoggerClientConfiguration extends Configuration {
 		}
 	}
 
-	@Override
-	public void reload() throws IOException {
-		super.reload();
-		init();
+	private void updateLogging() {
+		if (LoggingSupport.getInitialConfigurationProperty() == null) {
+			updateLoggingLevel();
+
+			if (this.getBoolean("logging.files.enabled", Defaults.LOGGING_FILES_ENABLED)) {
+				enableLoggingFileHandler();
+			}
+			else {
+				disableLoggingFileHandler();
+			}
+		}
+	}
+
+	private void updateLanguage() {
+		final String language = this.getString(CFG_KEY_LANGUAGE, Defaults.LANGUAGE);
+		Messages.setLanguage(language);
+		JFaceMessages.setLanguage(language);
+	}
+
+	private void updateLoggingLevel() {
+		try {
+			LoggingSupport.setLevel(LoggingSupport.getRootLogger().getName(), Level.parse(this.getString(CFG_KEY_LOGGING_LEVEL, Defaults.LOGGING_LEVEL.getName())));
+		}
+		catch (final IllegalArgumentException iae) {
+			logger.log(Level.WARNING, iae.toString(), iae);
+		}
+	}
+
+	private void enableLoggingFileHandler() {
+		final String loggingPath = this.getString("logging.files.path", Defaults.LOGGING_FILES_PATH);
+		if (loggingPath != null && !loggingPath.isEmpty()) {
+			final FileHandlerBuilder builder = new FileHandlerBuilder().pattern(loggingPath + File.separator + LOG_FILE_NAME).limit(this.getInt("logging.files.limit", Defaults.LOGGING_FILES_LIMIT) * 1024).count(this.getInt("logging.files.count", Defaults.LOGGING_FILES_COUNT)).append(true).formatter(new CustomFormatter(LOG_FORMAT_FILE));
+			if (fileHandlerBuilder == null || !builder.equals(fileHandlerBuilder)) {
+				if (fileHandler != null) {
+					LoggingSupport.getRootLogger().removeHandler(fileHandler);
+					fileHandler.close();
+					fileHandler = null;
+				}
+				try {
+					new File(loggingPath).mkdirs();
+					fileHandlerBuilder = builder;
+					fileHandler = builder.build();
+					LoggingSupport.getRootLogger().addHandler(fileHandler);
+				}
+				catch (final IOException ioe) {
+					logger.log(Level.SEVERE, ioe.toString(), ioe);
+				}
+			}
+		}
+	}
+
+	private void disableLoggingFileHandler() {
+		if (fileHandler != null) {
+			LoggingSupport.getRootLogger().removeHandler(fileHandler);
+			fileHandler.close();
+			fileHandler = null;
+			fileHandlerBuilder = null;
+		}
+	}
+
+	public Set<String> getGuiImportantKeys() {
+		return guiImportantKeys;
 	}
 
 }
