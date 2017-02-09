@@ -19,7 +19,7 @@ public enum PageDefinition implements IPageDefinition {
 	HTTP(new PageDefinitionDetailsBuilder().pageClass(RestartHeaderPreferencePage.class).build()),
 	APPEARANCE(new PageDefinitionDetailsBuilder().build()),
 	APPEARANCE_TABLE(new PageDefinitionDetailsBuilder().pageClass(RestartHeaderPreferencePage.class).parent(APPEARANCE).build()),
-	LOGGING(new PageDefinitionDetailsBuilder().build());
+	LOGGING(new PageDefinitionDetailsBuilder().pageClass(LoggingPreferencePage.class).build());
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";
 
