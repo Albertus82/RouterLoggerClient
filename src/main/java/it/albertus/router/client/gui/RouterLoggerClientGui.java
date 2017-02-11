@@ -1,6 +1,8 @@
 package it.albertus.router.client.gui;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -116,7 +118,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	private class MqttConnectionThread extends Thread {
 
 		private MqttConnectionThread() {
-			super("mqttConnectionThread");
+			super("MqttConnectionThread");
 			this.setDaemon(true);
 		}
 
@@ -143,7 +145,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private class ConnectThread extends Thread {
 		private ConnectThread() {
-			super("connectThread");
+			super("ConnectThread");
 		}
 
 		@Override
@@ -166,7 +168,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private class ReleaseThread extends Thread {
 		private ReleaseThread() {
-			super("releaseThread");
+			super("ReleaseThread");
 		}
 
 		@Override
@@ -271,20 +273,22 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	protected void initializeBounds() {/* Do not pack the shell */}
 
 	protected void printWelcome() {
-		System.out.println(" ____             _            _                                   ____ _ _            _");
-		System.out.println("|  _ \\ ___  _   _| |_ ___ _ __| |    ___   __ _  __ _  ___ _ __   / ___| (_) ___ _ __ | |_");
-		System.out.println("| |_) / _ \\| | | | __/ _ \\ '__| |   / _ \\ / _` |/ _` |/ _ \\ '__| | |   | | |/ _ \\ '_ \\| __|");
-		System.out.println("|  _ < (_) | |_| | ||  __/ |  | |__| (_) | (_| | (_| |  __/ |    | |___| | |  __/ | | | |_");
-		System.out.println("|_| \\_\\___/ \\__,_|\\__\\___|_|  |_____\\___/ \\__, |\\__, |\\___|_|     \\____|_|_|\\___|_| |_|\\__|");
-		System.out.println("                                          |___/ |___/");
+		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		final PrintWriter pw = new PrintWriter(baos);
+		pw.println(Messages.get("msg.startup.date", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
+		pw.println(" ____             _            _                                   ____ _ _            _");
+		pw.println("|  _ \\ ___  _   _| |_ ___ _ __| |    ___   __ _  __ _  ___ _ __   / ___| (_) ___ _ __ | |_");
+		pw.println("| |_) / _ \\| | | | __/ _ \\ '__| |   / _ \\ / _` |/ _` |/ _ \\ '__| | |   | | |/ _ \\ '_ \\| __|");
+		pw.println("|  _ < (_) | |_| | ||  __/ |  | |__| (_) | (_| | (_| |  __/ |    | |___| | |  __/ | | | |_");
+		pw.println("|_| \\_\\___/ \\__,_|\\__\\___|_|  |_____\\___/ \\__, |\\__, |\\___|_|     \\____|_|_|\\___|_| |_|\\__|");
+		pw.println("                                          |___/ |___/");
 		final Version version = Version.getInstance();
-		System.out.println(Messages.get("msg.welcome", Messages.get("msg.application.name"), Messages.get("msg.version", version.getNumber(), version.getDate()), Messages.get("msg.website")));
-		System.out.println();
-		System.out.println(Messages.get("msg.startup.date", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
+		pw.println(Messages.get("msg.welcome", Messages.get("msg.application.name"), Messages.get("msg.version", version.getNumber(), version.getDate()), Messages.get("msg.website")));
+		pw.close();
+		logger.info(baos.toString());
 		if (configuration.getBoolean("console.show.configuration", Defaults.CONSOLE_SHOW_CONFIGURATION)) {
-			System.out.println(Messages.get("msg.settings", configuration));
+			logger.info(Messages.get("msg.settings", configuration));
 		}
-		System.out.println();
 	}
 
 	@Override
@@ -296,7 +300,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	protected void createTrimWidgets(final Shell shell) {/* Not needed */}
 
 	protected void printGoodbye() {
-		System.out.println(Messages.get("msg.bye"));
+		logger.info(Messages.get("msg.bye"));
 	}
 
 	public TrayIcon getTrayIcon() {
@@ -353,7 +357,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	}
 
 	public void reconnectAfterConnectionLoss() {
-		new Thread("resetThread") {
+		new Thread("ResetThread") {
 			@Override
 			public void run() {
 				// Disconnect
@@ -381,7 +385,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		// Disable "Restart..." menu item...
 		menuBar.getFileRestartItem().setEnabled(false);
 
-		new Thread("resetThread") {
+		new Thread("ResetThread") {
 			@Override
 			public void run() {
 				final Thread releaseThread = new ReleaseThread();

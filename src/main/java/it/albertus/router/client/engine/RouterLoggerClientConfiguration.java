@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
-import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,7 +46,7 @@ public class RouterLoggerClientConfiguration extends Configuration {
 
 	private final Set<String> guiImportantKeys = new LinkedHashSet<>();
 
-	private FileHandler fileHandler;
+	private Handler fileHandler;
 	private FileHandlerBuilder fileHandlerBuilder;
 
 	public RouterLoggerClientConfiguration() throws IOException {
