@@ -273,7 +273,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	protected void initializeBounds() {/* Do not pack the shell */}
 
 	protected void printWelcome() {
-		if (logger.isLoggable(Level.WARNING)) {
+		if (logger.isLoggable(Level.INFO)) {
 			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			final PrintWriter pw = new PrintWriter(baos);
 			pw.println(Messages.get("msg.startup.date", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
@@ -286,7 +286,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 			final Version version = Version.getInstance();
 			pw.println(Messages.get("msg.welcome", Messages.get("msg.application.name"), Messages.get("msg.version", version.getNumber(), version.getDate()), Messages.get("msg.website")));
 			pw.close();
-			logger.warning(baos.toString());
+			logger.info(baos.toString());
 		}
 		if (configuration.getBoolean("console.show.configuration", Defaults.CONSOLE_SHOW_CONFIGURATION)) {
 			logger.info(Messages.get("msg.settings", configuration));
