@@ -273,19 +273,21 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	protected void initializeBounds() {/* Do not pack the shell */}
 
 	protected void printWelcome() {
-		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		final PrintWriter pw = new PrintWriter(baos);
-		pw.println(Messages.get("msg.startup.date", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
-		pw.println(" ____             _            _                                   ____ _ _            _");
-		pw.println("|  _ \\ ___  _   _| |_ ___ _ __| |    ___   __ _  __ _  ___ _ __   / ___| (_) ___ _ __ | |_");
-		pw.println("| |_) / _ \\| | | | __/ _ \\ '__| |   / _ \\ / _` |/ _` |/ _ \\ '__| | |   | | |/ _ \\ '_ \\| __|");
-		pw.println("|  _ < (_) | |_| | ||  __/ |  | |__| (_) | (_| | (_| |  __/ |    | |___| | |  __/ | | | |_");
-		pw.println("|_| \\_\\___/ \\__,_|\\__\\___|_|  |_____\\___/ \\__, |\\__, |\\___|_|     \\____|_|_|\\___|_| |_|\\__|");
-		pw.println("                                          |___/ |___/");
-		final Version version = Version.getInstance();
-		pw.println(Messages.get("msg.welcome", Messages.get("msg.application.name"), Messages.get("msg.version", version.getNumber(), version.getDate()), Messages.get("msg.website")));
-		pw.close();
-		logger.info(baos.toString());
+		if (logger.isLoggable(Level.WARNING)) {
+			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			final PrintWriter pw = new PrintWriter(baos);
+			pw.println(Messages.get("msg.startup.date", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
+			pw.println(" ____             _            _                                   ____ _ _            _");
+			pw.println("|  _ \\ ___  _   _| |_ ___ _ __| |    ___   __ _  __ _  ___ _ __   / ___| (_) ___ _ __ | |_");
+			pw.println("| |_) / _ \\| | | | __/ _ \\ '__| |   / _ \\ / _` |/ _` |/ _ \\ '__| | |   | | |/ _ \\ '_ \\| __|");
+			pw.println("|  _ < (_) | |_| | ||  __/ |  | |__| (_) | (_| | (_| |  __/ |    | |___| | |  __/ | | | |_");
+			pw.println("|_| \\_\\___/ \\__,_|\\__\\___|_|  |_____\\___/ \\__, |\\__, |\\___|_|     \\____|_|_|\\___|_| |_|\\__|");
+			pw.println("                                          |___/ |___/");
+			final Version version = Version.getInstance();
+			pw.println(Messages.get("msg.welcome", Messages.get("msg.application.name"), Messages.get("msg.version", version.getNumber(), version.getDate()), Messages.get("msg.website")));
+			pw.close();
+			logger.warning(baos.toString());
+		}
 		if (configuration.getBoolean("console.show.configuration", Defaults.CONSOLE_SHOW_CONFIGURATION)) {
 			logger.info(Messages.get("msg.settings", configuration));
 		}
