@@ -135,7 +135,7 @@ public class HttpPollingThread extends Thread {
 				final RouterLoggerStatus status = getRouterLoggerStatus(params);
 
 				if (status != null) {
-					gui.setStatus(status);
+					gui.updateStatus(status);
 				}
 
 				final RouterData routerData = getRouterData(params);

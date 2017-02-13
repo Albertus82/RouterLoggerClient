@@ -33,7 +33,7 @@ public class StatusMqttMessageListener implements IMqttMessageListener {
 
 		final StatusDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), StatusDto.class);
 		final RouterLoggerStatus rls = StatusTransformer.fromDto(dto);
-		gui.setStatus(rls);
+		gui.updateStatus(rls);
 	}
 
 }

@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.IStatus;
@@ -345,10 +346,15 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		return previousStatus;
 	}
 
-	public void setStatus(final RouterLoggerStatus newStatus) {
+	public void updateStatus(final RouterLoggerStatus newStatus) {
 		if (currentStatus == null || currentStatus.getStatus() == null || !currentStatus.getStatus().equals(newStatus.getStatus())) {
 			previousStatus = currentStatus;
 			currentStatus = newStatus;
+			if (logger.isLoggable(Level.INFO)) {
+				final LogRecord logRecord = new LogRecord(Level.INFO, Messages.get("lbl.status") + ": " + currentStatus.getStatus().getDescription() + '.');
+				logRecord.setMillis(currentStatus.getTimestamp().getTime());
+				logger.log(logRecord);
+			}
 			if (trayIcon != null) {
 				trayIcon.updateTrayItem(currentStatus.getStatus());
 				if (Status.WARNING.equals(currentStatus.getStatus())) {
