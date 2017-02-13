@@ -14,7 +14,7 @@ import it.albertus.jface.preference.field.UriListEditor;
 import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.mqtt.listener.DataMqttMessageListener;
-import it.albertus.router.client.mqtt.listener.RouterLoggerClientMqttCallback;
+import it.albertus.router.client.mqtt.listener.MqttCallback;
 import it.albertus.router.client.mqtt.listener.StatusMqttMessageListener;
 import it.albertus.router.client.mqtt.listener.ThresholdsMqttMessageListener;
 import it.albertus.router.client.resources.Messages;
@@ -24,9 +24,9 @@ import it.albertus.util.NewLine;
 import it.albertus.util.logging.LoggerFactory;
 
 /** @Singleton */
-public class RouterLoggerClientMqttClient extends BaseMqttClient {
+public class MqttClient extends BaseMqttClient {
 
-	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientMqttClient.class);
+	private static final Logger logger = LoggerFactory.getLogger(MqttClient.class);
 
 	private static final Configuration configuration = RouterLoggerClient.getConfiguration();
 
@@ -89,17 +89,17 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 	private IMqttMessageListener statusMessageListener;
 	private IMqttMessageListener thresholdsMessageListener;
 
-	private RouterLoggerClientMqttClient() {}
+	private MqttClient() {}
 
 	private static class Singleton {
-		private static final RouterLoggerClientMqttClient instance = new RouterLoggerClientMqttClient();
+		private static final MqttClient instance = new MqttClient();
 
 		private Singleton() {
 			throw new IllegalAccessError();
 		}
 	}
 
-	public static RouterLoggerClientMqttClient getInstance() {
+	public static MqttClient getInstance() {
 		return Singleton.instance;
 	}
 
@@ -208,8 +208,8 @@ public class RouterLoggerClientMqttClient extends BaseMqttClient {
 	}
 
 	@Override
-	protected RouterLoggerClientMqttCallback createMqttCallback(String clientId) {
-		return new RouterLoggerClientMqttCallback(clientId, gui);
+	protected MqttCallback createMqttCallback(String clientId) {
+		return new MqttCallback(clientId, gui);
 	}
 
 }

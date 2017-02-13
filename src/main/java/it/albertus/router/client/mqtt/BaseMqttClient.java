@@ -3,6 +3,7 @@ package it.albertus.router.client.mqtt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -18,7 +19,7 @@ public abstract class BaseMqttClient {
 
 	public static final String PREFERRED_CHARSET = "UTF-8";
 
-	private volatile MqttClient client;
+	private volatile IMqttClient client;
 
 	protected class MqttClientStartThread extends Thread {
 
@@ -110,7 +111,7 @@ public abstract class BaseMqttClient {
 		}
 	}
 
-	public MqttClient getClient() {
+	public IMqttClient getClient() {
 		return client;
 	}
 

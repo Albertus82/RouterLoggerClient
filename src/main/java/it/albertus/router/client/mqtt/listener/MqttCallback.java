@@ -13,14 +13,14 @@ import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.logging.LoggerFactory;
 
-public class RouterLoggerClientMqttCallback implements MqttCallbackExtended {
+public class MqttCallback implements MqttCallbackExtended {
 
-	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientMqttCallback.class);
+	private static final Logger logger = LoggerFactory.getLogger(MqttCallback.class);
 
 	private final String clientId;
 	private final RouterLoggerClientGui gui;
 
-	public RouterLoggerClientMqttCallback(final String clientId, final RouterLoggerClientGui gui) {
+	public MqttCallback(final String clientId, final RouterLoggerClientGui gui) {
 		this.clientId = clientId;
 		this.gui = gui;
 	}

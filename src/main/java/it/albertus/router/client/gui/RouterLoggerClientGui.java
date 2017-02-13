@@ -35,7 +35,7 @@ import it.albertus.router.client.engine.Status;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.gui.listener.PreferencesListener;
 import it.albertus.router.client.http.HttpPollingThread;
-import it.albertus.router.client.mqtt.RouterLoggerClientMqttClient;
+import it.albertus.router.client.mqtt.MqttClient;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.Configuration;
 import it.albertus.util.Configured;
@@ -53,7 +53,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private static final Configuration configuration = RouterLoggerClient.getConfiguration();
 
-	private final RouterLoggerClientMqttClient mqttClient = RouterLoggerClientMqttClient.getInstance();
+	private final MqttClient mqttClient = MqttClient.getInstance();
 
 	private final ThresholdsManager thresholdsManager;
 
