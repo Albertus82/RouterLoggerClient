@@ -351,7 +351,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 			previousStatus = currentStatus;
 			currentStatus = newStatus;
 			if (logger.isLoggable(Level.INFO)) {
-				final LogRecord logRecord = new LogRecord(Level.INFO, Messages.get("lbl.status") + ": " + currentStatus.getStatus().getDescription() + '.');
+				final LogRecord logRecord = new LogRecord(Level.INFO, Messages.get("lbl.status") + ": " + currentStatus.getStatus().getDescription());
 				logRecord.setMillis(currentStatus.getTimestamp().getTime());
 				logger.log(logRecord);
 			}
