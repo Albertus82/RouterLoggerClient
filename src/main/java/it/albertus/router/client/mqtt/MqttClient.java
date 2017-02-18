@@ -154,7 +154,7 @@ public class MqttClient extends BaseMqttClient {
 			else {
 				persistence = new MemoryPersistence();
 			}
-			logger.info(Messages.get("msg.mqtt.connecting", Arrays.toString(serverURIs), NewLine.SYSTEM_LINE_SEPARATOR + options.toString().trim() + "======"));
+			logger.log(Level.INFO, Messages.get("msg.mqtt.connecting"), new String[] { Arrays.toString(serverURIs), NewLine.SYSTEM_LINE_SEPARATOR + options.toString().trim() + "======" });
 			doConnect(clientId, options, persistence, configuration.getBoolean(CFG_KEY_MQTT_CONNECT_RETRY, Defaults.CONNECT_RETRY));
 		}
 		catch (final Exception e) {

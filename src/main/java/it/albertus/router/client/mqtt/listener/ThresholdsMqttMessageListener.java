@@ -1,6 +1,7 @@
 package it.albertus.router.client.mqtt.listener;
 
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
@@ -29,7 +30,10 @@ public class ThresholdsMqttMessageListener implements IMqttMessageListener {
 
 	@Override
 	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
-		logger.fine(Messages.get("msg.mqtt.message.arrived", topic, message));
+		final Level level = Level.FINE;
+		if (logger.isLoggable(level)) {
+			logger.log(level, Messages.get("msg.mqtt.message.arrived"), new Object[] { topic, message });
+		}
 
 		final ThresholdsDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), ThresholdsDto.class);
 

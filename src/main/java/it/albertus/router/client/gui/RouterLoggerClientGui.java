@@ -162,7 +162,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				httpPollingThread.start();
 			}
 			else {
-				logger.info(Messages.get("err.invalid.protocol", protocol));
+				logger.log(Level.INFO, Messages.get("err.invalid.protocol"), protocol);
 			}
 		}
 	}
@@ -289,8 +289,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 			pw.close();
 			logger.info(baos.toString());
 		}
-		if (configuration.getBoolean("console.show.configuration", Defaults.CONSOLE_SHOW_CONFIGURATION)) {
-			logger.info(Messages.get("msg.settings", configuration));
+		if (logger.isLoggable(Level.INFO) && configuration.getBoolean("console.show.configuration", Defaults.CONSOLE_SHOW_CONFIGURATION)) {
+			logger.log(Level.INFO, Messages.get("msg.settings"), configuration);
 		}
 	}
 

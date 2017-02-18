@@ -112,7 +112,7 @@ public class HttpPollingThread extends Thread {
 
 		String host = configuration.getString(CFG_KEY_HTTP_HOST);
 
-		logger.info(Messages.get("msg.http.polling", scheme.toUpperCase(), scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT)));
+		logger.log(Level.INFO, Messages.get("msg.http.polling"), new Object[] { scheme.toUpperCase(), scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT) });
 
 		while (!Thread.interrupted()) {
 			// Prepare connection parameters
