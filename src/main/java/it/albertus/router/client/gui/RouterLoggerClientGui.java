@@ -289,9 +289,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 			pw.close();
 			logger.info(baos.toString());
 		}
-		if (logger.isLoggable(Level.INFO) && configuration.getBoolean("console.show.configuration", Defaults.CONSOLE_SHOW_CONFIGURATION)) {
-			logger.log(Level.INFO, Messages.get("msg.settings"), configuration);
-		}
+
+		logger.log(Level.CONFIG, Messages.get("msg.settings"), configuration);
 	}
 
 	@Override
