@@ -49,9 +49,18 @@ public class RouterLoggerClientConfiguration extends Configuration {
 	private Handler fileHandler;
 	private FileHandlerBuilder fileHandlerBuilder;
 
-	public RouterLoggerClientConfiguration() throws IOException {
+	private static RouterLoggerClientConfiguration instance;
+
+	private RouterLoggerClientConfiguration() throws IOException {
 		super(Messages.get("msg.application.name") + File.separator + CFG_FILE_NAME, true);
 		init();
+	}
+
+	public static synchronized RouterLoggerClientConfiguration getInstance() throws IOException {
+		if (instance == null) {
+			instance = new RouterLoggerClientConfiguration();
+		}
+		return instance;
 	}
 
 	@Override

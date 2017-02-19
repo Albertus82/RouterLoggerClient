@@ -33,7 +33,7 @@ public class RouterLoggerClient {
 		}
 		logger = LoggerFactory.getLogger(RouterLoggerClient.class);
 		try {
-			configuration = new RouterLoggerClientConfiguration();
+			configuration = RouterLoggerClientConfiguration.getInstance();
 		}
 		catch (final IOException ioe) {
 			final String message = Messages.get("err.open.cfg", RouterLoggerClientConfiguration.CFG_FILE_NAME);
