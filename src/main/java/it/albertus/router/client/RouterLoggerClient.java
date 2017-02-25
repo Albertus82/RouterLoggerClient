@@ -1,12 +1,15 @@
 package it.albertus.router.client;
 
 import java.io.IOException;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
+import it.albertus.util.logging.CustomFormatter;
 import it.albertus.util.logging.LoggerFactory;
 import it.albertus.util.logging.LoggingSupport;
 
@@ -29,7 +32,11 @@ public class RouterLoggerClient {
 
 	static {
 		if (LoggingSupport.getFormat() == null) {
-			LoggingSupport.setFormat(LOG_FORMAT_CONSOLE);
+			for (final Handler handler : LoggingSupport.getRootHandlers()) {
+				if (handler instanceof ConsoleHandler) {
+					handler.setFormatter(new CustomFormatter(LOG_FORMAT_CONSOLE));
+				}
+			}
 		}
 		logger = LoggerFactory.getLogger(RouterLoggerClient.class);
 		try {
