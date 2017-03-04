@@ -24,7 +24,6 @@ import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.Status;
-import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.NewLine;
@@ -206,11 +205,11 @@ public class TrayIcon {
 		}
 	}
 
-	public void showBalloonToolTip(final Map<Threshold, String> thresholdsReached) {
+	public void showBalloonToolTip(final Map<String, String> thresholdsReached) {
 		if (configuration.getBoolean("gui.tray.tooltip", Defaults.GUI_TRAY_TOOLTIP) && showToolTip && thresholdsReached != null && !thresholdsReached.isEmpty() && toolTip != null && trayItem != null && gui != null && gui.getShell() != null && !gui.getShell().isDisposed() && !trayItem.isDisposed() && !toolTip.isDisposed()) {
 			final StringBuilder message = new StringBuilder();
-			for (final Entry<Threshold, String> threshold : thresholdsReached.entrySet()) {
-				message.append(threshold.getKey().getKey()).append('=').append(threshold.getValue()).append(NewLine.SYSTEM_LINE_SEPARATOR);
+			for (final Entry<String, String> entry : thresholdsReached.entrySet()) {
+				message.append(entry.getKey()).append('=').append(entry.getValue()).append(NewLine.SYSTEM_LINE_SEPARATOR);
 			}
 
 			try {

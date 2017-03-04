@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -47,9 +48,9 @@ public class ThresholdsManager {
 		if (thresholdsReached != null && thresholdsReached.getReached() != null && !thresholdsReached.getReached().isEmpty()) {
 			final Map<String, String> message = new TreeMap<>();
 			boolean print = false;
-			for (final Threshold threshold : thresholdsReached.getReached().keySet()) {
-				message.put(threshold.getKey(), thresholdsReached.getReached().get(threshold));
-				if (!threshold.isExcluded()) {
+			for (final Entry<Threshold, String> entry : thresholdsReached.getReached().entrySet()) {
+				message.put(entry.getKey().getKey(), entry.getValue());
+				if (!entry.getKey().isExcluded()) {
 					print = true;
 				}
 			}
@@ -59,7 +60,7 @@ public class ThresholdsManager {
 				logger.log(record);
 				final TrayIcon trayIcon = gui.getTrayIcon();
 				if (trayIcon != null) {
-					trayIcon.showBalloonToolTip(thresholdsReached.getReached());
+					trayIcon.showBalloonToolTip(message);
 				}
 			}
 		}
