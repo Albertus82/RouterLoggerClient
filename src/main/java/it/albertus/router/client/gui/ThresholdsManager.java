@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import it.albertus.jface.SwtThreadExecutor;
+import it.albertus.jface.DisplayThreadExecutor;
 import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.resources.Messages;
@@ -86,9 +86,9 @@ public class ThresholdsManager {
 		final DataTable dataTable = gui.getDataTable();
 		if (dataTable != null && dataTable.getTable() != null) {
 			final Set<Integer> indexes = new HashSet<>(thresholdsReached.getReached().size());
-			new SwtThreadExecutor(dataTable.getTable()) {
+			new DisplayThreadExecutor(dataTable.getTable()).execute(new Runnable() {
 				@Override
-				protected void run() {
+				public void run() {
 					for (int index = 0; index < dataTable.getTable().getColumnCount(); index++) {
 						final TableColumn tc = dataTable.getTable().getColumn(index);
 						for (final Threshold t : thresholdsReached.getReached().keySet()) {
@@ -108,7 +108,7 @@ public class ThresholdsManager {
 						}
 					}
 				}
-			}.start();
+			});
 		}
 		return updated[0];
 	}

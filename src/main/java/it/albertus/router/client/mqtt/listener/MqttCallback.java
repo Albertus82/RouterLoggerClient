@@ -8,7 +8,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttToken;
 
-import it.albertus.jface.SwtThreadExecutor;
+import it.albertus.jface.DisplayThreadExecutor;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.logging.LoggerFactory;
@@ -34,12 +34,12 @@ public class MqttCallback implements MqttCallbackExtended {
 	public void connectComplete(final boolean reconnect, final String serverURI) {
 		logger.log(Level.INFO, Messages.get("msg.mqtt.connected"), new String[] { serverURI, clientId });
 		if (reconnect) {
-			new SwtThreadExecutor(gui.getShell()) {
+			new DisplayThreadExecutor(gui.getShell()).execute(new Runnable() {
 				@Override
-				protected void run() {
+				public void run() {
 					gui.reconnectAfterConnectionLoss();
 				}
-			}.start();
+			});
 		}
 	}
 

@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import it.albertus.jface.SwtThreadExecutor;
+import it.albertus.jface.DisplayThreadExecutor;
 import it.albertus.jface.SwtUtils;
 import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.router.client.engine.RouterData;
@@ -264,9 +264,9 @@ public class DataTable {
 			final String timestamp = dateFormatTable.format(data.getTimestamp());
 			final int maxItems = configuration.getInt("gui.table.items.max", Defaults.MAX_ITEMS);
 			final Table table = tableViewer.getTable();
-			new SwtThreadExecutor(table) {
+			new DisplayThreadExecutor(table).execute(new Runnable() {
 				@Override
-				protected void run() {
+				public void run() {
 					// Header (una tantum)...
 					if (!(Boolean) table.getData(TableDataKey.INITIALIZED.toString())) {
 						// Disattivazione ridisegno automatico...
@@ -377,7 +377,7 @@ public class DataTable {
 						table.setTopIndex(table.getTopIndex() - 1);
 					}
 				}
-			}.start();
+			});
 		}
 	}
 

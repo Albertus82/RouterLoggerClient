@@ -26,8 +26,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.jface.DisplayThreadExecutor;
 import it.albertus.jface.EnhancedErrorDialog;
-import it.albertus.jface.SwtThreadExecutor;
 import it.albertus.jface.console.StyledTextConsole;
 import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.router.client.RouterLoggerClient.InitializationException;
@@ -103,8 +103,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				Protocol.valueOf(configuration.getString("client.protocol"));
 				gui.connect();
 			}
-			catch (final RuntimeException re) {
-				logger.log(Level.FINE, re.toString(), re);
+			catch (final RuntimeException e) {
+				logger.log(Level.FINE, e.toString(), e);
 				new PreferencesListener(gui).widgetSelected(null);
 			}
 			while (!shell.isDisposed()) {
@@ -132,8 +132,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					try {
 						TimeUnit.SECONDS.sleep(configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
 					}
-					catch (final InterruptedException ie) {
-						logger.log(Level.FINER, ie.toString(), ie);
+					catch (final InterruptedException e) {
+						logger.log(Level.FINER, e.toString(), e);
 						interrupt();
 					}
 					continue; // Retry
@@ -181,8 +181,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				try {
 					mqttConnectionThread.join();
 				}
-				catch (final InterruptedException ie) {
-					logger.log(Level.FINER, ie.toString(), ie);
+				catch (final InterruptedException e) {
+					logger.log(Level.FINER, e.toString(), e);
 					interrupt();
 				}
 			}
@@ -191,8 +191,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				try {
 					httpPollingThread.join();
 				}
-				catch (final InterruptedException ie) {
-					logger.log(Level.FINER, ie.toString(), ie);
+				catch (final InterruptedException e) {
+					logger.log(Level.FINER, e.toString(), e);
 					interrupt();
 				}
 			}
@@ -375,8 +375,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					try {
 						mqttConnectionThread.join();
 					}
-					catch (final InterruptedException ie) {
-						logger.log(Level.FINER, ie.toString(), ie);
+					catch (final InterruptedException e) {
+						logger.log(Level.FINER, e.toString(), e);
 						interrupt();
 					}
 				}
@@ -401,36 +401,36 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				try {
 					releaseThread.join();
 				}
-				catch (final InterruptedException ie) {
-					logger.log(Level.FINE, ie.toString(), ie);
+				catch (final InterruptedException e) {
+					logger.log(Level.FINE, e.toString(), e);
 					interrupt();
 				}
 
 				try {
 					configuration.reload();
 				}
-				catch (final IOException ioe) {
-					logger.log(Level.SEVERE, ioe.toString(), ioe);
+				catch (final IOException e) {
+					logger.log(Level.SEVERE, e.toString(), e);
 				}
-				new SwtThreadExecutor(getShell()) {
+				new DisplayThreadExecutor(getShell()).execute(new Runnable() {
 					@Override
-					protected void run() {
+					public void run() {
 						dataTable.reset();
 						if (!logger.isLoggable(Level.FINE)) {
 							console.clear();
 						}
 					}
-				}.start();
+				});
 
 				connect();
 
 				// Enable "Restart..." menu item...
-				new SwtThreadExecutor(getShell()) {
+				new DisplayThreadExecutor(getShell()).execute(new Runnable() {
 					@Override
-					protected void run() {
+					public void run() {
 						menuBar.getFileRestartItem().setEnabled(true);
 					}
-				}.start();
+				});
 			}
 		}.start();
 	}
