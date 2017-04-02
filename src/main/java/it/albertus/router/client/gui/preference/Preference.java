@@ -124,7 +124,7 @@ public enum Preference implements IPreference {
 	GUI_CONFIRM_CLOSE(new PreferenceDetailsBuilder(APPEARANCE).defaultValue(CloseDialog.Defaults.CONFIRM_CLOSE).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 
 	GUI_TABLE_ITEMS_MAX(new PreferenceDetailsBuilder(APPEARANCE_TABLE).defaultValue(DataTable.Defaults.MAX_ITEMS).build(), new FieldEditorDetailsBuilder(EnhancedIntegerFieldEditor.class).textLimit(4).build()),
-	GUI_IMPORTANT_KEYS(new PreferenceDetailsBuilder(APPEARANCE_TABLE).build(), new FieldEditorDetailsBuilder(WrapStringFieldEditor.class).textHeight(4).build()),
+	GUI_IMPORTANT_KEYS(new PreferenceDetailsBuilder(APPEARANCE_TABLE).build(), new FieldEditorDetailsBuilder(WrapStringFieldEditor.class).height(4).build()),
 	GUI_IMPORTANT_KEYS_SEPARATOR(new PreferenceDetailsBuilder(APPEARANCE_TABLE).defaultValue(RouterLoggerClientConfiguration.Defaults.GUI_IMPORTANT_KEYS_SEPARATOR).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).emptyStringAllowed(false).build()),
 	GUI_TABLE_COLUMNS_PACK(new PreferenceDetailsBuilder(APPEARANCE_TABLE).separate().restartRequired().defaultValue(DataTable.Defaults.COLUMNS_PACK).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	GUI_TABLE_COLUMNS_PADDING_RIGHT(new PreferenceDetailsBuilder(APPEARANCE_TABLE).restartRequired().defaultValue(DataTable.Defaults.COLUMNS_PADDING_RIGHT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMaximum(Byte.MAX_VALUE).scalePageIncrement(10).build()),
