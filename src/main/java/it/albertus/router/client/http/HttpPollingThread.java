@@ -23,7 +23,6 @@ import javax.xml.bind.DatatypeConverter;
 
 import com.google.gson.Gson;
 
-import it.albertus.router.client.RouterLoggerClient;
 import it.albertus.router.client.dto.RouterDataDto;
 import it.albertus.router.client.dto.StatusDto;
 import it.albertus.router.client.dto.ThresholdsDto;
@@ -31,6 +30,7 @@ import it.albertus.router.client.dto.transformer.DataTransformer;
 import it.albertus.router.client.dto.transformer.StatusTransformer;
 import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
 import it.albertus.router.client.engine.RouterData;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
@@ -43,7 +43,7 @@ public class HttpPollingThread extends Thread {
 
 	private static final Logger logger = LoggerFactory.getLogger(HttpPollingThread.class);
 
-	private static final Configuration configuration = RouterLoggerClient.getConfiguration();
+	private static final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 
 	private static final String HDR_KEY_AUTHORIZATION = "Authorization";
 	private static final String HDR_KEY_ACCEPT = "Accept";

@@ -15,18 +15,21 @@ import org.eclipse.swt.widgets.MessageBox;
 
 import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.jface.preference.Preferences;
-import it.albertus.router.client.RouterLoggerClient;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.gui.Images;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.gui.preference.Preference;
 import it.albertus.router.client.gui.preference.page.PageDefinition;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.resources.Messages.Language;
+import it.albertus.util.Configuration;
 import it.albertus.util.logging.LoggerFactory;
 
 public class PreferencesListener extends SelectionAdapter implements Listener {
 
 	private static final Logger logger = LoggerFactory.getLogger(PreferencesListener.class);
+
+	private static final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 
 	private final RouterLoggerClientGui gui;
 
@@ -37,7 +40,7 @@ public class PreferencesListener extends SelectionAdapter implements Listener {
 	@Override
 	public void widgetSelected(final SelectionEvent se) {
 		final Language language = Messages.getLanguage();
-		final Preferences preferences = new Preferences(PageDefinition.values(), Preference.values(), RouterLoggerClient.getConfiguration(), Images.getMainIcons());
+		final Preferences preferences = new Preferences(PageDefinition.values(), Preference.values(), configuration, Images.getMainIcons());
 		try {
 			preferences.openDialog(gui.getShell());
 		}
@@ -47,7 +50,7 @@ public class PreferencesListener extends SelectionAdapter implements Listener {
 		}
 
 		// Update console font...
-		final String fontDataString = RouterLoggerClient.getConfiguration().getString("gui.console.font", true);
+		final String fontDataString = configuration.getString("gui.console.font", true);
 		if (!fontDataString.isEmpty()) {
 			gui.getConsole().setFont(PreferenceConverter.readFontData(fontDataString));
 		}

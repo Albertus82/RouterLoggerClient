@@ -29,9 +29,8 @@ import org.eclipse.swt.widgets.Shell;
 import it.albertus.jface.DisplayThreadExecutor;
 import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.jface.console.StyledTextConsole;
-import it.albertus.router.client.RouterLoggerClient;
-import it.albertus.router.client.RouterLoggerClient.InitializationException;
 import it.albertus.router.client.engine.Protocol;
+import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.Status;
 import it.albertus.router.client.gui.listener.CloseListener;
@@ -39,6 +38,7 @@ import it.albertus.router.client.gui.listener.PreferencesListener;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.MqttClient;
 import it.albertus.router.client.resources.Messages;
+import it.albertus.router.client.util.InitializationException;
 import it.albertus.util.Configuration;
 import it.albertus.util.Configured;
 import it.albertus.util.Version;
@@ -53,7 +53,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
 
-	private static final Configuration configuration = RouterLoggerClient.getConfiguration();
+	private static final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 
 	private final MqttClient mqttClient = MqttClient.getInstance();
 
