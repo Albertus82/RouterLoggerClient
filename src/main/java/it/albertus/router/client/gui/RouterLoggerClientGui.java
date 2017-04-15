@@ -53,7 +53,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
 
-	private static final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
+	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
 
 	private final MqttClient mqttClient = MqttClient.getInstance();
 
@@ -100,7 +100,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 			gui.open();
 			final Shell shell = gui.getShell();
 			try {
-				Protocol.valueOf(configuration.getString("client.protocol"));
+				Protocol.valueOf(gui.configuration.getString("client.protocol"));
 				gui.connect();
 			}
 			catch (final RuntimeException e) {
