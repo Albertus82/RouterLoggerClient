@@ -92,7 +92,7 @@ public class HttpPollingThread extends Thread {
 		this.gui = gui;
 		if (configuration.getBoolean(CFG_KEY_HTTP_IGNORE_CERTIFICATE, Defaults.IGNORE_CERTIFICATE)) {
 			try {
-				final SSLContext sslContext = SSLContext.getInstance("SSL");
+				final SSLContext sslContext = SSLContext.getInstance("TLS");
 				sslContext.init(null, new TrustManager[] { new DummyTrustManager() }, new SecureRandom());
 				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 			}
