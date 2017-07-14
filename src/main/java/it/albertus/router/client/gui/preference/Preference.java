@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import it.albertus.jface.console.StyledTextConsole;
 import it.albertus.jface.preference.FieldEditorDetails;
 import it.albertus.jface.preference.FieldEditorDetails.FieldEditorDetailsBuilder;
+import it.albertus.jface.preference.FieldEditorFactory;
 import it.albertus.jface.preference.IPreference;
 import it.albertus.jface.preference.LocalizedLabelsAndValues;
 import it.albertus.jface.preference.PreferenceDetails;
@@ -143,6 +144,8 @@ public enum Preference implements IPreference {
 	LOGGING_FILES_COUNT(new PreferenceDetailsBuilder(LOGGING).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfiguration.Defaults.LOGGING_FILES_COUNT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(1).scaleMaximum(9).scalePageIncrement(1).build());
 
 	private static final String LABEL_KEY_PREFIX = "lbl.preferences.";
+
+	private static final FieldEditorFactory fieldEditorFactory = new FieldEditorFactory();
 
 	private final PreferenceDetails preferenceDetails;
 	private final FieldEditorDetails fieldEditorDetails;
