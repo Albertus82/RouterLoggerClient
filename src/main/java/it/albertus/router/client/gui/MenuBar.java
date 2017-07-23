@@ -17,8 +17,8 @@ import it.albertus.router.client.gui.listener.ClearDataTableSelectionListener;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.gui.listener.CopyMenuBarSelectionListener;
 import it.albertus.router.client.gui.listener.DeleteDataTableSelectionListener;
-import it.albertus.router.client.gui.listener.EditClearSubMenuArmListener;
-import it.albertus.router.client.gui.listener.EditMenuBarArmListener;
+import it.albertus.router.client.gui.listener.EditClearSubMenuListener;
+import it.albertus.router.client.gui.listener.EditMenuListener;
 import it.albertus.router.client.gui.listener.PreferencesListener;
 import it.albertus.router.client.gui.listener.RestartSelectionListener;
 import it.albertus.router.client.gui.listener.SelectAllMenuBarSelectionListener;
@@ -103,7 +103,9 @@ public class MenuBar {
 		editMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		editMenuHeader.setText(Messages.get("lbl.menu.header.edit"));
 		editMenuHeader.setMenu(editMenu);
-		editMenuHeader.addArmListener(new EditMenuBarArmListener(gui));
+		final EditMenuListener editMenuListener = new EditMenuListener(gui);
+		editMenu.addMenuListener(editMenuListener);
+		editMenuHeader.addArmListener(editMenuListener);
 
 		editCopyMenuItem = new MenuItem(editMenu, SWT.PUSH);
 		editCopyMenuItem.setText(Messages.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
@@ -129,7 +131,9 @@ public class MenuBar {
 
 		editClearSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editClearSubMenuItem.setMenu(editClearSubMenu);
-		editClearSubMenuItem.addArmListener(new EditClearSubMenuArmListener(gui));
+		final EditClearSubMenuListener editClearSubMenuListener = new EditClearSubMenuListener(gui);
+		editClearSubMenu.addMenuListener(editClearSubMenuListener);
+		editClearSubMenuItem.addArmListener(editClearSubMenuListener);
 
 		editClearDataTableMenuItem = new MenuItem(editClearSubMenu, SWT.PUSH);
 		editClearDataTableMenuItem.setText(Messages.get("lbl.menu.item.clear.table"));
