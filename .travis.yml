@@ -1,11 +1,11 @@
 language: java
 
+dist: trusty
+
 matrix:
   include:
     - os: linux
       jdk: oraclejdk8
-    - os: linux
-      jdk: oraclejdk7
     - os: linux
       jdk: openjdk7
     - os: osx
@@ -15,16 +15,17 @@ addons:
     organization: "albertus82-github"
   apt:
     sources:
-      - sourceline: 'ppa:ubuntu-wine/ppa'
+      - sourceline: 'deb https://dl.winehq.org/wine-builds/ubuntu/ trusty main'
+        key_url: https://dl.winehq.org/wine-builds/Release.key
     packages:
-      - wine1.7
+      - winehq-stable
       - lib32z1
       - lib32ncurses5
 
 env:
   global:
     - secure: "G7EAJynuHaoIzSOAd8CoytF1R5dwHnATLAIdh/mmJr3SlBl5YLGHRoDdba109uL7MqTmDFpQjmpaEzMAglmDXgNU1RVBshH0hK24R4QseaJZ0ssXt5kFKu6H2UdYa+8jYggeWOKD+NeIsucHIBpXMlMzy+lUb+z+zu2jJsj4vQjRCiiUdM4gJaUftNudmVRlqvxR8yzre6eDFCUencjdjWPsQTujEk4f8LrTNory6MDfKAK0xrizrHsbTZs+a2Q0q5FadoOe8L7p9I75z1L/V5dHq/TCdjN/lnGjL180xM/7VuLl2r1soQRN2yyVKi0QombjEgRxHywlU8dAg9q0zIYuzq62pbHEW3b7cV45Db8RKrRZiIax7SzROcda46T1EJDjfMU0ASmR4Df5ICM91i4sb0T+fByjsCH9hf7KwKpuABL8BdeJjK2+5iBMCq4OpTTTbwHoQvAcJ0vphvEY3/jmBx3z37PWJFAp0ZJZO+n47k4l0a+/I5YGV7JXO8e2fSMtJ/7tCPjnLIZn/4yXX4Ok/Cp6aMPyO2dEAH6cTCNvY6jIg1lF8IgekXqkqKcEZEtkYvWIXT/YnBJnR2ytqRJwNckD1POwXFQNdUwZvK3huNQDU1B9Sb1MecDFbwEc2VXg0KJ1JxbZkVmKIQbO52zB61gFqhslSyOTv1BMH7o="
-    - JRE7_HOME=/usr/lib/jvm/java-7-oracle/jre
+    - JRE7_HOME=/usr/lib/jvm/java-7-openjdk-amd64/jre
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install wine ant; fi;
