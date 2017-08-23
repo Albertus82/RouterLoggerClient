@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.PreferenceConverter;
-import org.eclipse.jface.util.Util;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -28,6 +27,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.jface.DisplayThreadExecutor;
 import it.albertus.jface.EnhancedErrorDialog;
+import it.albertus.jface.SwtUtils;
 import it.albertus.jface.console.StyledTextConsole;
 import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
@@ -214,7 +214,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		super.configureShell(shell);
 
 		// Fix invisible (transparent) shell bug with some Linux distibutions
-		if (!Util.isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
+		if (!SwtUtils.isGtk3() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
 			shell.setMinimized(true);
 		}
 
@@ -227,7 +227,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		final int code = super.open();
 
 		// Fix invisible (transparent) shell bug with some Linux distibutions
-		if (Util.isGtk() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
+		if (SwtUtils.isGtk3() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
 			getShell().setMinimized(true);
 		}
 
