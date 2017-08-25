@@ -33,7 +33,7 @@ public class ThresholdsManager {
 		}
 	};
 
-	private final Map<Date, ThresholdsReached> thresholdsBuffer = new HashMap<>(2);
+	private final Map<Date, ThresholdsReached> thresholdsBuffer = new HashMap<>(4);
 	private final RouterLoggerClientGui gui;
 
 	public ThresholdsManager(final RouterLoggerClientGui gui) {
