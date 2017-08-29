@@ -214,7 +214,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		super.configureShell(shell);
 
 		// Fix invisible (transparent) shell bug with some Linux distibutions
-		if (!SwtUtils.isGtk3() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
+		if (SwtUtils.isGtk3() != null && !SwtUtils.isGtk3() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
 			shell.setMinimized(true);
 		}
 
@@ -227,7 +227,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		final int code = super.open();
 
 		// Fix invisible (transparent) shell bug with some Linux distibutions
-		if (SwtUtils.isGtk3() && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
+		if ((SwtUtils.isGtk3() == null || SwtUtils.isGtk3()) && configuration.getBoolean("gui.start.minimized", Defaults.GUI_START_MINIMIZED)) {
 			getShell().setMinimized(true);
 		}
 
