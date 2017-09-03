@@ -61,7 +61,7 @@ public class DataTable {
 
 	private static final String FONT_KEY_TABLE_BOLD = "tableBold";
 
-	private static final DateFormat dateFormatTable = new SimpleDateFormat(TIMESTAMP_PATTERN);
+	private final DateFormat dateFormatTable = new SimpleDateFormat(TIMESTAMP_PATTERN);
 
 	public static class Defaults {
 		public static final int MAX_ITEMS = 2000;
