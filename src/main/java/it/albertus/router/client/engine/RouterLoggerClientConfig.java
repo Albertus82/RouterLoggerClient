@@ -157,6 +157,7 @@ public class RouterLoggerClientConfig extends Configuration {
 			LoggingSupport.getRootLogger().removeHandler(fileHandler);
 			fileHandler.close();
 			fileHandler = null;
+			logger.log(Level.FINE, "FileHandler closed and removed.");
 		}
 	}
 
