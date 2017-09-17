@@ -30,7 +30,7 @@ import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.jface.SwtUtils;
 import it.albertus.jface.console.StyledTextConsole;
 import it.albertus.router.client.engine.Protocol;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.RouterLoggerClientConfig;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.Status;
 import it.albertus.router.client.gui.listener.CloseListener;
@@ -53,7 +53,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
 
-	private final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
+	private final Configuration configuration = RouterLoggerClientConfig.getInstance();
 
 	private final MqttClient mqttClient = MqttClient.getInstance();
 

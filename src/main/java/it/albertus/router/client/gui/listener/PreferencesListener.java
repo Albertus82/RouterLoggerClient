@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.MessageBox;
 
 import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.jface.preference.Preferences;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.RouterLoggerClientConfig;
 import it.albertus.router.client.gui.Images;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.gui.preference.Preference;
@@ -29,7 +29,7 @@ public class PreferencesListener extends SelectionAdapter implements Listener {
 
 	private static final Logger logger = LoggerFactory.getLogger(PreferencesListener.class);
 
-	private static final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
+	private static final Configuration configuration = RouterLoggerClientConfig.getInstance();
 
 	private final RouterLoggerClientGui gui;
 

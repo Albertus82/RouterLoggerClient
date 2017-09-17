@@ -30,7 +30,7 @@ import it.albertus.router.client.dto.transformer.DataTransformer;
 import it.albertus.router.client.dto.transformer.StatusTransformer;
 import it.albertus.router.client.dto.transformer.ThresholdsTransformer;
 import it.albertus.router.client.engine.RouterData;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.RouterLoggerClientConfig;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
@@ -43,7 +43,7 @@ public class HttpPollingThread extends Thread {
 
 	private static final Logger logger = LoggerFactory.getLogger(HttpPollingThread.class);
 
-	private static final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
+	private static final Configuration configuration = RouterLoggerClientConfig.getInstance();
 
 	private static final String HDR_KEY_AUTHORIZATION = "Authorization";
 	private static final String HDR_KEY_ACCEPT = "Accept";

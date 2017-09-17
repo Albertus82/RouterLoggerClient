@@ -19,9 +19,9 @@ import it.albertus.util.logging.FileHandlerConfig;
 import it.albertus.util.logging.LoggerFactory;
 import it.albertus.util.logging.LoggingSupport;
 
-public class RouterLoggerClientConfiguration extends Configuration {
+public class RouterLoggerClientConfig extends Configuration {
 
-	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientConfiguration.class);
+	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientConfig.class);
 
 	public static class Defaults {
 		public static final String LANGUAGE = Locale.getDefault().getLanguage();
@@ -49,17 +49,17 @@ public class RouterLoggerClientConfiguration extends Configuration {
 
 	private EnhancedFileHandler fileHandler;
 
-	private static RouterLoggerClientConfiguration instance;
+	private static RouterLoggerClientConfig instance;
 
-	private RouterLoggerClientConfiguration() throws IOException {
+	private RouterLoggerClientConfig() throws IOException {
 		super(Messages.get("msg.application.name") + File.separator + CFG_FILE_NAME, true);
 		init();
 	}
 
-	public static synchronized RouterLoggerClientConfiguration getInstance() {
+	public static synchronized RouterLoggerClientConfig getInstance() {
 		if (instance == null) {
 			try {
-				instance = new RouterLoggerClientConfiguration();
+				instance = new RouterLoggerClientConfig();
 			}
 			catch (final IOException e) {
 				final String message = Messages.get("err.open.cfg", CFG_FILE_NAME);

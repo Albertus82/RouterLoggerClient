@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.TrayItem;
 
 import it.albertus.jface.listener.TrayRestoreListener;
 import it.albertus.router.client.engine.RouterData;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.RouterLoggerClientConfig;
 import it.albertus.router.client.engine.Status;
 import it.albertus.router.client.gui.listener.CloseListener;
 import it.albertus.router.client.resources.Messages;
@@ -32,7 +32,7 @@ public class TrayIcon {
 
 	private static final Logger logger = LoggerFactory.getLogger(TrayIcon.class);
 
-	private static final RouterLoggerClientConfiguration configuration = RouterLoggerClientConfiguration.getInstance();
+	private static final RouterLoggerClientConfig configuration = RouterLoggerClientConfig.getInstance();
 
 	public static class Defaults {
 		public static final boolean GUI_MINIMIZE_TRAY = true;

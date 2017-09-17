@@ -11,7 +11,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 
 import it.albertus.jface.preference.field.UriListEditor;
-import it.albertus.router.client.engine.RouterLoggerClientConfiguration;
+import it.albertus.router.client.engine.RouterLoggerClientConfig;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.mqtt.listener.DataMqttMessageListener;
 import it.albertus.router.client.mqtt.listener.MqttCallback;
@@ -28,7 +28,7 @@ public class MqttClient extends BaseMqttClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(MqttClient.class);
 
-	private static final Configuration configuration = RouterLoggerClientConfiguration.getInstance();
+	private static final Configuration configuration = RouterLoggerClientConfig.getInstance();
 
 	private static final String CFG_KEY_MQTT_CLEAN_SESSION = "mqtt.clean.session";
 	private static final String CFG_KEY_MQTT_MAX_INFLIGHT = "mqtt.max.inflight";
