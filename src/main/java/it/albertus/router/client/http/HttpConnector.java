@@ -24,8 +24,8 @@ import it.albertus.util.Version;
 public class HttpConnector {
 
 	public static class Defaults {
-		public static final int CONNECTION_TIMEOUT = 0;
-		public static final int READ_TIMEOUT = 0;
+		public static final int CONNECTION_TIMEOUT = 20000;
+		public static final int READ_TIMEOUT = 20000;
 		public static final boolean AUTHENTICATION = true;
 		public static final boolean PROXY_ENABLED = false;
 		public static final Type PROXY_TYPE = Type.HTTP;
