@@ -69,24 +69,24 @@ public class HttpConnector {
 			Authenticator.setDefault(null);
 			connection = url.openConnection(/* DIRECT */);
 		}
-		connection.setConnectTimeout(configuration.getInt("http.connection.timeout", Defaults.CONNECTION_TIMEOUT));
-		connection.setReadTimeout(configuration.getInt("http.read.timeout", Defaults.READ_TIMEOUT));
-		connection.setRequestProperty("User-Agent", USER_AGENT);
-		connection.addRequestProperty("Accept", "application/json");
-		connection.addRequestProperty("Accept-Encoding", "gzip");
-		if (etag != null && !etag.trim().isEmpty()) {
-			connection.addRequestProperty("If-None-Match", etag);
-		}
-		final String username = configuration.getString("http.username");
-		final char[] password = configuration.getCharArray("http.password");
-		if (configuration.getBoolean("http.authentication", Defaults.AUTHENTICATION) && StringUtils.isNotEmpty(username) && password != null && password.length > 0) {
-			final byte[] un = username.getBytes(CHARSET);
-			final byte[] pw = toBytes(password);
-			final ByteBuffer buffer = ByteBuffer.allocate(un.length + 1 + pw.length);
-			buffer.put(un).put((byte) ':').put(pw);
-			connection.addRequestProperty("Authorization", "Basic " + DatatypeConverter.printBase64Binary(buffer.array()));
-		}
 		if (connection instanceof HttpURLConnection) {
+			connection.setConnectTimeout(configuration.getInt("http.connection.timeout", Defaults.CONNECTION_TIMEOUT));
+			connection.setReadTimeout(configuration.getInt("http.read.timeout", Defaults.READ_TIMEOUT));
+			connection.setRequestProperty("User-Agent", USER_AGENT);
+			connection.addRequestProperty("Accept", "application/json");
+			connection.addRequestProperty("Accept-Encoding", "gzip");
+			if (etag != null && !etag.trim().isEmpty()) {
+				connection.addRequestProperty("If-None-Match", etag);
+			}
+			final String username = configuration.getString("http.username");
+			final char[] password = configuration.getCharArray("http.password");
+			if (configuration.getBoolean("http.authentication", Defaults.AUTHENTICATION) && StringUtils.isNotEmpty(username) && password != null && password.length > 0) {
+				final byte[] un = username.getBytes(CHARSET);
+				final byte[] pw = toBytes(password);
+				final ByteBuffer buffer = ByteBuffer.allocate(un.length + 1 + pw.length);
+				buffer.put(un).put((byte) ':').put(pw);
+				connection.addRequestProperty("Authorization", "Basic " + DatatypeConverter.printBase64Binary(buffer.array()));
+			}
 			return (HttpURLConnection) connection;
 		}
 		else {
