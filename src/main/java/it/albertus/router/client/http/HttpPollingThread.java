@@ -164,6 +164,7 @@ public class HttpPollingThread extends Thread {
 		for (final String header : urlConnection.getHeaderFields().keySet()) {
 			if (header != null && HDR_KEY_ETAG.equalsIgnoreCase(header)) {
 				eTagStatus = urlConnection.getHeaderField(header);
+				break;
 			}
 		}
 
@@ -199,6 +200,7 @@ public class HttpPollingThread extends Thread {
 		for (final String header : urlConnection.getHeaderFields().keySet()) {
 			if (header != null && HDR_KEY_ETAG.equalsIgnoreCase(header)) {
 				eTagThresholds = urlConnection.getHeaderField(header);
+				break;
 			}
 		}
 
