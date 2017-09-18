@@ -48,7 +48,7 @@ public class HttpConnector {
 		throw new IllegalAccessError();
 	}
 
-	public static HttpURLConnection openConnection(final URL url, final String etag) throws IOException {
+	public static HttpURLConnection openConnection(final URL url, final String ifNoneMatch) throws IOException {
 		final URLConnection connection;
 		if (configuration.getBoolean("proxy.enabled", Defaults.PROXY_ENABLED)) {
 			if (configuration.getBoolean("proxy.auth.required", Defaults.PROXY_AUTH_REQUIRED)) {
@@ -75,8 +75,8 @@ public class HttpConnector {
 			connection.setRequestProperty("User-Agent", USER_AGENT);
 			connection.addRequestProperty("Accept", "application/json");
 			connection.addRequestProperty("Accept-Encoding", "gzip");
-			if (etag != null && !etag.trim().isEmpty()) {
-				connection.addRequestProperty("If-None-Match", etag);
+			if (ifNoneMatch != null && !ifNoneMatch.trim().isEmpty()) {
+				connection.addRequestProperty("If-None-Match", ifNoneMatch);
 			}
 			final String username = configuration.getString("http.username");
 			final char[] password = configuration.getCharArray("http.password");
