@@ -86,26 +86,23 @@ public class ThresholdsManager {
 		final DataTable dataTable = gui.getDataTable();
 		if (dataTable != null && dataTable.getTable() != null) {
 			final Set<Integer> indexes = new HashSet<>(thresholdsReached.getReached().size());
-			new DisplayThreadExecutor(dataTable.getTable()).execute(new Runnable() {
-				@Override
-				public void run() {
-					for (int index = 0; index < dataTable.getTable().getColumnCount(); index++) {
-						final TableColumn tc = dataTable.getTable().getColumn(index);
-						for (final Threshold t : thresholdsReached.getReached().keySet()) {
-							if (tc.getText().equals(t.getKey())) {
-								indexes.add(index);
-							}
+			new DisplayThreadExecutor(dataTable.getTable()).execute(() -> {
+				for (int index = 0; index < dataTable.getTable().getColumnCount(); index++) {
+					final TableColumn tc = dataTable.getTable().getColumn(index);
+					for (final Threshold t : thresholdsReached.getReached().keySet()) {
+						if (tc.getText().equals(t.getKey())) {
+							indexes.add(index);
 						}
 					}
+				}
 
-					for (final TableItem ti : dataTable.getTable().getItems()) {
-						if (ti.getText(1).equals(timestampFormat.get().format(thresholdsReached.getTimestamp()))) {
-							for (final int index : indexes) {
-								ti.setForeground(index, dataTable.getThresholdsReachedForegroundColor());
-							}
-							updated[0] = true;
-							break;
+				for (final TableItem ti : dataTable.getTable().getItems()) {
+					if (ti.getText(1).equals(timestampFormat.get().format(thresholdsReached.getTimestamp()))) {
+						for (final int index : indexes) {
+							ti.setForeground(index, dataTable.getThresholdsReachedForegroundColor());
 						}
+						updated[0] = true;
+						break;
 					}
 				}
 			});

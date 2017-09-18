@@ -8,8 +8,6 @@ import java.util.logging.Logger;
 import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Image;
@@ -133,12 +131,7 @@ public class TrayIcon {
 					exitMenuItem = new MenuItem(trayMenu, SWT.PUSH);
 					exitMenuItem.setText(Messages.get("lbl.tray.close"));
 					exitMenuItem.addSelectionListener(new CloseListener(gui));
-					trayItem.addMenuDetectListener(new MenuDetectListener() {
-						@Override
-						public void menuDetected(final MenuDetectEvent e) {
-							trayMenu.setVisible(true);
-						}
-					});
+					trayItem.addMenuDetectListener(e -> trayMenu.setVisible(true));
 
 					trayItem.addSelectionListener(trayRestoreListener);
 					if (!Util.isLinux()) {
@@ -179,19 +172,16 @@ public class TrayIcon {
 			final String updatedToolTipText = sb.toString();
 			if (!updatedToolTipText.equals(toolTipText) || (status != null && !getTrayIcon(status).equals(trayIcon))) {
 				try {
-					trayItem.getDisplay().syncExec(new Runnable() {
-						@Override
-						public void run() {
-							if (!trayItem.isDisposed()) {
-								if (!updatedToolTipText.equals(toolTipText)) {
-									toolTipText = updatedToolTipText;
-									trayItem.setToolTipText(toolTipText);
-								}
-								if (status != null && !getTrayIcon(status).equals(trayIcon)) {
-									trayIcon = getTrayIcon(status);
-									if (trayItem.getVisible() && gui != null && gui.getShell() != null && !gui.getShell().isDisposed() && !gui.getShell().getVisible()) {
-										trayItem.setImage(trayIcon); // Only if visible!
-									}
+					trayItem.getDisplay().syncExec(() -> {
+						if (!trayItem.isDisposed()) {
+							if (!updatedToolTipText.equals(toolTipText)) {
+								toolTipText = updatedToolTipText;
+								trayItem.setToolTipText(toolTipText);
+							}
+							if (status != null && !getTrayIcon(status).equals(trayIcon)) {
+								trayIcon = getTrayIcon(status);
+								if (trayItem.getVisible() && gui != null && gui.getShell() != null && !gui.getShell().isDisposed() && !gui.getShell().getVisible()) {
+									trayItem.setImage(trayIcon); // Only if visible!
 								}
 							}
 						}
@@ -212,14 +202,11 @@ public class TrayIcon {
 			}
 
 			try {
-				trayItem.getDisplay().syncExec(new Runnable() {
-					@Override
-					public void run() {
-						if (configuration.getBoolean("gui.tray.tooltip", Defaults.GUI_TRAY_TOOLTIP) && showToolTip && toolTip != null && trayItem != null && gui != null && gui.getShell() != null && !gui.getShell().isDisposed() && !trayItem.isDisposed() && !toolTip.isDisposed() && trayItem.getVisible() && !gui.getShell().getVisible()) {
-							toolTip.setMessage(message.toString().trim());
-							toolTip.setVisible(true);
-							showToolTip = false;
-						}
+				trayItem.getDisplay().syncExec(() -> {
+					if (configuration.getBoolean("gui.tray.tooltip", Defaults.GUI_TRAY_TOOLTIP) && showToolTip && toolTip != null && trayItem != null && gui != null && gui.getShell() != null && !gui.getShell().isDisposed() && !trayItem.isDisposed() && !toolTip.isDisposed() && trayItem.getVisible() && !gui.getShell().getVisible()) {
+						toolTip.setMessage(message.toString().trim());
+						toolTip.setVisible(true);
+						showToolTip = false;
 					}
 				});
 			}

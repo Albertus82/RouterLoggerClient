@@ -8,7 +8,6 @@ import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 import it.albertus.router.client.dto.StatusDto;
 import it.albertus.router.client.dto.transformer.StatusTransformer;
@@ -29,7 +28,7 @@ public class StatusMqttMessageListener implements IMqttMessageListener {
 	}
 
 	@Override
-	public void messageArrived(final String topic, final MqttMessage message) throws JsonSyntaxException, UnsupportedEncodingException {
+	public void messageArrived(final String topic, final MqttMessage message) throws UnsupportedEncodingException {
 		final Level level = Level.FINE;
 		if (logger.isLoggable(level)) {
 			logger.log(level, Messages.get("msg.mqtt.message.arrived"), new Object[] { topic, message });

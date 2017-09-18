@@ -412,25 +412,17 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 				catch (final IOException e) {
 					logger.log(Level.SEVERE, e.toString(), e);
 				}
-				new DisplayThreadExecutor(getShell()).execute(new Runnable() {
-					@Override
-					public void run() {
-						dataTable.reset();
-						if (!logger.isLoggable(Level.FINE)) {
-							console.clear();
-						}
+				new DisplayThreadExecutor(getShell()).execute(() -> {
+					dataTable.reset();
+					if (!logger.isLoggable(Level.FINE)) {
+						console.clear();
 					}
 				});
 
 				connect();
 
 				// Enable "Restart..." menu item...
-				new DisplayThreadExecutor(getShell()).execute(new Runnable() {
-					@Override
-					public void run() {
-						menuBar.getFileRestartItem().setEnabled(true);
-					}
-				});
+				new DisplayThreadExecutor(getShell()).execute(() -> menuBar.getFileRestartItem().setEnabled(true));
 			}
 		}.start();
 	}

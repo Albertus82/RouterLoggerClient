@@ -34,12 +34,7 @@ public class MqttCallback implements MqttCallbackExtended {
 	public void connectComplete(final boolean reconnect, final String serverURI) {
 		logger.log(Level.INFO, Messages.get("msg.mqtt.connected"), new String[] { serverURI, clientId });
 		if (reconnect) {
-			new DisplayThreadExecutor(gui.getShell()).execute(new Runnable() {
-				@Override
-				public void run() {
-					gui.reconnectAfterConnectionLoss();
-				}
-			});
+			new DisplayThreadExecutor(gui.getShell()).execute(gui::reconnectAfterConnectionLoss);
 		}
 	}
 
