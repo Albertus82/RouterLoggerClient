@@ -17,7 +17,8 @@ public enum PageDefinition implements IPageDefinition {
 	MQTT_MESSAGES(new PageDefinitionDetailsBuilder().pageClass(RestartHeaderPreferencePage.class).parent(MQTT).build()),
 	MQTT_ADVANCED(new PageDefinitionDetailsBuilder().pageClass(AdvancedMqttPreferencePage.class).parent(MQTT).build()),
 	HTTP(new PageDefinitionDetailsBuilder().pageClass(RestartHeaderPreferencePage.class).build()),
-	APPEARANCE(new PageDefinitionDetailsBuilder().build()),
+	HTTP_PROXY(new PageDefinitionDetailsBuilder().pageClass(HttpProxyPreferencePage.class).parent(HTTP).build()),
+	APPEARANCE,
 	APPEARANCE_TABLE(new PageDefinitionDetailsBuilder().pageClass(RestartHeaderPreferencePage.class).parent(APPEARANCE).build()),
 	LOGGING(new PageDefinitionDetailsBuilder().pageClass(LoggingPreferencePage.class).build());
 

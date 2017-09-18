@@ -4,6 +4,7 @@ import static it.albertus.router.client.gui.preference.page.PageDefinition.APPEA
 import static it.albertus.router.client.gui.preference.page.PageDefinition.APPEARANCE_TABLE;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.GENERAL;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.HTTP;
+import static it.albertus.router.client.gui.preference.page.PageDefinition.HTTP_PROXY;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.LOGGING;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.MQTT;
 import static it.albertus.router.client.gui.preference.page.PageDefinition.MQTT_ADVANCED;
@@ -49,7 +50,9 @@ import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.gui.TrayIcon;
 import it.albertus.router.client.gui.preference.page.AdvancedMqttPreferencePage;
 import it.albertus.router.client.gui.preference.page.GeneralPreferencePage;
+import it.albertus.router.client.gui.preference.page.HttpProxyPreferencePage;
 import it.albertus.router.client.gui.preference.page.MqttPreferencePage;
+import it.albertus.router.client.http.HttpConnector;
 import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.MqttClient;
 import it.albertus.router.client.resources.Messages;
@@ -92,18 +95,18 @@ public enum Preference implements IPreference {
 
 	HTTP_HOST(new PreferenceDetailsBuilder(HTTP).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
 	HTTP_PORT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.PORT).build(), new FieldEditorDetailsBuilder(EnhancedIntegerFieldEditor.class).numberValidRange(1, 65535).emptyStringAllowed(false).build()),
-	HTTP_AUTHENTICATION(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.AUTHENTICATION).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
+	HTTP_AUTHENTICATION(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpConnector.Defaults.AUTHENTICATION).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	HTTP_USERNAME(new PreferenceDetailsBuilder(HTTP).parent(HTTP_AUTHENTICATION).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
 	HTTP_PASSWORD(new PreferenceDetailsBuilder(HTTP).parent(HTTP_AUTHENTICATION).build(), new FieldEditorDetailsBuilder(PasswordFieldEditor.class).build()),
 	HTTP_IGNORE_CERTIFICATE(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.IGNORE_CERTIFICATE).restartRequired().build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	HTTP_CONNECTION_RETRY_INTERVAL_SECS(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.CONNECTION_RETRY_INTERVAL_SECS).build(), new FieldEditorDetailsBuilder(ShortComboFieldEditor.class).numberMinimum(1).labelsAndValues(new StaticLabelsAndValues().put(Integer.toString(HttpPollingThread.Defaults.CONNECTION_RETRY_INTERVAL_SECS), HttpPollingThread.Defaults.CONNECTION_RETRY_INTERVAL_SECS)).build()),
-	HTTP_CONNECTION_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.CONNECTION_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
+	HTTP_CONNECTION_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpConnector.Defaults.CONNECTION_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
 		@Override
 		public String getString() {
 			return Messages.get("lbl.preferences.http.timeout.infinite");
 		}
 	}, 0)).build()),
-	HTTP_READ_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.READ_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
+	HTTP_READ_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpConnector.Defaults.READ_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
 		@Override
 		public String getString() {
 			return Messages.get("lbl.preferences.http.timeout.infinite");
@@ -115,6 +118,14 @@ public enum Preference implements IPreference {
 			return Messages.get("lbl.preferences.http.refresh.auto");
 		}
 	}, 0)).build()),
+
+	PROXY_ENABLED(new PreferenceDetailsBuilder(HTTP_PROXY).defaultValue(HttpConnector.Defaults.PROXY_ENABLED).separate().build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
+	PROXY_TYPE(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(HttpConnector.Defaults.PROXY_TYPE.name()).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(HttpProxyPreferencePage.getProxyTypeComboOptions()).boldCustomValues(false).build()),
+	PROXY_ADDRESS(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(HttpConnector.Defaults.PROXY_ADDRESS).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).textLimit(253).emptyStringAllowed(false).boldCustomValues(false).build()),
+	PROXY_PORT(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(HttpConnector.Defaults.PROXY_PORT).build(), new FieldEditorDetailsBuilder(EnhancedIntegerFieldEditor.class).numberValidRange(1, 65535).boldCustomValues(false).build()),
+	PROXY_AUTH_REQUIRED(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(HttpConnector.Defaults.PROXY_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
+	PROXY_USERNAME(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_AUTH_REQUIRED).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
+	PROXY_PASSWORD(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_AUTH_REQUIRED).build(), new FieldEditorDetailsBuilder(PasswordFieldEditor.class).build()),
 
 	GUI_CONSOLE_FONT(new PreferenceDetailsBuilder(APPEARANCE).defaultValue(JFaceResources.getTextFont().getFontData()).build(), new FieldEditorDetailsBuilder(FontFieldEditor.class).build()),
 	GUI_CONSOLE_MAX_CHARS(new PreferenceDetailsBuilder(APPEARANCE).defaultValue(StyledTextConsole.DEFAULT_LIMIT).build(), new FieldEditorDetailsBuilder(EnhancedIntegerFieldEditor.class).textLimit(6).build()),
