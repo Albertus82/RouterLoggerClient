@@ -26,12 +26,7 @@ public class ThresholdsManager {
 
 	private static final Logger logger = LoggerFactory.getLogger(ThresholdsManager.class);
 
-	private static final ThreadLocal<DateFormat> timestampFormat = new ThreadLocal<DateFormat>() {
-		@Override
-		protected DateFormat initialValue() {
-			return new SimpleDateFormat(DataTable.TIMESTAMP_PATTERN);
-		}
-	};
+	private static final ThreadLocal<DateFormat> timestampFormat = ThreadLocal.withInitial(() -> new SimpleDateFormat(DataTable.TIMESTAMP_PATTERN));
 
 	private final Map<Date, ThresholdsReached> thresholdsBuffer = new HashMap<>(4);
 	private final RouterLoggerClientGui gui;
