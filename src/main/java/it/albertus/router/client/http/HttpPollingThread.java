@@ -18,6 +18,7 @@ import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManager;
 import javax.xml.bind.DatatypeConverter;
 
@@ -149,8 +150,12 @@ public class HttpPollingThread extends Thread {
 					gui.getTrayIcon().updateTrayItem(status.getStatus(), routerData);
 				}
 			}
-			catch (final IOException ioe) {
-				logger.log(Level.SEVERE, ioe.toString(), ioe);
+			catch (final SSLException e) {
+				logger.log(Level.WARNING, Messages.get("err.http.ssl", host, Messages.get("lbl.preferences.http.ignore.certificate")), e);
+				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
+			}
+			catch (final IOException e) {
+				logger.log(Level.SEVERE, e.toString(), e);
 				refresh = configuration.getShort(CFG_KEY_HTTP_CONNECTION_RETRY_INTERVAL_SECS, Defaults.CONNECTION_RETRY_INTERVAL_SECS);
 			}
 			if (Thread.interrupted()) {
@@ -178,6 +183,8 @@ public class HttpPollingThread extends Thread {
 		if (eTagStatus != null) {
 			urlConnection.addRequestProperty(HDR_KEY_IF_NONE_MATCH, eTagStatus);
 		}
+
+		urlConnection.connect();
 		for (final String header : urlConnection.getHeaderFields().keySet()) {
 			if (header != null && HDR_KEY_ETAG.equalsIgnoreCase(header)) {
 				eTagStatus = urlConnection.getHeaderField(header);
@@ -196,6 +203,7 @@ public class HttpPollingThread extends Thread {
 			urlConnection.addRequestProperty(HDR_KEY_IF_NONE_MATCH, eTagData);
 		}
 
+		urlConnection.connect();
 		for (final String header : urlConnection.getHeaderFields().keySet()) {
 			if (header != null) {
 				if (HDR_KEY_ETAG.equalsIgnoreCase(header)) {
@@ -218,6 +226,8 @@ public class HttpPollingThread extends Thread {
 		if (eTagThresholds != null) {
 			urlConnection.addRequestProperty(HDR_KEY_IF_NONE_MATCH, eTagThresholds);
 		}
+
+		urlConnection.connect();
 		for (final String header : urlConnection.getHeaderFields().keySet()) {
 			if (header != null && HDR_KEY_ETAG.equalsIgnoreCase(header)) {
 				eTagThresholds = urlConnection.getHeaderField(header);
