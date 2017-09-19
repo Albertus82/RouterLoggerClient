@@ -119,7 +119,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	private class MqttConnectionThread extends Thread {
 
 		private MqttConnectionThread() {
-			super("MqttConnectionThread");
+			super("MQTT-Connection-Thread");
 			this.setDaemon(true);
 		}
 
@@ -146,7 +146,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private class ConnectThread extends Thread {
 		private ConnectThread() {
-			super("ConnectThread");
+			super("Connect-Thread");
 		}
 
 		@Override
@@ -169,7 +169,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private class ReleaseThread extends Thread {
 		private ReleaseThread() {
-			super("ReleaseThread");
+			super("Release-Thread");
 		}
 
 		@Override
@@ -359,66 +359,60 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	}
 
 	public void reconnectAfterConnectionLoss() {
-		new Thread("ResetThread") {
-			@Override
-			public void run() {
-				// Disconnect
-				mqttClient.disconnect();
-				if (mqttConnectionThread != null) {
-					mqttConnectionThread.interrupt();
-					try {
-						mqttConnectionThread.join();
-					}
-					catch (final InterruptedException e) {
-						logger.log(Level.FINER, e.toString(), e);
-						interrupt();
-					}
+		new Thread(() -> {
+			// Disconnect
+			mqttClient.disconnect();
+			if (mqttConnectionThread != null) {
+				mqttConnectionThread.interrupt();
+				try {
+					mqttConnectionThread.join();
 				}
-
-				// Reconnect
-				mqttClient.init(RouterLoggerClientGui.this);
-				mqttConnectionThread = new MqttConnectionThread();
-				mqttConnectionThread.start();
+				catch (final InterruptedException e) {
+					logger.log(Level.FINER, e.toString(), e);
+					Thread.currentThread().interrupt();
+				}
 			}
-		}.start();
+
+			// Reconnect
+			mqttClient.init(RouterLoggerClientGui.this);
+			mqttConnectionThread = new MqttConnectionThread();
+			mqttConnectionThread.start();
+		}, "Reset-Thread").start();
 	}
 
 	public void restart() {
 		// Disable "Restart..." menu item...
 		menuBar.getFileRestartItem().setEnabled(false);
 
-		new Thread("ResetThread") {
-			@Override
-			public void run() {
-				final Thread releaseThread = new ReleaseThread();
-				releaseThread.start();
-				try {
-					releaseThread.join();
-				}
-				catch (final InterruptedException e) {
-					logger.log(Level.FINE, e.toString(), e);
-					interrupt();
-				}
-
-				try {
-					configuration.reload();
-				}
-				catch (final IOException e) {
-					logger.log(Level.SEVERE, e.toString(), e);
-				}
-				new DisplayThreadExecutor(getShell()).execute(() -> {
-					dataTable.reset();
-					if (!logger.isLoggable(Level.FINE)) {
-						console.clear();
-					}
-				});
-
-				connect();
-
-				// Enable "Restart..." menu item...
-				new DisplayThreadExecutor(getShell()).execute(() -> menuBar.getFileRestartItem().setEnabled(true));
+		new Thread(() -> {
+			final Thread releaseThread = new ReleaseThread();
+			releaseThread.start();
+			try {
+				releaseThread.join();
 			}
-		}.start();
+			catch (final InterruptedException e) {
+				logger.log(Level.FINE, e.toString(), e);
+				Thread.currentThread().interrupt();
+			}
+
+			try {
+				configuration.reload();
+			}
+			catch (final IOException e) {
+				logger.log(Level.SEVERE, e.toString(), e);
+			}
+			new DisplayThreadExecutor(getShell()).execute(() -> {
+				dataTable.reset();
+				if (!logger.isLoggable(Level.FINE)) {
+					console.clear();
+				}
+			});
+
+			connect();
+
+			// Enable "Restart..." menu item...
+			new DisplayThreadExecutor(getShell()).execute(() -> menuBar.getFileRestartItem().setEnabled(true));
+		}, "Reset-Thread").start();
 	}
 
 	public ThresholdsManager getThresholdsManager() {

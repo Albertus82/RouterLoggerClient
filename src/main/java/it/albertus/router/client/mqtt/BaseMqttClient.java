@@ -27,7 +27,7 @@ public abstract class BaseMqttClient {
 		private final boolean retry;
 
 		protected MqttClientStartThread(final MqttConnectOptions options, final boolean retry) {
-			this.setName("mqttClientStartThread");
+			this.setName("MQTT-Client-Start-Thread");
 			this.setDaemon(true);
 			this.options = options;
 			this.retry = retry;
