@@ -47,9 +47,6 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientGui.class);
 
-	public static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = "gui.clipboard.max.chars";
-	public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
-
 	private static final float SASH_MAGNIFICATION_FACTOR = 1.5f;
 
 	private final Configuration configuration = RouterLoggerClientConfig.getInstance();
@@ -77,7 +74,6 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 
 	public static class Defaults {
 		public static final boolean GUI_START_MINIMIZED = false;
-		public static final int GUI_CLIPBOARD_MAX_CHARS = 100000;
 		public static final boolean CONSOLE_SHOW_CONFIGURATION = false;
 		public static final int MQTT_CONNECT_RETRY_INTERVAL_SECS = 5;
 

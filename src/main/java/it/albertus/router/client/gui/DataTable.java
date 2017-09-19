@@ -56,6 +56,7 @@ public class DataTable {
 	private static final String CFG_KEY_GUI_TABLE_COLUMNS_PACK = "gui.table.columns.pack";
 	private static final String CFG_KEY_GUI_IMPORTANT_KEYS_COLOR_BACKGROUND = "gui.important.keys.color.background";
 	private static final String CFG_KEY_GUI_THRESHOLDS_REACHED_COLOR_FOREGROUND = "gui.thresholds.reached.color.foreground";
+	private static final String CFG_KEY_GUI_CLIPBOARD_MAX_CHARS = "gui.clipboard.max.chars";
 
 	private static final String FONT_KEY_TABLE_BOLD = "tableBold";
 
@@ -69,6 +70,7 @@ public class DataTable {
 		public static final byte COLUMNS_PADDING_RIGHT = 0;
 		public static final String IMPORTANT_KEYS_COLOR_BACKGROUND = "255,255,0";
 		public static final String THRESHOLDS_REACHED_COLOR_FOREGROUND = "255,0,0";
+		public static final int CLIPBOARD_MAX_CHARS = 100000;
 
 		private Defaults() {
 			throw new IllegalAccessError("Constants class");
@@ -158,7 +160,7 @@ public class DataTable {
 					data.append(column.getText()).append(FIELD_SEPARATOR);
 				}
 				data.replace(data.length() - 1, data.length(), NewLine.SYSTEM_LINE_SEPARATOR);
-				if (data.length() > configuration.getInt(RouterLoggerClientGui.CFG_KEY_GUI_CLIPBOARD_MAX_CHARS, RouterLoggerClientGui.GUI_CLIPBOARD_MAX_CHARS)) {
+				if (data.length() > configuration.getInt(CFG_KEY_GUI_CLIPBOARD_MAX_CHARS, Defaults.CLIPBOARD_MAX_CHARS)) {
 					final MessageBox messageBox = new MessageBox(table.getShell(), SWT.ICON_WARNING);
 					messageBox.setText(Messages.get("lbl.window.title"));
 					messageBox.setMessage(Messages.get("err.clipboard.cannot.copy"));
@@ -180,7 +182,7 @@ public class DataTable {
 							row.append(NewLine.SYSTEM_LINE_SEPARATOR);
 						}
 					}
-					if (row.length() + data.length() > configuration.getInt(RouterLoggerClientGui.CFG_KEY_GUI_CLIPBOARD_MAX_CHARS, RouterLoggerClientGui.GUI_CLIPBOARD_MAX_CHARS)) {
+					if (row.length() + data.length() > configuration.getInt(CFG_KEY_GUI_CLIPBOARD_MAX_CHARS, Defaults.CLIPBOARD_MAX_CHARS)) {
 						limited = true;
 						break;
 					}
