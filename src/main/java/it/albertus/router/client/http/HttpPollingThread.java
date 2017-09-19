@@ -91,28 +91,25 @@ public class HttpPollingThread extends Thread {
 			return;
 		}
 
-		String host = configuration.getString(CFG_KEY_HTTP_HOST);
-
-		logger.log(Level.INFO, Messages.get("msg.http.polling"), new Object[] { scheme.toUpperCase(), scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT) });
+		logger.log(Level.INFO, Messages.get("msg.http.polling"), new Object[] { scheme.toUpperCase(), scheme + "://" + configuration.getString(CFG_KEY_HTTP_HOST) + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT) });
 
 		while (!Thread.interrupted()) {
-			// Prepare connection parameters
 			scheme = configuration.getString(CFG_KEY_CLIENT_PROTOCOL, true).trim().toLowerCase();
 
 			if (!scheme.contains("http")) {
 				break;
 			}
 
-			host = configuration.getString(CFG_KEY_HTTP_HOST, true);
-
-			final String baseUrl = scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT);
+			final String host = configuration.getString(CFG_KEY_HTTP_HOST, true);
 
 			if (configuration.getBoolean(CFG_KEY_HTTP_IGNORE_CERTIFICATE, Defaults.IGNORE_CERTIFICATE)) {
-				HttpsURLConnection.setDefaultHostnameVerifier(new RouterLoggerHostnameVerifier(host));
+				HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> host.equals(hostname));
 			}
 
 			refresh = configuration.getInt(CFG_KEY_HTTP_REFRESH_SECS, Defaults.REFRESH_SECS);
 			try {
+				final String baseUrl = scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT);
+
 				final RouterLoggerStatus status = getRouterLoggerStatus(baseUrl);
 
 				if (status != null) {
