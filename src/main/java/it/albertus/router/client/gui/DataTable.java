@@ -47,8 +47,6 @@ public class DataTable {
 
 	private static final Logger logger = LoggerFactory.getLogger(DataTable.class);
 
-	private static final RouterLoggerClientConfig configuration = RouterLoggerClientConfig.getInstance();
-
 	public static final String TIMESTAMP_PATTERN = "dd/MM/yyyy HH:mm:ss.SSS";
 
 	private static final char SAMPLE_CHAR = '9';
@@ -61,7 +59,9 @@ public class DataTable {
 
 	private static final String FONT_KEY_TABLE_BOLD = "tableBold";
 
-	private final DateFormat dateFormatTable = new SimpleDateFormat(TIMESTAMP_PATTERN);
+	private static final RouterLoggerClientConfig configuration = RouterLoggerClientConfig.getInstance();
+
+	private static final ThreadLocal<DateFormat> dateFormats = ThreadLocal.withInitial(() -> new SimpleDateFormat(TIMESTAMP_PATTERN));
 
 	public static class Defaults {
 		public static final int MAX_ITEMS = 2000;
@@ -260,7 +260,7 @@ public class DataTable {
 	public void addRow(final RouterData data, final ThresholdsReached thresholdsReached) {
 		if (data != null && data.getData() != null && !data.getData().isEmpty()) {
 			final Map<String, String> info = data.getData();
-			final String timestamp = dateFormatTable.format(data.getTimestamp());
+			final String timestamp = dateFormats.get().format(data.getTimestamp());
 			final int maxItems = configuration.getInt("gui.table.items.max", Defaults.MAX_ITEMS);
 			final Table table = tableViewer.getTable();
 			new DisplayThreadExecutor(table).execute(() -> {

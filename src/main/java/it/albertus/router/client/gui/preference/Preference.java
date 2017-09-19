@@ -86,12 +86,7 @@ public enum Preference implements IPreference {
 	MQTT_VERSION(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(MqttClient.Defaults.MQTT_VERSION).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(AdvancedMqttPreferencePage.getMqttVersionComboOptions()).build()),
 	MQTT_PERSISTENCE_FILE_ENABLED(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(MqttClient.Defaults.PERSISTENCE_FILE_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	MQTT_PERSISTENCE_FILE_CUSTOM(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(MqttClient.Defaults.PERSISTENCE_FILE_CUSTOM).parent(MQTT_PERSISTENCE_FILE_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
-	MQTT_PERSISTENCE_FILE_PATH(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(Configuration.getOsSpecificLocalAppDataDir() + File.separator + Messages.get("msg.application.name")).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryDialogMessage(new Localized() {
-		@Override
-		public String getString() {
-			return Messages.get("msg.preferences.directory.dialog.message.mqtt");
-		}
-	}).build()),
+	MQTT_PERSISTENCE_FILE_PATH(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(Configuration.getOsSpecificLocalAppDataDir() + File.separator + Messages.get("msg.application.name")).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryDialogMessage(() -> Messages.get("msg.preferences.directory.dialog.message.mqtt")).build()),
 
 	HTTP_HOST(new PreferenceDetailsBuilder(HTTP).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
 	HTTP_PORT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.PORT).build(), new FieldEditorDetailsBuilder(EnhancedIntegerFieldEditor.class).numberValidRange(1, 65535).emptyStringAllowed(false).build()),
@@ -145,12 +140,7 @@ public enum Preference implements IPreference {
 
 	LOGGING_LEVEL(new PreferenceDetailsBuilder(LOGGING).defaultValue(RouterLoggerClientConfig.Defaults.LOGGING_LEVEL.getName()).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(GeneralPreferencePage.getLoggingComboOptions()).build()),
 	LOGGING_FILES_ENABLED(new PreferenceDetailsBuilder(LOGGING).separate().defaultValue(RouterLoggerClientConfig.Defaults.LOGGING_FILES_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
-	LOGGING_FILES_PATH(new PreferenceDetailsBuilder(LOGGING).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfig.Defaults.LOGGING_FILES_PATH).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryMustExist(false).directoryDialogMessage(new Localized() {
-		@Override
-		public String getString() {
-			return Messages.get("msg.preferences.directory.dialog.message.log");
-		}
-	}).build()),
+	LOGGING_FILES_PATH(new PreferenceDetailsBuilder(LOGGING).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfig.Defaults.LOGGING_FILES_PATH).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryMustExist(false).directoryDialogMessage(() -> Messages.get("msg.preferences.directory.dialog.message.log")).build()),
 	LOGGING_FILES_LIMIT(new PreferenceDetailsBuilder(LOGGING).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfig.Defaults.LOGGING_FILES_LIMIT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(512).scaleMaximum(8192).scalePageIncrement(512).build()),
 	LOGGING_FILES_COUNT(new PreferenceDetailsBuilder(LOGGING).parent(LOGGING_FILES_ENABLED).defaultValue(RouterLoggerClientConfig.Defaults.LOGGING_FILES_COUNT).build(), new FieldEditorDetailsBuilder(ScaleIntegerFieldEditor.class).scaleMinimum(1).scaleMaximum(9).scalePageIncrement(1).build());
 
@@ -168,12 +158,7 @@ public enum Preference implements IPreference {
 			preferenceDetails.setName(name().toLowerCase().replace('_', '.'));
 		}
 		if (preferenceDetails.getLabel() == null) {
-			preferenceDetails.setLabel(new Localized() {
-				@Override
-				public String getString() {
-					return Messages.get(LABEL_KEY_PREFIX + preferenceDetails.getName());
-				}
-			});
+			preferenceDetails.setLabel(() -> Messages.get(LABEL_KEY_PREFIX + preferenceDetails.getName()));
 		}
 	}
 
@@ -184,7 +169,7 @@ public enum Preference implements IPreference {
 
 	@Override
 	public String getLabel() {
-		return preferenceDetails.getLabel().getString();
+		return preferenceDetails.getLabel().get();
 	}
 
 	@Override

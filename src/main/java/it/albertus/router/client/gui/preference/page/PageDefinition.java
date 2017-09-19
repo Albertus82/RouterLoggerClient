@@ -8,7 +8,6 @@ import it.albertus.jface.preference.page.PageDefinitionDetails;
 import it.albertus.jface.preference.page.PageDefinitionDetails.PageDefinitionDetailsBuilder;
 import it.albertus.jface.preference.page.RestartHeaderPreferencePage;
 import it.albertus.router.client.resources.Messages;
-import it.albertus.util.Localized;
 
 public enum PageDefinition implements IPageDefinition {
 
@@ -36,12 +35,7 @@ public enum PageDefinition implements IPageDefinition {
 			pageDefinitionDetails.setNodeId(name().toLowerCase().replace('_', '.'));
 		}
 		if (pageDefinitionDetails.getLabel() == null) {
-			pageDefinitionDetails.setLabel(new Localized() {
-				@Override
-				public String getString() {
-					return Messages.get(LABEL_KEY_PREFIX + pageDefinitionDetails.getNodeId());
-				}
-			});
+			pageDefinitionDetails.setLabel(() -> Messages.get(LABEL_KEY_PREFIX + pageDefinitionDetails.getNodeId()));
 		}
 	}
 
@@ -52,7 +46,7 @@ public enum PageDefinition implements IPageDefinition {
 
 	@Override
 	public String getLabel() {
-		return pageDefinitionDetails.getLabel().getString();
+		return pageDefinitionDetails.getLabel().get();
 	}
 
 	@Override
