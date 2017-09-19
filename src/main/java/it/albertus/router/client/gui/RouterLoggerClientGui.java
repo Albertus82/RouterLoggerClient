@@ -40,7 +40,6 @@ import it.albertus.router.client.mqtt.MqttClient;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.util.InitializationException;
 import it.albertus.util.Configuration;
-import it.albertus.util.Supplier;
 import it.albertus.util.Version;
 import it.albertus.util.logging.LoggerFactory;
 
@@ -261,12 +260,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		if (!fontDataString.isEmpty()) {
 			console.setFont(PreferenceConverter.readFontData(fontDataString));
 		}
-		console.setLimit(new Supplier<Integer>() {
-			@Override
-			public Integer get() {
-				return configuration.getInt("gui.console.max.chars");
-			}
-		});
+		console.setLimit(() -> configuration.getInt("gui.console.max.chars"));
 
 		return parent;
 	}
