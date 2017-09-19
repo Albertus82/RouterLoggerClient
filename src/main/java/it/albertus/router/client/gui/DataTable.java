@@ -94,7 +94,6 @@ public class DataTable {
 
 	private final TableViewer tableViewer;
 
-	private final Menu contextMenu;
 	private final MenuItem copyMenuItem;
 	private final MenuItem deleteMenuItem;
 	private final MenuItem selectAllMenuItem;
@@ -115,7 +114,7 @@ public class DataTable {
 		table.setLinesVisible(true);
 		table.setData(TableDataKey.INITIALIZED.toString(), false);
 
-		contextMenu = new Menu(table);
+		final Menu contextMenu = new Menu(table);
 
 		// Copy...
 		copyMenuItem = new MenuItem(contextMenu, SWT.PUSH);
@@ -145,11 +144,11 @@ public class DataTable {
 		clearMenuItem.addSelectionListener(new ClearDataTableSelectionListener(gui));
 
 		table.addMenuDetectListener(event -> {
-			getCopyMenuItem().setEnabled(canCopy());
-			getDeleteMenuItem().setEnabled(canDelete());
-			getSelectAllMenuItem().setEnabled(canSelectAll());
-			getClearMenuItem().setEnabled(canClear());
-			getContextMenu().setVisible(true);
+			copyMenuItem.setEnabled(canCopy());
+			deleteMenuItem.setEnabled(canDelete());
+			selectAllMenuItem.setEnabled(canSelectAll());
+			clearMenuItem.setEnabled(canClear());
+			contextMenu.setVisible(true);
 		});
 	}
 
@@ -158,7 +157,7 @@ public class DataTable {
 		if (tableViewer != null) {
 			final Table table = tableViewer.getTable();
 			if (table != null && !table.isDisposed() && table.getColumns() != null && table.getColumns().length != 0 && table.getSelectionCount() > 0) {
-				StringBuilder data = new StringBuilder();
+				final StringBuilder data = new StringBuilder();
 
 				// Testata...
 				for (final TableColumn column : table.getColumns()) {
@@ -292,7 +291,7 @@ public class DataTable {
 					column.setToolTipText(Messages.get("lbl.column.response.time.tooltip"));
 
 					// Tutte le altre colonne...
-					for (String key : info.keySet()) {
+					for (final String key : info.keySet()) {
 						column = new TableColumn(table, SWT.NONE);
 						column.setText(configuration.getBoolean(CFG_KEY_GUI_TABLE_COLUMNS_PACK, Defaults.COLUMNS_PACK) ? " " : key);
 						column.setToolTipText(key);
@@ -450,26 +449,6 @@ public class DataTable {
 
 	public Table getTable() {
 		return tableViewer != null ? tableViewer.getTable() : null;
-	}
-
-	public Menu getContextMenu() {
-		return contextMenu;
-	}
-
-	public MenuItem getCopyMenuItem() {
-		return copyMenuItem;
-	}
-
-	public MenuItem getDeleteMenuItem() {
-		return deleteMenuItem;
-	}
-
-	public MenuItem getSelectAllMenuItem() {
-		return selectAllMenuItem;
-	}
-
-	public MenuItem getClearMenuItem() {
-		return clearMenuItem;
 	}
 
 	public int getIteration() {
