@@ -36,7 +36,6 @@ import it.albertus.router.client.engine.Threshold;
 import it.albertus.router.client.engine.ThresholdsReached;
 import it.albertus.router.client.gui.listener.ClearDataTableSelectionListener;
 import it.albertus.router.client.gui.listener.CopyDataTableSelectionListener;
-import it.albertus.router.client.gui.listener.DataTableContextMenuDetectListener;
 import it.albertus.router.client.gui.listener.DeleteDataTableSelectionListener;
 import it.albertus.router.client.gui.listener.SelectAllDataTableSelectionListener;
 import it.albertus.router.client.resources.Messages;
@@ -145,7 +144,13 @@ public class DataTable {
 		clearMenuItem.setText(Messages.get("lbl.menu.item.clear"));
 		clearMenuItem.addSelectionListener(new ClearDataTableSelectionListener(gui));
 
-		table.addMenuDetectListener(new DataTableContextMenuDetectListener(gui));
+		table.addMenuDetectListener(event -> {
+			getCopyMenuItem().setEnabled(canCopy());
+			getDeleteMenuItem().setEnabled(canDelete());
+			getSelectAllMenuItem().setEnabled(canSelectAll());
+			getClearMenuItem().setEnabled(canClear());
+			getContextMenu().setVisible(true);
+		});
 	}
 
 	/** Copies the current selection to the clipboard. */
