@@ -1,23 +1,24 @@
 package it.albertus.router.client.gui.listener;
 
+import java.util.function.Supplier;
+
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
 import it.albertus.router.client.gui.DataTable;
-import it.albertus.router.client.gui.RouterLoggerClientGui;
 
 public class DeleteDataTableSelectionListener extends SelectionAdapter {
 
-	private final RouterLoggerClientGui gui;
+	private final Supplier<DataTable> supplier;
 
-	public DeleteDataTableSelectionListener(final RouterLoggerClientGui gui) {
-		this.gui = gui;
+	public DeleteDataTableSelectionListener(final Supplier<DataTable> supplier) {
+		this.supplier = supplier;
 	}
 
 	@Override
 	public void widgetSelected(final SelectionEvent se) {
-		final DataTable dataTable = gui.getDataTable();
-		if (dataTable.canDelete() && dataTable.getTable().isFocusControl()) {
+		final DataTable dataTable = supplier.get();
+		if (dataTable.getTable().isFocusControl()) {
 			dataTable.delete();
 		}
 	}

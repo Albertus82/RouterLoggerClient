@@ -1,25 +1,23 @@
 package it.albertus.router.client.gui.listener;
 
+import java.util.function.Supplier;
+
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
 import it.albertus.router.client.gui.DataTable;
-import it.albertus.router.client.gui.RouterLoggerClientGui;
 
 public class CopyDataTableSelectionListener extends SelectionAdapter {
 
-	private final RouterLoggerClientGui gui;
+	private final Supplier<DataTable> supplier;
 
-	public CopyDataTableSelectionListener(final RouterLoggerClientGui gui) {
-		this.gui = gui;
+	public CopyDataTableSelectionListener(final Supplier<DataTable> supplier) {
+		this.supplier = supplier;
 	}
 
 	@Override
 	public void widgetSelected(final SelectionEvent se) {
-		final DataTable dataTable = gui.getDataTable();
-		if (dataTable.canCopy()) {
-			dataTable.copy();
-		}
+		supplier.get().copy();
 	}
 
 }

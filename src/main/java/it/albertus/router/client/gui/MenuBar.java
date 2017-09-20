@@ -130,7 +130,7 @@ public class MenuBar {
 
 		editDeleteMenuItem = new MenuItem(editMenu, SWT.PUSH);
 		editDeleteMenuItem.setText(Messages.get(LBL_MENU_ITEM_DELETE) + SwtUtils.getShortcutLabel(Messages.get(LBL_MENU_ITEM_DELETE_KEY)));
-		editDeleteMenuItem.addSelectionListener(new DeleteDataTableSelectionListener(gui));
+		editDeleteMenuItem.addSelectionListener(new DeleteDataTableSelectionListener(gui::getDataTable));
 		editDeleteMenuItem.setAccelerator(SwtUtils.KEY_DELETE); // Vero!
 
 		new MenuItem(editMenu, SWT.SEPARATOR);

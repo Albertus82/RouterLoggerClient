@@ -119,13 +119,13 @@ public class DataTable {
 		// Copy...
 		copyMenuItem = new MenuItem(contextMenu, SWT.PUSH);
 		copyMenuItem.setText(Messages.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
-		copyMenuItem.addSelectionListener(new CopyDataTableSelectionListener(gui));
+		copyMenuItem.addSelectionListener(new CopyDataTableSelectionListener(gui::getDataTable));
 		copyMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_COPY); // Finto!
 
 		// Delete...
 		deleteMenuItem = new MenuItem(contextMenu, SWT.PUSH);
 		deleteMenuItem.setText(Messages.get("lbl.menu.item.delete") + SwtUtils.getShortcutLabel(Messages.get("lbl.menu.item.delete.key")));
-		deleteMenuItem.addSelectionListener(new DeleteDataTableSelectionListener(gui));
+		deleteMenuItem.addSelectionListener(new DeleteDataTableSelectionListener(gui::getDataTable));
 		deleteMenuItem.setAccelerator(SwtUtils.KEY_DELETE); // Finto!
 
 		new MenuItem(contextMenu, SWT.SEPARATOR);
@@ -133,7 +133,7 @@ public class DataTable {
 		// Select all...
 		selectAllMenuItem = new MenuItem(contextMenu, SWT.PUSH);
 		selectAllMenuItem.setText(Messages.get("lbl.menu.item.select.all") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SELECT_ALL));
-		selectAllMenuItem.addSelectionListener(new SelectAllDataTableSelectionListener(gui));
+		selectAllMenuItem.addSelectionListener(new SelectAllDataTableSelectionListener(gui::getDataTable));
 		selectAllMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_SELECT_ALL); // Finto!
 
 		new MenuItem(contextMenu, SWT.SEPARATOR);
@@ -154,7 +154,7 @@ public class DataTable {
 
 	/** Copies the current selection to the clipboard. */
 	public void copy() {
-		if (tableViewer != null) {
+		if (canCopy()) {
 			final Table table = tableViewer.getTable();
 			if (table != null && !table.isDisposed() && table.getColumns() != null && table.getColumns().length != 0 && table.getSelectionCount() > 0) {
 				final StringBuilder data = new StringBuilder();
@@ -210,7 +210,7 @@ public class DataTable {
 	}
 
 	public void delete() {
-		if (tableViewer != null) {
+		if (canDelete()) {
 			final Table table = tableViewer.getTable();
 			if (table != null && !table.isDisposed() && table.getColumns() != null && table.getColumns().length != 0 && table.getSelectionCount() > 0) {
 				table.setRedraw(false);
