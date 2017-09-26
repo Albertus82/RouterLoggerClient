@@ -57,7 +57,6 @@ import it.albertus.router.client.http.HttpPollingThread;
 import it.albertus.router.client.mqtt.MqttClient;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.Configuration;
-import it.albertus.util.Localized;
 
 public enum Preference implements IPreference {
 
@@ -95,24 +94,9 @@ public enum Preference implements IPreference {
 	HTTP_PASSWORD(new PreferenceDetailsBuilder(HTTP).parent(HTTP_AUTHENTICATION).build(), new FieldEditorDetailsBuilder(PasswordFieldEditor.class).build()),
 	HTTP_IGNORE_CERTIFICATE(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.IGNORE_CERTIFICATE).restartRequired().build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	HTTP_CONNECTION_RETRY_INTERVAL_SECS(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.CONNECTION_RETRY_INTERVAL_SECS).build(), new FieldEditorDetailsBuilder(ShortComboFieldEditor.class).numberMinimum(1).labelsAndValues(new StaticLabelsAndValues().put(Integer.toString(HttpPollingThread.Defaults.CONNECTION_RETRY_INTERVAL_SECS), HttpPollingThread.Defaults.CONNECTION_RETRY_INTERVAL_SECS)).build()),
-	HTTP_CONNECTION_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpConnector.Defaults.CONNECTION_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
-		@Override
-		public String getString() {
-			return Messages.get("lbl.preferences.http.timeout.infinite");
-		}
-	}, 0)).build()),
-	HTTP_READ_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpConnector.Defaults.READ_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
-		@Override
-		public String getString() {
-			return Messages.get("lbl.preferences.http.timeout.infinite");
-		}
-	}, 0)).build()),
-	HTTP_REFRESH_SECS(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.REFRESH_SECS).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(new Localized() {
-		@Override
-		public String getString() {
-			return Messages.get("lbl.preferences.http.refresh.auto");
-		}
-	}, 0)).build()),
+	HTTP_CONNECTION_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpConnector.Defaults.CONNECTION_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(() -> Messages.get("lbl.preferences.http.timeout.infinite"), 0)).build()),
+	HTTP_READ_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpConnector.Defaults.READ_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(() -> Messages.get("lbl.preferences.http.timeout.infinite"), 0)).build()),
+	HTTP_REFRESH_SECS(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.REFRESH_SECS).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(() -> Messages.get("lbl.preferences.http.refresh.auto"), 0)).build()),
 
 	PROXY_ENABLED(new PreferenceDetailsBuilder(HTTP_PROXY).defaultValue(HttpConnector.Defaults.PROXY_ENABLED).separate().build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	PROXY_TYPE(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(HttpConnector.Defaults.PROXY_TYPE.name()).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(HttpProxyPreferencePage.getProxyTypeComboOptions()).boldCustomValues(false).build()),

@@ -10,7 +10,6 @@ import it.albertus.jface.preference.page.RestartHeaderPreferencePage;
 import it.albertus.router.client.engine.Protocol;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.router.client.resources.Messages.Language;
-import it.albertus.util.Localized;
 import it.albertus.util.logging.LoggingSupport;
 
 public class GeneralPreferencePage extends RestartHeaderPreferencePage {
@@ -21,13 +20,7 @@ public class GeneralPreferencePage extends RestartHeaderPreferencePage {
 		for (final Language language : values) {
 			final Locale locale = language.getLocale();
 			final String value = locale.getLanguage();
-			final Localized name = new Localized() {
-				@Override
-				public String getString() {
-					return locale.getDisplayLanguage(locale);
-				}
-			};
-			options.put(name, value);
+			options.add(() -> locale.getDisplayLanguage(locale), value);
 		}
 		return options;
 	}
