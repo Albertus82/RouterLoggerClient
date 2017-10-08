@@ -9,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.google.gson.Gson;
 
+import it.albertus.mqtt.MqttPayloadDecoder;
 import it.albertus.router.client.dto.RouterDataDto;
 import it.albertus.router.client.dto.transformer.DataTransformer;
 import it.albertus.router.client.engine.RouterData;
