@@ -50,7 +50,7 @@ public class MqttPayloadDecoder {
 		}
 	}
 
-	private List<byte[]> split(final byte[] array, final byte[] delimiter) {
+	protected List<byte[]> split(final byte[] array, final byte[] delimiter) {
 		final List<byte[]> byteArrays = new LinkedList<byte[]>();
 		if (delimiter.length == 0) {
 			return byteArrays;
