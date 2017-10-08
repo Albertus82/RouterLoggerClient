@@ -1,6 +1,6 @@
 package it.albertus.router.client.mqtt.listener;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +23,7 @@ public class DataMqttMessageListener implements IMqttMessageListener {
 
 	private static final Logger logger = LoggerFactory.getLogger(DataMqttMessageListener.class);
 
+	private final MqttPayloadDecoder decoder = new MqttPayloadDecoder();
 	private final RouterLoggerClientGui gui;
 
 	public DataMqttMessageListener(final RouterLoggerClientGui gui) {
@@ -30,13 +31,13 @@ public class DataMqttMessageListener implements IMqttMessageListener {
 	}
 
 	@Override
-	public void messageArrived(final String topic, final MqttMessage message) throws UnsupportedEncodingException {
+	public void messageArrived(final String topic, final MqttMessage message) throws IOException {
 		final Level level = Level.FINE;
 		if (logger.isLoggable(level)) {
 			logger.log(level, Messages.get("msg.mqtt.message.arrived"), new Object[] { topic, message });
 		}
 
-		final RouterDataDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), RouterDataDto.class);
+		final RouterDataDto dto = new Gson().fromJson(new String(decoder.decode(message.getPayload()), BaseMqttClient.PREFERRED_CHARSET), RouterDataDto.class);
 		final RouterData data = DataTransformer.fromDto(dto);
 
 		final ThresholdsManager thresholdsManager = gui.getThresholdsManager();

@@ -1,6 +1,6 @@
 package it.albertus.router.client.mqtt.listener;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +21,7 @@ public class StatusMqttMessageListener implements IMqttMessageListener {
 
 	private static final Logger logger = LoggerFactory.getLogger(StatusMqttMessageListener.class);
 
+	private final MqttPayloadDecoder decoder = new MqttPayloadDecoder();
 	private final RouterLoggerClientGui gui;
 
 	public StatusMqttMessageListener(final RouterLoggerClientGui gui) {
@@ -28,13 +29,13 @@ public class StatusMqttMessageListener implements IMqttMessageListener {
 	}
 
 	@Override
-	public void messageArrived(final String topic, final MqttMessage message) throws UnsupportedEncodingException {
+	public void messageArrived(final String topic, final MqttMessage message) throws IOException {
 		final Level level = Level.FINE;
 		if (logger.isLoggable(level)) {
 			logger.log(level, Messages.get("msg.mqtt.message.arrived"), new Object[] { topic, message });
 		}
 
-		final StatusDto dto = new Gson().fromJson(new String(message.getPayload(), BaseMqttClient.PREFERRED_CHARSET), StatusDto.class);
+		final StatusDto dto = new Gson().fromJson(new String(decoder.decode(message.getPayload()), BaseMqttClient.PREFERRED_CHARSET), StatusDto.class);
 		final RouterLoggerStatus rls = StatusTransformer.fromDto(dto);
 		gui.updateStatus(rls);
 	}
