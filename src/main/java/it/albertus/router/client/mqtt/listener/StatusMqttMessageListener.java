@@ -4,25 +4,21 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.google.gson.Gson;
 
-import it.albertus.mqtt.MqttPayloadDecoder;
 import it.albertus.router.client.dto.StatusDto;
 import it.albertus.router.client.dto.transformer.StatusTransformer;
 import it.albertus.router.client.engine.RouterLoggerStatus;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
-import it.albertus.router.client.mqtt.BaseMqttClient;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.logging.LoggerFactory;
 
-public class StatusMqttMessageListener implements IMqttMessageListener {
+public class StatusMqttMessageListener extends MqttMessageListener {
 
 	private static final Logger logger = LoggerFactory.getLogger(StatusMqttMessageListener.class);
 
-	private final MqttPayloadDecoder decoder = new MqttPayloadDecoder();
 	private final RouterLoggerClientGui gui;
 
 	public StatusMqttMessageListener(final RouterLoggerClientGui gui) {
@@ -36,7 +32,7 @@ public class StatusMqttMessageListener implements IMqttMessageListener {
 			logger.log(level, Messages.get("msg.mqtt.message.arrived"), new Object[] { topic, message });
 		}
 
-		final StatusDto dto = new Gson().fromJson(new String(decoder.decode(message.getPayload()), BaseMqttClient.PREFERRED_CHARSET), StatusDto.class);
+		final StatusDto dto = new Gson().fromJson(decode(message), StatusDto.class);
 		final RouterLoggerStatus rls = StatusTransformer.fromDto(dto);
 		gui.updateStatus(rls);
 	}

@@ -4,27 +4,23 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.google.gson.Gson;
 
-import it.albertus.mqtt.MqttPayloadDecoder;
 import it.albertus.router.client.dto.RouterDataDto;
 import it.albertus.router.client.dto.transformer.DataTransformer;
 import it.albertus.router.client.engine.RouterData;
 import it.albertus.router.client.gui.DataTable;
 import it.albertus.router.client.gui.RouterLoggerClientGui;
 import it.albertus.router.client.gui.ThresholdsManager;
-import it.albertus.router.client.mqtt.BaseMqttClient;
 import it.albertus.router.client.resources.Messages;
 import it.albertus.util.logging.LoggerFactory;
 
-public class DataMqttMessageListener implements IMqttMessageListener {
+public class DataMqttMessageListener extends MqttMessageListener {
 
 	private static final Logger logger = LoggerFactory.getLogger(DataMqttMessageListener.class);
 
-	private final MqttPayloadDecoder decoder = new MqttPayloadDecoder();
 	private final RouterLoggerClientGui gui;
 
 	public DataMqttMessageListener(final RouterLoggerClientGui gui) {
@@ -38,7 +34,7 @@ public class DataMqttMessageListener implements IMqttMessageListener {
 			logger.log(level, Messages.get("msg.mqtt.message.arrived"), new Object[] { topic, message });
 		}
 
-		final RouterDataDto dto = new Gson().fromJson(new String(decoder.decode(message.getPayload()), BaseMqttClient.PREFERRED_CHARSET), RouterDataDto.class);
+		final RouterDataDto dto = new Gson().fromJson(decode(message), RouterDataDto.class);
 		final RouterData data = DataTransformer.fromDto(dto);
 
 		final ThresholdsManager thresholdsManager = gui.getThresholdsManager();

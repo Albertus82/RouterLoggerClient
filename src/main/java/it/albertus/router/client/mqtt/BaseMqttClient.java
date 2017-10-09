@@ -17,8 +17,6 @@ public abstract class BaseMqttClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(BaseMqttClient.class);
 
-	public static final String PREFERRED_CHARSET = "UTF-8";
-
 	private volatile IMqttClient client;
 
 	protected class MqttClientStartThread extends Thread {
