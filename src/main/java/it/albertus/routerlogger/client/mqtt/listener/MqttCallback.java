@@ -27,7 +27,7 @@ public class MqttCallback implements MqttCallbackExtended {
 
 	@Override
 	public void connectionLost(final Throwable cause) {
-		logger.log(Level.WARNING, cause.toString(), cause);
+		logger.log(Level.WARNING, String.valueOf(cause), cause);
 	}
 
 	@Override
