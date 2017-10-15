@@ -26,7 +26,7 @@ addons:
 env:
   global:
     - secure: "G7EAJynuHaoIzSOAd8CoytF1R5dwHnATLAIdh/mmJr3SlBl5YLGHRoDdba109uL7MqTmDFpQjmpaEzMAglmDXgNU1RVBshH0hK24R4QseaJZ0ssXt5kFKu6H2UdYa+8jYggeWOKD+NeIsucHIBpXMlMzy+lUb+z+zu2jJsj4vQjRCiiUdM4gJaUftNudmVRlqvxR8yzre6eDFCUencjdjWPsQTujEk4f8LrTNory6MDfKAK0xrizrHsbTZs+a2Q0q5FadoOe8L7p9I75z1L/V5dHq/TCdjN/lnGjL180xM/7VuLl2r1soQRN2yyVKi0QombjEgRxHywlU8dAg9q0zIYuzq62pbHEW3b7cV45Db8RKrRZiIax7SzROcda46T1EJDjfMU0ASmR4Df5ICM91i4sb0T+fByjsCH9hf7KwKpuABL8BdeJjK2+5iBMCq4OpTTTbwHoQvAcJ0vphvEY3/jmBx3z37PWJFAp0ZJZO+n47k4l0a+/I5YGV7JXO8e2fSMtJ/7tCPjnLIZn/4yXX4Ok/Cp6aMPyO2dEAH6cTCNvY6jIg1lF8IgekXqkqKcEZEtkYvWIXT/YnBJnR2ytqRJwNckD1POwXFQNdUwZvK3huNQDU1B9Sb1MecDFbwEc2VXg0KJ1JxbZkVmKIQbO52zB61gFqhslSyOTv1BMH7o="
-    - JRE8_HOME=/usr/lib/jvm/java-8-oracle-amd64/jre
+    - JRE8_HOME=/usr/lib/jvm/java-8-oracle/jre
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; brew install wine ant; fi;
