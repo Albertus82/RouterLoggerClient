@@ -3,7 +3,7 @@
 <project name="RouterLoggerClient" default="all" xmlns:jacoco="antlib:org.jacoco.ant">
 
 	<property environment="env" />
-	<!-- <property name="env.JRE8_HOME" value="${env.JAVA_HOME}/../jdk1.8.0_144/jre" /> -->
+	<property name="env.JRE8_HOME" value="${env.JAVA_HOME}/../jdk1.8.0_144/jre" />
 
 	<property file="build.properties" />
 	<property file="${build.resourcesDirectory}/version.properties" />
@@ -25,7 +25,7 @@
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
-			<!-- <bootclasspath path="${build.compiler.compilerArguments.bootclasspath}" /> -->
+			<bootclasspath path="${build.compiler.compilerArguments.bootclasspath}" />
 		</javac>
 	</target>
 
@@ -584,7 +584,7 @@
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
-			<!-- <bootclasspath path="${build.compiler.compilerArguments.bootclasspath}" /> -->
+			<bootclasspath path="${build.compiler.compilerArguments.bootclasspath}" />
 		</javac>
 
 		<copy todir="${build.outputTestDirectory}" failonerror="false">
