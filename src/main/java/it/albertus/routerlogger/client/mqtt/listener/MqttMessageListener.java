@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import it.albertus.mqtt.MqttPayloadDecoder;
+import it.albertus.net.mqtt.MqttPayloadDecoder;
 
 public abstract class MqttMessageListener implements IMqttMessageListener {
 
