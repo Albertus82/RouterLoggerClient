@@ -134,7 +134,6 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					continue; // Retry
 				}
 				mqttClient.subscribeData();
-				mqttClient.subscribeThresholds();
 				break;
 			}
 		}

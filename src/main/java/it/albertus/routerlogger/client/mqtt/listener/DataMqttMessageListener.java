@@ -10,10 +10,11 @@ import com.google.gson.Gson;
 
 import it.albertus.routerlogger.client.dto.RouterDataDto;
 import it.albertus.routerlogger.client.dto.transformer.DataTransformer;
+import it.albertus.routerlogger.client.dto.transformer.ThresholdsTransformer;
 import it.albertus.routerlogger.client.engine.RouterData;
+import it.albertus.routerlogger.client.engine.ThresholdsReached;
 import it.albertus.routerlogger.client.gui.DataTable;
 import it.albertus.routerlogger.client.gui.RouterLoggerClientGui;
-import it.albertus.routerlogger.client.gui.ThresholdsManager;
 import it.albertus.routerlogger.client.resources.Messages;
 import it.albertus.util.logging.LoggerFactory;
 
@@ -36,18 +37,13 @@ public class DataMqttMessageListener extends MqttMessageListener {
 
 		final RouterDataDto dto = new Gson().fromJson(decode(message), RouterDataDto.class);
 		final RouterData data = DataTransformer.fromDto(dto);
+		final ThresholdsReached thresholdsReached = ThresholdsTransformer.fromDto(dto);
 
-		final ThresholdsManager thresholdsManager = gui.getThresholdsManager();
 		final DataTable dataTable = gui.getDataTable();
 		if (dataTable != null && dataTable.getTableViewer() != null && !dataTable.getTableViewer().getTable().isDisposed()) {
-			if (thresholdsManager.getThresholdsBuffer().containsKey(data.getTimestamp())) {
-				synchronized (thresholdsManager) {
-					dataTable.addRow(data, thresholdsManager.getThresholdsBuffer().get(data.getTimestamp()));
-					thresholdsManager.getThresholdsBuffer().remove(data.getTimestamp());
-				}
-			}
-			else {
-				dataTable.addRow(data, null);
+			dataTable.addRow(data, thresholdsReached);
+			if (!message.isRetained()) {
+				gui.getThresholdsManager().printThresholdsReached(thresholdsReached);
 			}
 		}
 
