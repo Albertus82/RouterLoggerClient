@@ -19,14 +19,14 @@ import javax.net.ssl.TrustManager;
 
 import com.google.gson.Gson;
 
-import it.albertus.routerlogger.client.dto.RouterDataDto;
-import it.albertus.routerlogger.client.dto.StatusDto;
+import it.albertus.routerlogger.client.dto.DeviceStatusDto;
+import it.albertus.routerlogger.client.dto.AppStatusDto;
 import it.albertus.routerlogger.client.dto.transformer.DataTransformer;
 import it.albertus.routerlogger.client.dto.transformer.StatusTransformer;
 import it.albertus.routerlogger.client.dto.transformer.ThresholdsTransformer;
 import it.albertus.routerlogger.client.engine.RouterData;
 import it.albertus.routerlogger.client.engine.RouterLoggerClientConfig;
-import it.albertus.routerlogger.client.engine.RouterLoggerStatus;
+import it.albertus.routerlogger.client.engine.AppStatus;
 import it.albertus.routerlogger.client.engine.ThresholdsReached;
 import it.albertus.routerlogger.client.gui.RouterLoggerClientGui;
 import it.albertus.routerlogger.client.resources.Messages;
@@ -108,13 +108,13 @@ public class HttpPollingThread extends Thread {
 			try {
 				final String baseUrl = scheme + "://" + host + ":" + configuration.getInt(CFG_KEY_HTTP_PORT, Defaults.PORT);
 
-				final RouterLoggerStatus status = getRouterLoggerStatus(baseUrl);
+				final AppStatus status = getRouterLoggerStatus(baseUrl);
 
 				if (status != null) {
 					gui.updateStatus(status);
 				}
 
-				final RouterDataDto routerDataDto = getRouterDataDto(baseUrl);
+				final DeviceStatusDto routerDataDto = getRouterDataDto(baseUrl);
 				final RouterData routerData = DataTransformer.fromDto(routerDataDto);
 				if (status != null) {
 					gui.getTrayIcon().updateTrayItem(status.getStatus(), routerData);
@@ -150,8 +150,8 @@ public class HttpPollingThread extends Thread {
 		}
 	}
 
-	private RouterLoggerStatus getRouterLoggerStatus(final String baseUrl) throws IOException {
-		final URL url = new URL(baseUrl + "/json/status");
+	private AppStatus getRouterLoggerStatus(final String baseUrl) throws IOException {
+		final URL url = new URL(baseUrl + "/status/app");
 		final HttpURLConnection urlConnection = HttpConnector.openConnection(url, eTagStatus);
 
 		urlConnection.connect();
@@ -162,12 +162,12 @@ public class HttpPollingThread extends Thread {
 			}
 		}
 
-		final StatusDto dto = getDtoFromHttpResponse(urlConnection, StatusDto.class);
+		final AppStatusDto dto = getDtoFromHttpResponse(urlConnection, AppStatusDto.class);
 		return StatusTransformer.fromDto(dto);
 	}
 
-	private RouterDataDto getRouterDataDto(final String baseUrl) throws IOException {
-		final URL url = new URL(baseUrl + "/json/data");
+	private DeviceStatusDto getRouterDataDto(final String baseUrl) throws IOException {
+		final URL url = new URL(baseUrl + "/status/device");
 		final HttpURLConnection urlConnection = HttpConnector.openConnection(url, eTagData);
 
 		urlConnection.connect();
@@ -182,7 +182,7 @@ public class HttpPollingThread extends Thread {
 			}
 		}
 
-		return getDtoFromHttpResponse(urlConnection, RouterDataDto.class);
+		return getDtoFromHttpResponse(urlConnection, DeviceStatusDto.class);
 	}
 
 	private <T> T getDtoFromHttpResponse(final HttpURLConnection urlConnection, final Class<T> dtoClass) throws IOException {

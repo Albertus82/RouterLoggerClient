@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-public class RouterDataDto implements Serializable {
+public class DeviceStatusDto implements Serializable {
 
 	private static final long serialVersionUID = 1478970573356973998L;
 

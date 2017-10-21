@@ -14,9 +14,9 @@ import it.albertus.jface.preference.field.UriListEditor;
 import it.albertus.mqtt.MqttQos;
 import it.albertus.routerlogger.client.engine.RouterLoggerClientConfig;
 import it.albertus.routerlogger.client.gui.RouterLoggerClientGui;
-import it.albertus.routerlogger.client.mqtt.listener.DataMqttMessageListener;
+import it.albertus.routerlogger.client.mqtt.listener.DeviceStatusMqttMessageListener;
 import it.albertus.routerlogger.client.mqtt.listener.MqttCallback;
-import it.albertus.routerlogger.client.mqtt.listener.StatusMqttMessageListener;
+import it.albertus.routerlogger.client.mqtt.listener.AppStatusMqttMessageListener;
 import it.albertus.routerlogger.client.resources.Messages;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
@@ -65,11 +65,11 @@ public class MqttClient extends BaseMqttClient {
 		public static final boolean PERSISTENCE_FILE_CUSTOM = false;
 
 		public static final boolean DATA_ENABLED = true;
-		public static final String DATA_TOPIC = "router/logger/data";
+		public static final String DATA_TOPIC = "routerlogger/status/device";
 		public static final byte DATA_QOS = MqttQos.AT_MOST_ONCE.getValue();
 
 		public static final boolean STATUS_ENABLED = true;
-		public static final String STATUS_TOPIC = "router/logger/status";
+		public static final String STATUS_TOPIC = "routerlogger/status/app";
 		public static final byte STATUS_QOS = MqttQos.EXACTLY_ONCE.getValue();
 
 		private Defaults() {
@@ -101,8 +101,8 @@ public class MqttClient extends BaseMqttClient {
 	}
 
 	protected void createListeners() {
-		dataMessageListener = new DataMqttMessageListener(gui);
-		statusMessageListener = new StatusMqttMessageListener(gui);
+		dataMessageListener = new DeviceStatusMqttMessageListener(gui);
+		statusMessageListener = new AppStatusMqttMessageListener(gui);
 	}
 
 	@Override
@@ -165,7 +165,7 @@ public class MqttClient extends BaseMqttClient {
 		}
 	}
 
-	public void subscribeData() {
+	public void subscribeDeviceStatus() {
 		final String topic = configuration.getString(CFG_KEY_MQTT_DATA_TOPIC, Defaults.DATA_TOPIC);
 		final int qos = configuration.getByte(CFG_KEY_MQTT_DATA_QOS, Defaults.DATA_QOS);
 		try {
@@ -176,7 +176,7 @@ public class MqttClient extends BaseMqttClient {
 		}
 	}
 
-	public void subscribeStatus() {
+	public void subscribeAppStatus() {
 		final String topic = configuration.getString(CFG_KEY_MQTT_STATUS_TOPIC, Defaults.STATUS_TOPIC);
 		final int qos = configuration.getByte(CFG_KEY_MQTT_STATUS_QOS, Defaults.STATUS_QOS);
 		try {

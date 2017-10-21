@@ -3,7 +3,7 @@ package it.albertus.routerlogger.client.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-public class StatusDto implements Serializable {
+public class AppStatusDto implements Serializable {
 
 	private static final long serialVersionUID = -5771403443518144259L;
 
@@ -33,11 +33,6 @@ public class StatusDto implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	@Override
-	public String toString() {
-		return "StatusDto [timestamp=" + timestamp + ", status=" + status + ", description=" + description + "]";
 	}
 
 }
