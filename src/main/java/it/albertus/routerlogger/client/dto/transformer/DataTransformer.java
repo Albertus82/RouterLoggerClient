@@ -10,7 +10,7 @@ public class DataTransformer {
 	}
 
 	public static RouterData fromDto(final DeviceStatusDto dto) {
-		if (dto != null) {
+		if (dto != null && dto.getTimestamp() != null) {
 			return new RouterData(dto.getTimestamp(), dto.getResponseTime(), dto.getData());
 		}
 		else {
