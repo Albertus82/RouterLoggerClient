@@ -48,7 +48,7 @@ public class HttpConnector {
 		throw new IllegalAccessError();
 	}
 
-	public static HttpURLConnection openConnection(final URL url, final String ifNoneMatch) throws IOException {
+	static HttpURLConnection openConnection(final URL url, final String ifNoneMatch) throws IOException {
 		final URLConnection connection;
 		if (configuration.getBoolean("proxy.enabled", Defaults.PROXY_ENABLED)) {
 			if (configuration.getBoolean("proxy.auth.required", Defaults.PROXY_AUTH_REQUIRED)) {
