@@ -8,20 +8,20 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.google.gson.Gson;
 
-import it.albertus.routerlogger.client.dto.StatusDto;
+import it.albertus.routerlogger.client.dto.AppStatusDto;
 import it.albertus.routerlogger.client.dto.transformer.StatusTransformer;
-import it.albertus.routerlogger.client.engine.RouterLoggerStatus;
+import it.albertus.routerlogger.client.engine.AppStatus;
 import it.albertus.routerlogger.client.gui.RouterLoggerClientGui;
 import it.albertus.routerlogger.client.resources.Messages;
 import it.albertus.util.logging.LoggerFactory;
 
-public class StatusMqttMessageListener extends MqttMessageListener {
+public class AppStatusMqttMessageListener extends MqttMessageListener {
 
-	private static final Logger logger = LoggerFactory.getLogger(StatusMqttMessageListener.class);
+	private static final Logger logger = LoggerFactory.getLogger(AppStatusMqttMessageListener.class);
 
 	private final RouterLoggerClientGui gui;
 
-	public StatusMqttMessageListener(final RouterLoggerClientGui gui) {
+	public AppStatusMqttMessageListener(final RouterLoggerClientGui gui) {
 		this.gui = gui;
 	}
 
@@ -32,8 +32,8 @@ public class StatusMqttMessageListener extends MqttMessageListener {
 			logger.log(level, Messages.get("msg.mqtt.message.arrived"), new Object[] { topic, message });
 		}
 
-		final StatusDto dto = new Gson().fromJson(decode(message), StatusDto.class);
-		final RouterLoggerStatus rls = StatusTransformer.fromDto(dto);
+		final AppStatusDto dto = new Gson().fromJson(decode(message), AppStatusDto.class);
+		final AppStatus rls = StatusTransformer.fromDto(dto);
 		gui.updateStatus(rls);
 	}
 

@@ -11,13 +11,12 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 
 import it.albertus.jface.preference.field.UriListEditor;
-import it.albertus.mqtt.MqttQos;
+import it.albertus.net.mqtt.MqttQos;
 import it.albertus.routerlogger.client.engine.RouterLoggerClientConfig;
 import it.albertus.routerlogger.client.gui.RouterLoggerClientGui;
-import it.albertus.routerlogger.client.mqtt.listener.DataMqttMessageListener;
+import it.albertus.routerlogger.client.mqtt.listener.DeviceStatusMqttMessageListener;
 import it.albertus.routerlogger.client.mqtt.listener.MqttCallback;
-import it.albertus.routerlogger.client.mqtt.listener.StatusMqttMessageListener;
-import it.albertus.routerlogger.client.mqtt.listener.ThresholdsMqttMessageListener;
+import it.albertus.routerlogger.client.mqtt.listener.AppStatusMqttMessageListener;
 import it.albertus.routerlogger.client.resources.Messages;
 import it.albertus.util.Configuration;
 import it.albertus.util.ConfigurationException;
@@ -49,9 +48,6 @@ public class MqttClient extends BaseMqttClient {
 	private static final String CFG_KEY_MQTT_DATA_TOPIC = "mqtt.data.topic";
 	private static final String CFG_KEY_MQTT_DATA_QOS = "mqtt.data.qos";
 
-	private static final String CFG_KEY_MQTT_THRESHOLDS_TOPIC = "mqtt.thresholds.topic";
-	private static final String CFG_KEY_MQTT_THRESHOLDS_QOS = "mqtt.thresholds.qos";
-
 	private static final String CFG_KEY_MQTT_STATUS_TOPIC = "mqtt.status.topic";
 	private static final String CFG_KEY_MQTT_STATUS_QOS = "mqtt.status.qos";
 
@@ -69,15 +65,11 @@ public class MqttClient extends BaseMqttClient {
 		public static final boolean PERSISTENCE_FILE_CUSTOM = false;
 
 		public static final boolean DATA_ENABLED = true;
-		public static final String DATA_TOPIC = "router/logger/data";
+		public static final String DATA_TOPIC = "routerlogger/status/device";
 		public static final byte DATA_QOS = MqttQos.AT_MOST_ONCE.getValue();
 
-		public static final boolean THRESHOLDS_ENABLED = true;
-		public static final String THRESHOLDS_TOPIC = "router/logger/thresholds";
-		public static final byte THRESHOLDS_QOS = MqttQos.AT_LEAST_ONCE.getValue();
-
 		public static final boolean STATUS_ENABLED = true;
-		public static final String STATUS_TOPIC = "router/logger/status";
+		public static final String STATUS_TOPIC = "routerlogger/status/app";
 		public static final byte STATUS_QOS = MqttQos.EXACTLY_ONCE.getValue();
 
 		private Defaults() {
@@ -88,7 +80,6 @@ public class MqttClient extends BaseMqttClient {
 	private RouterLoggerClientGui gui;
 	private IMqttMessageListener dataMessageListener;
 	private IMqttMessageListener statusMessageListener;
-	private IMqttMessageListener thresholdsMessageListener;
 
 	private MqttClient() {}
 
@@ -110,9 +101,8 @@ public class MqttClient extends BaseMqttClient {
 	}
 
 	protected void createListeners() {
-		dataMessageListener = new DataMqttMessageListener(gui);
-		statusMessageListener = new StatusMqttMessageListener(gui);
-		thresholdsMessageListener = new ThresholdsMqttMessageListener(gui);
+		dataMessageListener = new DeviceStatusMqttMessageListener(gui);
+		statusMessageListener = new AppStatusMqttMessageListener(gui);
 	}
 
 	@Override
@@ -175,7 +165,7 @@ public class MqttClient extends BaseMqttClient {
 		}
 	}
 
-	public void subscribeData() {
+	public void subscribeDeviceStatus() {
 		final String topic = configuration.getString(CFG_KEY_MQTT_DATA_TOPIC, Defaults.DATA_TOPIC);
 		final int qos = configuration.getByte(CFG_KEY_MQTT_DATA_QOS, Defaults.DATA_QOS);
 		try {
@@ -186,22 +176,11 @@ public class MqttClient extends BaseMqttClient {
 		}
 	}
 
-	public void subscribeStatus() {
+	public void subscribeAppStatus() {
 		final String topic = configuration.getString(CFG_KEY_MQTT_STATUS_TOPIC, Defaults.STATUS_TOPIC);
 		final int qos = configuration.getByte(CFG_KEY_MQTT_STATUS_QOS, Defaults.STATUS_QOS);
 		try {
 			doSubscribe(topic, qos, statusMessageListener);
-		}
-		catch (final Exception e) {
-			logger.log(Level.SEVERE, e.toString(), e);
-		}
-	}
-
-	public void subscribeThresholds() {
-		final String topic = configuration.getString(CFG_KEY_MQTT_THRESHOLDS_TOPIC, Defaults.THRESHOLDS_TOPIC);
-		final int qos = configuration.getByte(CFG_KEY_MQTT_THRESHOLDS_QOS, Defaults.THRESHOLDS_QOS);
-		try {
-			doSubscribe(topic, qos, thresholdsMessageListener);
 		}
 		catch (final Exception e) {
 			logger.log(Level.SEVERE, e.toString(), e);

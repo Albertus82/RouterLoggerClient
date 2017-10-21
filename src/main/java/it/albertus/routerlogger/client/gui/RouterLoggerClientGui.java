@@ -31,7 +31,7 @@ import it.albertus.jface.SwtUtils;
 import it.albertus.jface.console.StyledTextConsole;
 import it.albertus.routerlogger.client.engine.Protocol;
 import it.albertus.routerlogger.client.engine.RouterLoggerClientConfig;
-import it.albertus.routerlogger.client.engine.RouterLoggerStatus;
+import it.albertus.routerlogger.client.engine.AppStatus;
 import it.albertus.routerlogger.client.engine.Status;
 import it.albertus.routerlogger.client.gui.listener.CloseListener;
 import it.albertus.routerlogger.client.gui.listener.PreferencesListener;
@@ -61,8 +61,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	private DataTable dataTable;
 	private StyledTextConsole console;
 
-	private RouterLoggerStatus currentStatus;
-	private RouterLoggerStatus previousStatus;
+	private AppStatus currentStatus;
+	private AppStatus previousStatus;
 
 	private volatile Thread mqttConnectionThread;
 	private volatile Thread httpPollingThread;
@@ -122,7 +122,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		@Override
 		public void run() {
 			while (!Thread.interrupted()) {
-				mqttClient.subscribeStatus();
+				mqttClient.subscribeAppStatus();
 				if (mqttClient.getClient() == null) {
 					try {
 						TimeUnit.SECONDS.sleep(configuration.getInt("mqtt.connect.retry.interval.secs", Defaults.MQTT_CONNECT_RETRY_INTERVAL_SECS)); // Wait between retries
@@ -133,8 +133,7 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 					}
 					continue; // Retry
 				}
-				mqttClient.subscribeData();
-				mqttClient.subscribeThresholds();
+				mqttClient.subscribeDeviceStatus();
 				break;
 			}
 		}
@@ -328,15 +327,15 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 		return !console.isEmpty();
 	}
 
-	public RouterLoggerStatus getCurrentStatus() {
+	public AppStatus getCurrentStatus() {
 		return currentStatus;
 	}
 
-	public RouterLoggerStatus getPreviousStatus() {
+	public AppStatus getPreviousStatus() {
 		return previousStatus;
 	}
 
-	public void updateStatus(final RouterLoggerStatus newStatus) {
+	public void updateStatus(final AppStatus newStatus) {
 		if (currentStatus == null || currentStatus.getStatus() == null || !currentStatus.getStatus().equals(newStatus.getStatus())) {
 			previousStatus = currentStatus;
 			currentStatus = newStatus;

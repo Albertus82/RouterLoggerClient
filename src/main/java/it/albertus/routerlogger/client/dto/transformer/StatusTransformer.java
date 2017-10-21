@@ -1,7 +1,7 @@
 package it.albertus.routerlogger.client.dto.transformer;
 
-import it.albertus.routerlogger.client.dto.StatusDto;
-import it.albertus.routerlogger.client.engine.RouterLoggerStatus;
+import it.albertus.routerlogger.client.dto.AppStatusDto;
+import it.albertus.routerlogger.client.engine.AppStatus;
 import it.albertus.routerlogger.client.engine.Status;
 
 public class StatusTransformer {
@@ -10,9 +10,9 @@ public class StatusTransformer {
 		throw new IllegalAccessError();
 	}
 
-	public static RouterLoggerStatus fromDto(final StatusDto dto) {
+	public static AppStatus fromDto(final AppStatusDto dto) {
 		if (dto != null) {
-			return new RouterLoggerStatus(Status.valueOf(dto.getStatus()), dto.getTimestamp());
+			return new AppStatus(Status.valueOf(dto.getStatus()), dto.getTimestamp());
 		}
 		else {
 			return null;
