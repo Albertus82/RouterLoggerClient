@@ -11,8 +11,7 @@ import static it.albertus.routerlogger.client.gui.preference.page.PageDefinition
 import static it.albertus.routerlogger.client.gui.preference.page.PageDefinition.MQTT_MESSAGES;
 
 import java.io.File;
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.Arrays;
 
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
@@ -181,13 +180,7 @@ public enum Preference implements IPreference {
 
 	@Override
 	public Preference[] getChildren() {
-		final Set<Preference> preferences = EnumSet.noneOf(Preference.class);
-		for (final Preference item : Preference.values()) {
-			if (this.equals(item.getParent())) {
-				preferences.add(item);
-			}
-		}
-		return preferences.toArray(new Preference[] {});
+		return Arrays.stream(values()).parallel().filter(item -> this.equals(item.getParent())).toArray(Preference[]::new);
 	}
 
 	@Override
