@@ -15,14 +15,12 @@ import it.albertus.jface.cocoa.CocoaEnhancerException;
 import it.albertus.jface.cocoa.CocoaUIEnhancer;
 import it.albertus.jface.sysinfo.SystemInformationDialog;
 import it.albertus.routerlogger.client.gui.listener.AboutListener;
+import it.albertus.routerlogger.client.gui.listener.ArmMenuListener;
 import it.albertus.routerlogger.client.gui.listener.ClearConsoleSelectionListener;
 import it.albertus.routerlogger.client.gui.listener.ClearDataTableSelectionListener;
 import it.albertus.routerlogger.client.gui.listener.CloseListener;
 import it.albertus.routerlogger.client.gui.listener.CopyMenuBarSelectionListener;
 import it.albertus.routerlogger.client.gui.listener.DeleteDataTableSelectionListener;
-import it.albertus.routerlogger.client.gui.listener.EditClearSubMenuListener;
-import it.albertus.routerlogger.client.gui.listener.EditMenuListener;
-import it.albertus.routerlogger.client.gui.listener.HelpMenuListener;
 import it.albertus.routerlogger.client.gui.listener.PreferencesListener;
 import it.albertus.routerlogger.client.gui.listener.RestartSelectionListener;
 import it.albertus.routerlogger.client.gui.listener.SelectAllMenuBarSelectionListener;
@@ -119,9 +117,6 @@ public class MenuBar {
 		editMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		editMenuHeader.setText(Messages.get(LBL_MENU_HEADER_EDIT));
 		editMenuHeader.setMenu(editMenu);
-		final EditMenuListener editMenuListener = new EditMenuListener(gui);
-		editMenu.addMenuListener(editMenuListener);
-		editMenuHeader.addArmListener(editMenuListener);
 
 		editCopyMenuItem = new MenuItem(editMenu, SWT.PUSH);
 		editCopyMenuItem.setText(Messages.get(LBL_MENU_ITEM_COPY) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
@@ -147,9 +142,10 @@ public class MenuBar {
 
 		final Menu editClearSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editClearSubMenuItem.setMenu(editClearSubMenu);
-		final EditClearSubMenuListener editClearSubMenuListener = new EditClearSubMenuListener(gui);
-		editClearSubMenu.addMenuListener(editClearSubMenuListener);
-		editClearSubMenuItem.addArmListener(editClearSubMenuListener);
+
+		final ArmMenuListener editMenuListener = () -> editClearSubMenuItem.setEnabled(gui.getDataTable().canClear() || gui.canClearConsole());
+		editMenu.addMenuListener(editMenuListener);
+		editMenuHeader.addArmListener(editMenuListener);
 
 		editClearDataTableMenuItem = new MenuItem(editClearSubMenu, SWT.PUSH);
 		editClearDataTableMenuItem.setText(Messages.get(LBL_MENU_ITEM_CLEAR_TABLE));
@@ -158,6 +154,13 @@ public class MenuBar {
 		editClearConsoleMenuItem = new MenuItem(editClearSubMenu, SWT.PUSH);
 		editClearConsoleMenuItem.setText(Messages.get(LBL_MENU_ITEM_CLEAR_CONSOLE));
 		editClearConsoleMenuItem.addSelectionListener(new ClearConsoleSelectionListener(gui));
+
+		final ArmMenuListener editClearSubMenuListener = () -> {
+			editClearDataTableMenuItem.setEnabled(gui.getDataTable().canClear());
+			editClearConsoleMenuItem.setEnabled(gui.canClearConsole());
+		};
+		editClearSubMenu.addMenuListener(editClearSubMenuListener);
+		editClearSubMenuItem.addArmListener(editClearSubMenuListener);
 
 		// Tools
 		if (!cocoaMenuCreated) {
@@ -194,7 +197,7 @@ public class MenuBar {
 			helpAboutItem.addSelectionListener(new AboutListener(gui));
 		}
 
-		final HelpMenuListener helpMenuListener = new HelpMenuListener(helpSystemInfoItem);
+		final ArmMenuListener helpMenuListener = () -> helpSystemInfoItem.setEnabled(SystemInformationDialog.isAvailable());
 		helpMenu.addMenuListener(helpMenuListener);
 		helpMenuHeader.addArmListener(helpMenuListener);
 
