@@ -4,10 +4,11 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import it.albertus.jface.preference.page.BasePreferencePage;
 import it.albertus.jface.preference.page.IPageDefinition;
+import it.albertus.jface.preference.page.LoggingPreferencePage;
 import it.albertus.jface.preference.page.PageDefinitionDetails;
 import it.albertus.jface.preference.page.PageDefinitionDetails.PageDefinitionDetailsBuilder;
-import it.albertus.routerlogger.client.resources.Messages;
 import it.albertus.jface.preference.page.RestartHeaderPreferencePage;
+import it.albertus.routerlogger.client.resources.Messages;
 
 public enum PageDefinition implements IPageDefinition {
 
