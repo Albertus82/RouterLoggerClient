@@ -5,7 +5,7 @@ import java.util.logging.Handler;
 
 import it.albertus.routerlogger.client.engine.RouterLoggerClientConfig;
 import it.albertus.routerlogger.client.gui.RouterLoggerClientGui;
-import it.albertus.routerlogger.client.util.InitializationException;
+import it.albertus.util.InitializationException;
 import it.albertus.util.logging.CustomFormatter;
 import it.albertus.util.logging.LoggingSupport;
 

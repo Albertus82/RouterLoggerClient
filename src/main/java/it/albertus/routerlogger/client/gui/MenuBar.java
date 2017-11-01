@@ -143,7 +143,7 @@ public class MenuBar {
 		final Menu editClearSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editClearSubMenuItem.setMenu(editClearSubMenu);
 
-		final ArmMenuListener editMenuListener = () -> editClearSubMenuItem.setEnabled(gui.getDataTable().canClear() || gui.canClearConsole());
+		final ArmMenuListener editMenuListener = event -> editClearSubMenuItem.setEnabled(gui.getDataTable().canClear() || gui.canClearConsole());
 		editMenu.addMenuListener(editMenuListener);
 		editMenuHeader.addArmListener(editMenuListener);
 
@@ -155,7 +155,7 @@ public class MenuBar {
 		editClearConsoleMenuItem.setText(Messages.get(LBL_MENU_ITEM_CLEAR_CONSOLE));
 		editClearConsoleMenuItem.addSelectionListener(new ClearConsoleSelectionListener(gui));
 
-		final ArmMenuListener editClearSubMenuListener = () -> {
+		final ArmMenuListener editClearSubMenuListener = event -> {
 			editClearDataTableMenuItem.setEnabled(gui.getDataTable().canClear());
 			editClearConsoleMenuItem.setEnabled(gui.canClearConsole());
 		};
@@ -197,7 +197,7 @@ public class MenuBar {
 			helpAboutItem.addSelectionListener(new AboutListener(gui));
 		}
 
-		final ArmMenuListener helpMenuListener = () -> helpSystemInfoItem.setEnabled(SystemInformationDialog.isAvailable());
+		final ArmMenuListener helpMenuListener = event -> helpSystemInfoItem.setEnabled(SystemInformationDialog.isAvailable());
 		helpMenu.addMenuListener(helpMenuListener);
 		helpMenuHeader.addArmListener(helpMenuListener);
 
