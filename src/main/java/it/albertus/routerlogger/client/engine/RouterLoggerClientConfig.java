@@ -32,7 +32,7 @@ public class RouterLoggerClientConfig extends LoggingConfig implements LanguageC
 	private final Set<String> guiImportantKeys = new LinkedHashSet<>();
 
 	private RouterLoggerClientConfig() throws IOException {
-		super(DIRECTORY_NAME + File.separator + CFG_FILE_NAME, true, DEFAULT_LOGGING_FILES_PATH, LOG_FILE_NAME_PATTERN);
+		super(DIRECTORY_NAME + File.separator + CFG_FILE_NAME, true);
 		init();
 	}
 
@@ -64,12 +64,38 @@ public class RouterLoggerClientConfig extends LoggingConfig implements LanguageC
 
 	@Override
 	public void updateLanguage() {
-		final String language = getString(CFG_KEY_LANGUAGE, Messages.DEFAULT_LANGUAGE);
+		final String language = getString("language", Messages.DEFAULT_LANGUAGE);
 		Messages.setLanguage(language);
 	}
 
 	public Set<String> getGuiImportantKeys() {
 		return guiImportantKeys;
+	}
+
+	@Override
+	protected String getFileHandlerPattern() {
+		return getString("logging.files.path", DEFAULT_LOGGING_FILES_PATH) + File.separator + LOG_FILE_NAME_PATTERN;
+	}
+
+	@Override
+	protected int getFileHandlerLimit() {
+		final Integer limit = getInt("logging.files.limit");
+		if (limit != null) {
+			return limit * 1024;
+		}
+		else {
+			return super.getFileHandlerLimit();
+		}
+	}
+
+	@Override
+	protected int getFileHandlerCount() {
+		return getInt("logging.files.count", super.getFileHandlerCount());
+	}
+
+	@Override
+	protected String getLoggingLevel() {
+		return getString("logging.level", super.getLoggingLevel());
 	}
 
 }
