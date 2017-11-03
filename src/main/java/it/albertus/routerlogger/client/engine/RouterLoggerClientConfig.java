@@ -16,14 +16,14 @@ import it.albertus.util.logging.LoggerFactory;
 
 public class RouterLoggerClientConfig extends LoggingConfig implements LanguageConfig {
 
-	private static final String DIRECTORY_NAME = "RouterLogger Client";
+	private static final String DIRECTORY_NAME = "RouterLogger" + File.separator + "Client";
 
 	public static final String DEFAULT_LOGGING_FILES_PATH = getOsSpecificLocalAppDataDir() + File.separator + DIRECTORY_NAME;
 
 	public static final String DEFAULT_GUI_IMPORTANT_KEYS_SEPARATOR = ",";
 
-	private static final String CFG_FILE_NAME = "routerlogger-client.cfg";
-	private static final String LOG_FILE_NAME_PATTERN = "routerlogger-client.%g.log";
+	private static final String CFG_FILE_NAME = "client.cfg";
+	private static final String LOG_FILE_NAME_PATTERN = "client.%g.log";
 
 	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientConfig.class);
 
@@ -70,6 +70,11 @@ public class RouterLoggerClientConfig extends LoggingConfig implements LanguageC
 
 	public Set<String> getGuiImportantKeys() {
 		return guiImportantKeys;
+	}
+
+	@Override
+	protected boolean isFileHandlerEnabled() {
+		return getBoolean("logging.files.enabled", super.isFileHandlerEnabled());
 	}
 
 	@Override
