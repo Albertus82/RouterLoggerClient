@@ -22,8 +22,8 @@ public class RouterLoggerClientConfig extends LoggingConfig implements LanguageC
 
 	public static final String DEFAULT_GUI_IMPORTANT_KEYS_SEPARATOR = ",";
 
-	private static final String CFG_FILE_NAME = "client.cfg";
-	private static final String LOG_FILE_NAME_PATTERN = "client.%g.log";
+	private static final String CFG_FILE_NAME = "routerlogger-client.cfg";
+	private static final String LOG_FILE_NAME_PATTERN = "routerlogger-client.%g.log";
 
 	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientConfig.class);
 

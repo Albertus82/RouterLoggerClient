@@ -42,37 +42,37 @@
 		</fileset>
 
 		<!-- Copy dependencies -->
-		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${dependencies.directory}">
+		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/routerlogger/client/${dependencies.directory}">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/platform/win32-win32-x86">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${dependencies.directory}">
+		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/routerlogger/client/${dependencies.directory}">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/platform/win32-win32-x86_64">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}/${dependencies.directory}">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/routerlogger/client/${dependencies.directory}">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/platform/gtk-linux-x86">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}/${dependencies.directory}">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/routerlogger/client/${dependencies.directory}">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/platform/gtk-linux-x86_64">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}/${dependencies.directory}">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/routerlogger/client/${dependencies.directory}">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/platform/gtk-linux-armhf">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${dependencies.directory}">
+		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/routerlogger/client/${dependencies.directory}">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/platform/cocoa-macosx-x86_64">
 				<include name="*.jar" />
@@ -80,44 +80,44 @@
 		</copy>
 
 		<!-- Prepare MANIFEST.MF files -->
-		<manifestclasspath property="classpath.win32-win32-x86" jarfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${ant.project.name}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.win32-win32-x86" jarfile="${build.assemblyDirectory}/dist/win32-win32-x86/routerlogger/client/RouterLoggerClient.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${dependencies.directory}">
+				<fileset dir="${build.assemblyDirectory}/dist/win32-win32-x86/routerlogger/client/${dependencies.directory}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.win32-win32-x86_64" jarfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${ant.project.name}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.win32-win32-x86_64" jarfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/routerlogger/client/RouterLoggerClient.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${dependencies.directory}">
+				<fileset dir="${build.assemblyDirectory}/dist/win32-win32-x86_64/routerlogger/client/${dependencies.directory}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.gtk-linux-x86" jarfile="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.gtk-linux-x86" jarfile="${build.assemblyDirectory}/dist/gtk-linux-x86/routerlogger/client/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}/${dependencies.directory}">
+				<fileset dir="${build.assemblyDirectory}/dist/gtk-linux-x86/routerlogger/client/${dependencies.directory}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.gtk-linux-x86_64" jarfile="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.gtk-linux-x86_64" jarfile="${build.assemblyDirectory}/dist/gtk-linux-x86_64/routerlogger/client/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}/${dependencies.directory}">
+				<fileset dir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/routerlogger/client/${dependencies.directory}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.gtk-linux-armhf" jarfile="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.gtk-linux-armhf" jarfile="${build.assemblyDirectory}/dist/gtk-linux-armhf/routerlogger/client/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}/${dependencies.directory}">
+				<fileset dir="${build.assemblyDirectory}/dist/gtk-linux-armhf/routerlogger/client/${dependencies.directory}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.cocoa-macosx-x86_64" jarfile="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.cocoa-macosx-x86_64" jarfile="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/routerlogger/client/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${dependencies.directory}">
+				<fileset dir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/routerlogger/client/${dependencies.directory}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
@@ -127,22 +127,22 @@
 	<target name="config">
 		<fileset id="config" dir="${build.configDirectory}" />
 
-		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/routerlogger/client" failonerror="false">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/routerlogger/client" failonerror="false">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/routerlogger/client" failonerror="false">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/routerlogger/client" failonerror="false">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/routerlogger/client" failonerror="false">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/routerlogger/client" failonerror="false">
 			<fileset refid="config" />
 		</copy>
 	</target>
@@ -158,22 +158,22 @@
 			<include name="*.command" />
 		</fileset>
 
-		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/routerlogger/client" failonerror="false">
 			<fileset refid="bat" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/routerlogger/client" failonerror="false">
 			<fileset refid="bat" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/routerlogger/client" failonerror="false">
 			<fileset refid="sh" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/routerlogger/client" failonerror="false">
 			<fileset refid="sh" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/routerlogger/client" failonerror="false">
 			<fileset refid="sh" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/routerlogger/client" failonerror="false">
 			<fileset refid="command" />
 		</copy>
 	</target>
@@ -185,35 +185,35 @@
 	</fileset>
 
 	<target name="docs">
-		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}">
+		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/routerlogger/client">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}">
+		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/routerlogger/client">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/routerlogger/client">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/routerlogger/client">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/routerlogger/client">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}">
+		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/routerlogger/client">
 			<fileset refid="docs" />
 		</copy>
 	</target>
 
 	<target name="icons">
-		<copy file="${icons.directory}/main.ico" tofile="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}/${artifactId}.icns" failonerror="false" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}/${artifactId}.icns" failonerror="false" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}/${artifactId}.icns" failonerror="false" />
-		<copy file="${icons.directory}/main.icns" tofile="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" failonerror="false" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.assemblyDirectory}/dist/gtk-linux-x86/routerlogger/client/${artifactId}.icns" failonerror="false" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.assemblyDirectory}/dist/gtk-linux-x86_64/routerlogger/client/${artifactId}.icns" failonerror="false" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.assemblyDirectory}/dist/gtk-linux-armhf/routerlogger/client/${artifactId}.icns" failonerror="false" />
+		<copy file="${icons.directory}/main.icns" tofile="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/routerlogger/client/${artifactId}.icns" failonerror="false" />
 	</target>
 
 	<target name="jar" depends="compile, resources, config, scripts, docs, icons, lib">
-		<jar destfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${ant.project.name}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.assemblyDirectory}/dist/win32-win32-x86/routerlogger/client/RouterLoggerClient.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86}" />
@@ -224,7 +224,7 @@
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
-		<jar destfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${ant.project.name}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/routerlogger/client/RouterLoggerClient.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86_64}" />
@@ -235,7 +235,7 @@
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
-		<jar destfile="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.assemblyDirectory}/dist/gtk-linux-x86/routerlogger/client/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86}" />
@@ -246,7 +246,7 @@
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
-		<jar destfile="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.assemblyDirectory}/dist/gtk-linux-x86_64/routerlogger/client/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86_64}" />
@@ -257,7 +257,7 @@
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
-		<jar destfile="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.assemblyDirectory}/dist/gtk-linux-armhf/routerlogger/client/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-armhf}" />
@@ -268,7 +268,7 @@
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
-		<jar destfile="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/routerlogger/client/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.cocoa-macosx-x86_64}" />
@@ -286,7 +286,7 @@
 
 		<mkdir dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" />
 		<jarbundler vmoptions="${macos.vmoptions}" dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarbundler.dir}/JavaApplicationStub" highresolutioncapable="true">
-			<jarfileset dir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}" includes="**/*.jar" />
+			<jarfileset dir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/routerlogger/client" includes="**/*.jar" />
 		</jarbundler>
 		<copy todir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/Resources/Java" failonerror="false">
 			<fileset refid="config" />
@@ -311,35 +311,35 @@
 	<target name="dist-linux" depends="jar">
 		<tar destfile="${build.distDirectory}/${artifactId}-${version.number}-gtk-linux-x86-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.assemblyDirectory}/dist/gtk-linux-x86" filemode="755">
-				<include name="${artifactId}/*.jar" />
-				<include name="${artifactId}/*.sh" />
+				<include name="routerlogger/client/*.jar" />
+				<include name="routerlogger/client/*.sh" />
 			</tarfileset>
 			<tarfileset dir="${build.assemblyDirectory}/dist/gtk-linux-x86">
 				<include name="**" />
-				<exclude name="${artifactId}/*.jar" />
-				<exclude name="${artifactId}/*.sh" />
+				<exclude name="routerlogger/client/*.jar" />
+				<exclude name="routerlogger/client/*.sh" />
 			</tarfileset>
 		</tar>
 		<tar destfile="${build.distDirectory}/${artifactId}-${version.number}-gtk-linux-x86_64-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.assemblyDirectory}/dist/gtk-linux-x86_64" filemode="755">
-				<include name="${artifactId}/*.jar" />
-				<include name="${artifactId}/*.sh" />
+				<include name="routerlogger/client/*.jar" />
+				<include name="routerlogger/client/*.sh" />
 			</tarfileset>
 			<tarfileset dir="${build.assemblyDirectory}/dist/gtk-linux-x86_64">
 				<include name="**" />
-				<exclude name="${artifactId}/*.jar" />
-				<exclude name="${artifactId}/*.sh" />
+				<exclude name="routerlogger/client/*.jar" />
+				<exclude name="routerlogger/client/*.sh" />
 			</tarfileset>
 		</tar>
 		<tar destfile="${build.distDirectory}/${artifactId}-${version.number}-gtk-linux-armhf-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.assemblyDirectory}/dist/gtk-linux-armhf" filemode="755">
-				<include name="${artifactId}/*.jar" />
-				<include name="${artifactId}/*.sh" />
+				<include name="routerlogger/client/*.jar" />
+				<include name="routerlogger/client/*.sh" />
 			</tarfileset>
 			<tarfileset dir="${build.assemblyDirectory}/dist/gtk-linux-armhf">
 				<include name="**" />
-				<exclude name="${artifactId}/*.jar" />
-				<exclude name="${artifactId}/*.sh" />
+				<exclude name="routerlogger/client/*.jar" />
+				<exclude name="routerlogger/client/*.sh" />
 			</tarfileset>
 		</tar>
 	</target>
@@ -389,10 +389,10 @@
 		<chmod perm="+x" file="${launch4j.bindir}/windres" failonerror="false" failifexecutionfails="false" ignoremissing="true" />
 
 		<launch4j bindir="${launch4j.bindir}">
-			<config outfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${ant.project.name}.exe" jarpath="${ant.project.name}.jar" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
+			<config outfile="${build.assemblyDirectory}/dist/win32-win32-x86/routerlogger/client/RouterLoggerClient.exe" jarpath="RouterLoggerClient.jar" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
 				<singleInstance mutexname="${build.jar.archive.manifest.mainClass}" windowtitle="${name}" />
 				<jre runtimebits="32" minversion="${build.compiler.target}.0" jdkpreference="${launch4j.jdkPreference}" initialheapsize="${vm.initialHeapSize}" maxheapsize="${vm.maxHeapSize}" />
-				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${name}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${ant.project.name}" originalfilename="${ant.project.name}.exe" />
+				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${name}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="RouterLoggerClient" originalfilename="RouterLoggerClient.exe" />
 			</config>
 		</launch4j>
 		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86/setup.iss">
@@ -407,33 +407,33 @@
 			AppMutex=${build.jar.archive.manifest.mainClass}
 			DefaultDirName={pf}\RouterLogger\Client
 			DefaultGroupName=${name}
-			UninstallDisplayIcon={app}\${ant.project.name}.exe
+			UninstallDisplayIcon={app}\RouterLoggerClient.exe
 			Compression=lzma2
 			SolidCompression=yes
 			CloseApplications=no
 			ArchitecturesAllowed=x86
 
 			[Languages]
-			Name: "English"; MessagesFile: "compiler:Default.isl"; LicenseFile: "${artifactId}\LICENSE.txt"
-			Name: "Italiano"; MessagesFile: "compiler:Languages\Italian.isl"; LicenseFile: "${artifactId}\LICENSE.txt"
+			Name: "English"; MessagesFile: "compiler:Default.isl"; LicenseFile: "routerlogger\client\LICENSE.txt"
+			Name: "Italiano"; MessagesFile: "compiler:Languages\Italian.isl"; LicenseFile: "routerlogger\client\LICENSE.txt"
 
 			[Run]
-			Filename: "{app}\${ant.project.name}.exe"; Description: "{cm:LaunchProgram,${name}}"; Flags: nowait postinstall skipifsilent
+			Filename: "{app}\RouterLoggerClient.exe"; Description: "{cm:LaunchProgram,${name}}"; Flags: nowait postinstall skipifsilent
 
 			[Tasks]
 			Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 			Name: "startupicon"; Description: "{cm:AutoStartProgram,${name}}"; GroupDescription: "{cm:AutoStartProgramGroupDescription}"; Flags: unchecked
 
 			[Icons]
-			Name: "{group}\${name}"; Filename: "{app}\${ant.project.name}.exe"
+			Name: "{group}\${name}"; Filename: "{app}\RouterLoggerClient.exe"
 			Name: "{group}\{cm:UninstallProgram,${name}}"; Filename: "{uninstallexe}"
-			Name: "{userdesktop}\${name}"; Filename: "{app}\${ant.project.name}.exe"; Tasks: desktopicon
-			Name: "{userstartup}\${name}"; Filename: "{app}\${ant.project.name}.exe"; Tasks: startupicon
+			Name: "{userdesktop}\${name}"; Filename: "{app}\RouterLoggerClient.exe"; Tasks: desktopicon
+			Name: "{userstartup}\${name}"; Filename: "{app}\RouterLoggerClient.exe"; Tasks: startupicon
 
 			[Files]
-			Source: "${artifactId}\*"; Excludes: "*.cfg,${dependencies.directory}\*.log"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
-			Source: "${artifactId}\${dependencies.directory}\*.log"; DestDir: "{app}\${dependencies.directory}"; Flags: ignoreversion overwritereadonly uninsremovereadonly; Attribs: hidden readonly
-			Source: "${artifactId}\*.cfg"; DestDir: "{userappdata}\${name}"; Flags: onlyifdoesntexist
+			Source: "routerlogger\client\*"; Excludes: "*.cfg,${dependencies.directory}\*.log"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+			Source: "routerlogger\client\${dependencies.directory}\*.log"; DestDir: "{app}\${dependencies.directory}"; Flags: ignoreversion overwritereadonly uninsremovereadonly; Attribs: hidden readonly
+			Source: "routerlogger\client\*.cfg"; DestDir: "{userappdata}\${name}"; Flags: onlyifdoesntexist
 
 			[Code]
 			procedure CurStepChanged(CurStep: TSetupStep);
@@ -457,7 +457,7 @@
 		</echo>
 
 		<pathconvert pathsep="&#13;&#10;" property="dependencies.log.x86">
-			<fileset dir="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${dependencies.directory}">
+			<fileset dir="${build.assemblyDirectory}/dist/win32-win32-x86/routerlogger/client/${dependencies.directory}">
 				<include name="*.jar" />
 			</fileset>
 			<mapper>
@@ -465,7 +465,7 @@
 			</mapper>
 		</pathconvert>
 
-		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${dependencies.directory}/${appId.x86}.log">${dependencies.log.x86}</echo>
+		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86/routerlogger/client/${dependencies.directory}/${appId.x86}.log">${dependencies.log.x86}</echo>
 
 		<exec osfamily="windows" executable="${innosetup.dir}/ISCC.exe">
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86/setup.iss" />
@@ -480,10 +480,10 @@
 		</exec>
 
 		<launch4j bindir="${launch4j.bindir}">
-			<config outfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${ant.project.name}.exe" jarpath="${ant.project.name}.jar" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
+			<config outfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/routerlogger/client/RouterLoggerClient.exe" jarpath="RouterLoggerClient.jar" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
 				<singleInstance mutexname="${build.jar.archive.manifest.mainClass}" windowtitle="${name}" />
 				<jre runtimebits="64" minversion="${build.compiler.target}.0" jdkpreference="${launch4j.jdkPreference}" initialheapsize="${vm.initialHeapSize}" maxheapsize="${vm.maxHeapSize}" />
-				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${name}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${ant.project.name}" originalfilename="${ant.project.name}.exe" />
+				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${name}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="RouterLoggerClient" originalfilename="RouterLoggerClient.exe" />
 			</config>
 		</launch4j>
 		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86_64/setup.iss">
@@ -498,7 +498,7 @@
 			AppMutex=${build.jar.archive.manifest.mainClass}
 			DefaultDirName={pf}\RouterLogger\Client
 			DefaultGroupName=${name}
-			UninstallDisplayIcon={app}\${ant.project.name}.exe
+			UninstallDisplayIcon={app}\RouterLoggerClient.exe
 			Compression=lzma2
 			SolidCompression=yes
 			CloseApplications=no
@@ -506,26 +506,26 @@
 			ArchitecturesInstallIn64BitMode=x64
 
 			[Languages]
-			Name: "English"; MessagesFile: "compiler:Default.isl"; LicenseFile: "${artifactId}\LICENSE.txt"
-			Name: "Italiano"; MessagesFile: "compiler:Languages\Italian.isl"; LicenseFile: "${artifactId}\LICENSE.txt"
+			Name: "English"; MessagesFile: "compiler:Default.isl"; LicenseFile: "routerlogger\client\LICENSE.txt"
+			Name: "Italiano"; MessagesFile: "compiler:Languages\Italian.isl"; LicenseFile: "routerlogger\client\LICENSE.txt"
 
 			[Run]
-			Filename: "{app}\${ant.project.name}.exe"; Description: "{cm:LaunchProgram,${name}}"; Flags: nowait postinstall skipifsilent
+			Filename: "{app}\RouterLoggerClient.exe"; Description: "{cm:LaunchProgram,${name}}"; Flags: nowait postinstall skipifsilent
 
 			[Tasks]
 			Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 			Name: "startupicon"; Description: "{cm:AutoStartProgram,${name}}"; GroupDescription: "{cm:AutoStartProgramGroupDescription}"; Flags: unchecked
 
 			[Icons]
-			Name: "{group}\${name}"; Filename: "{app}\${ant.project.name}.exe"
+			Name: "{group}\${name}"; Filename: "{app}\RouterLoggerClient.exe"
 			Name: "{group}\{cm:UninstallProgram,${name}}"; Filename: "{uninstallexe}"
-			Name: "{userdesktop}\${name}"; Filename: "{app}\${ant.project.name}.exe"; Tasks: desktopicon
-			Name: "{userstartup}\${name}"; Filename: "{app}\${ant.project.name}.exe"; Tasks: startupicon
+			Name: "{userdesktop}\${name}"; Filename: "{app}\RouterLoggerClient.exe"; Tasks: desktopicon
+			Name: "{userstartup}\${name}"; Filename: "{app}\RouterLoggerClient.exe"; Tasks: startupicon
 
 			[Files]
-			Source: "${artifactId}\*"; Excludes: "*.cfg,${dependencies.directory}\*.log"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
-			Source: "${artifactId}\${dependencies.directory}\*.log"; DestDir: "{app}\${dependencies.directory}"; Flags: ignoreversion overwritereadonly uninsremovereadonly; Attribs: hidden readonly
-			Source: "${artifactId}\*.cfg"; DestDir: "{userappdata}\${name}"; Flags: onlyifdoesntexist
+			Source: "routerlogger\client\*"; Excludes: "*.cfg,${dependencies.directory}\*.log"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+			Source: "routerlogger\client\${dependencies.directory}\*.log"; DestDir: "{app}\${dependencies.directory}"; Flags: ignoreversion overwritereadonly uninsremovereadonly; Attribs: hidden readonly
+			Source: "routerlogger\client\*.cfg"; DestDir: "{userappdata}\${name}"; Flags: onlyifdoesntexist
 
 			[Code]
 			procedure CurStepChanged(CurStep: TSetupStep);
@@ -549,7 +549,7 @@
 		</echo>
 
 		<pathconvert pathsep="&#13;&#10;" property="dependencies.log.x86_64">
-			<fileset dir="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${dependencies.directory}">
+			<fileset dir="${build.assemblyDirectory}/dist/win32-win32-x86_64/routerlogger/client/${dependencies.directory}">
 				<include name="*.jar" />
 			</fileset>
 			<mapper>
@@ -557,7 +557,7 @@
 			</mapper>
 		</pathconvert>
 
-		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${dependencies.directory}/${appId.x64}.log">${dependencies.log.x86_64}</echo>
+		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86_64/routerlogger/client/${dependencies.directory}/${appId.x64}.log">${dependencies.log.x86_64}</echo>
 
 		<exec osfamily="windows" executable="${innosetup.dir}/ISCC.exe">
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86_64/setup.iss" />
