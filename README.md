@@ -6,6 +6,8 @@ RouterLogger Client
 
 MQTT/HTTP client for [RouterLogger](https://github.com/Albertus82/RouterLogger).
 
+![Screenshot](https://user-images.githubusercontent.com/8672431/32418233-25f22d94-c266-11e7-8431-749061adfd61.png)
+
 ## Acknowledgements
 
 This application includes third-party software components developed by:
