@@ -9,7 +9,11 @@ import org.eclipse.swt.events.TypedEvent;
 @FunctionalInterface
 public interface ArmMenuListener extends ArmListener, MenuListener {
 
-	/** Sent when a menu is shown, is armed, or 'about to be selected'. */
+	/**
+	 * Sent when a menu is shown, is armed, or 'about to be selected'.
+	 * 
+	 * @param e an event containing information about the operation
+	 */
 	void menuArmed(TypedEvent e);
 
 	@Override
