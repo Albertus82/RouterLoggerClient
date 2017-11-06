@@ -10,7 +10,6 @@ import static it.albertus.routerlogger.client.gui.preference.page.PageDefinition
 import static it.albertus.routerlogger.client.gui.preference.page.PageDefinition.MQTT_ADVANCED;
 import static it.albertus.routerlogger.client.gui.preference.page.PageDefinition.MQTT_MESSAGES;
 
-import java.io.File;
 import java.util.Arrays;
 
 import org.eclipse.jface.preference.ColorFieldEditor;
@@ -56,7 +55,6 @@ import it.albertus.routerlogger.client.http.HttpConnector;
 import it.albertus.routerlogger.client.http.HttpPollingThread;
 import it.albertus.routerlogger.client.mqtt.MqttClient;
 import it.albertus.routerlogger.client.resources.Messages;
-import it.albertus.util.Configuration;
 import it.albertus.util.LoggingConfig;
 
 public enum Preference implements IPreference {
@@ -84,7 +82,7 @@ public enum Preference implements IPreference {
 	MQTT_VERSION(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(MqttClient.Defaults.MQTT_VERSION).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(AdvancedMqttPreferencePage.getMqttVersionComboOptions()).build()),
 	MQTT_PERSISTENCE_FILE_ENABLED(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(MqttClient.Defaults.PERSISTENCE_FILE_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	MQTT_PERSISTENCE_FILE_CUSTOM(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(MqttClient.Defaults.PERSISTENCE_FILE_CUSTOM).parent(MQTT_PERSISTENCE_FILE_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
-	MQTT_PERSISTENCE_FILE_PATH(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(Configuration.getOsSpecificLocalAppDataDir() + File.separator + Messages.get("msg.application.name")).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryDialogMessage(() -> Messages.get("msg.preferences.directory.dialog.message.mqtt")).build()),
+	MQTT_PERSISTENCE_FILE_PATH(new PreferenceDetailsBuilder(MQTT_ADVANCED).restartRequired().defaultValue(RouterLoggerClientConfig.DEFAULT_LOGGING_FILES_PATH).parent(MQTT_PERSISTENCE_FILE_CUSTOM).build(), new FieldEditorDetailsBuilder(EnhancedDirectoryFieldEditor.class).emptyStringAllowed(false).directoryDialogMessage(() -> Messages.get("msg.preferences.directory.dialog.message.mqtt")).build()),
 
 	HTTP_HOST(new PreferenceDetailsBuilder(HTTP).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
 	HTTP_PORT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.PORT).build(), new FieldEditorDetailsBuilder(EnhancedIntegerFieldEditor.class).numberValidRange(1, 65535).emptyStringAllowed(false).build()),
