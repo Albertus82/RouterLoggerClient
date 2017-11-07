@@ -40,6 +40,7 @@ public class RouterLoggerClient {
 
 	public static void main(final String[] args) {
 		RouterLoggerClientGui.run(initializationException);
+		System.exit(0);
 	}
 
 	public static InitializationException getInitializationException() {
