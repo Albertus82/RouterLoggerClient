@@ -13,8 +13,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-
-import javax.xml.bind.DatatypeConverter;
+import java.util.Base64;
 
 import it.albertus.routerlogger.client.engine.RouterLoggerClientConfig;
 import it.albertus.util.Configuration;
@@ -85,7 +84,7 @@ public class HttpConnector {
 				final byte[] pw = toBytes(password);
 				final ByteBuffer buffer = ByteBuffer.allocate(un.length + 1 + pw.length);
 				buffer.put(un).put((byte) ':').put(pw);
-				connection.addRequestProperty("Authorization", "Basic " + DatatypeConverter.printBase64Binary(buffer.array()));
+				connection.addRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString(buffer.array()));
 			}
 			return (HttpURLConnection) connection;
 		}
