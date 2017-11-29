@@ -20,7 +20,7 @@ import it.albertus.util.Configuration;
 import it.albertus.util.StringUtils;
 import it.albertus.util.Version;
 
-public class HttpConnector {
+public class ConnectionFactory {
 
 	public static class Defaults {
 		public static final int CONNECTION_TIMEOUT = 20000;
@@ -43,11 +43,11 @@ public class HttpConnector {
 
 	private static final Configuration configuration = RouterLoggerClientConfig.getInstance();
 
-	private HttpConnector() {
+	private ConnectionFactory() {
 		throw new IllegalAccessError();
 	}
 
-	static HttpURLConnection openConnection(final URL url, final String ifNoneMatch) throws IOException {
+	static HttpURLConnection createHttpConnection(final URL url, final String ifNoneMatch) throws IOException {
 		final URLConnection connection;
 		if (configuration.getBoolean("proxy.enabled", Defaults.PROXY_ENABLED)) {
 			if (configuration.getBoolean("proxy.auth.required", Defaults.PROXY_AUTH_REQUIRED)) {

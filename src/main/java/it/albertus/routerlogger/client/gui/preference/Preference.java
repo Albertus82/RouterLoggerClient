@@ -51,7 +51,7 @@ import it.albertus.routerlogger.client.gui.preference.page.AdvancedMqttPreferenc
 import it.albertus.routerlogger.client.gui.preference.page.GeneralPreferencePage;
 import it.albertus.routerlogger.client.gui.preference.page.HttpProxyPreferencePage;
 import it.albertus.routerlogger.client.gui.preference.page.MqttPreferencePage;
-import it.albertus.routerlogger.client.http.HttpConnector;
+import it.albertus.routerlogger.client.http.ConnectionFactory;
 import it.albertus.routerlogger.client.http.HttpPollingThread;
 import it.albertus.routerlogger.client.mqtt.MqttClient;
 import it.albertus.routerlogger.client.resources.Messages;
@@ -86,20 +86,20 @@ public enum Preference implements IPreference {
 
 	HTTP_HOST(new PreferenceDetailsBuilder(HTTP).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
 	HTTP_PORT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.PORT).build(), new FieldEditorDetailsBuilder(EnhancedIntegerFieldEditor.class).numberValidRange(1, 65535).emptyStringAllowed(false).build()),
-	HTTP_AUTHENTICATION(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpConnector.Defaults.AUTHENTICATION).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
+	HTTP_AUTHENTICATION(new PreferenceDetailsBuilder(HTTP).defaultValue(ConnectionFactory.Defaults.AUTHENTICATION).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	HTTP_USERNAME(new PreferenceDetailsBuilder(HTTP).parent(HTTP_AUTHENTICATION).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
 	HTTP_PASSWORD(new PreferenceDetailsBuilder(HTTP).parent(HTTP_AUTHENTICATION).build(), new FieldEditorDetailsBuilder(PasswordFieldEditor.class).build()),
 	HTTP_IGNORE_CERTIFICATE(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.IGNORE_CERTIFICATE).restartRequired().build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	HTTP_CONNECTION_RETRY_INTERVAL_SECS(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.CONNECTION_RETRY_INTERVAL_SECS).build(), new FieldEditorDetailsBuilder(ShortComboFieldEditor.class).numberMinimum(1).labelsAndValues(new StaticLabelsAndValues().put(Integer.toString(HttpPollingThread.Defaults.CONNECTION_RETRY_INTERVAL_SECS), HttpPollingThread.Defaults.CONNECTION_RETRY_INTERVAL_SECS)).build()),
-	HTTP_CONNECTION_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpConnector.Defaults.CONNECTION_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(() -> Messages.get("lbl.preferences.http.timeout.infinite"), 0)).build()),
-	HTTP_READ_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpConnector.Defaults.READ_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(() -> Messages.get("lbl.preferences.http.timeout.infinite"), 0)).build()),
+	HTTP_CONNECTION_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(ConnectionFactory.Defaults.CONNECTION_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(() -> Messages.get("lbl.preferences.http.timeout.infinite"), 0)).build()),
+	HTTP_READ_TIMEOUT(new PreferenceDetailsBuilder(HTTP).defaultValue(ConnectionFactory.Defaults.READ_TIMEOUT).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(() -> Messages.get("lbl.preferences.http.timeout.infinite"), 0)).build()),
 	HTTP_REFRESH_SECS(new PreferenceDetailsBuilder(HTTP).defaultValue(HttpPollingThread.Defaults.REFRESH_SECS).build(), new FieldEditorDetailsBuilder(IntegerComboFieldEditor.class).labelsAndValues(new LocalizedLabelsAndValues(() -> Messages.get("lbl.preferences.http.refresh.auto"), 0)).build()),
 
-	PROXY_ENABLED(new PreferenceDetailsBuilder(HTTP_PROXY).defaultValue(HttpConnector.Defaults.PROXY_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
-	PROXY_TYPE(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(HttpConnector.Defaults.PROXY_TYPE.name()).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(HttpProxyPreferencePage.getProxyTypeComboOptions()).boldCustomValues(false).build()),
-	PROXY_ADDRESS(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(HttpConnector.Defaults.PROXY_ADDRESS).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).textLimit(253).emptyStringAllowed(false).boldCustomValues(false).build()),
-	PROXY_PORT(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(HttpConnector.Defaults.PROXY_PORT).build(), new FieldEditorDetailsBuilder(EnhancedIntegerFieldEditor.class).numberValidRange(1, 65535).boldCustomValues(false).build()),
-	PROXY_AUTH_REQUIRED(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(HttpConnector.Defaults.PROXY_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
+	PROXY_ENABLED(new PreferenceDetailsBuilder(HTTP_PROXY).defaultValue(ConnectionFactory.Defaults.PROXY_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
+	PROXY_TYPE(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(ConnectionFactory.Defaults.PROXY_TYPE.name()).build(), new FieldEditorDetailsBuilder(DefaultComboFieldEditor.class).labelsAndValues(HttpProxyPreferencePage.getProxyTypeComboOptions()).boldCustomValues(false).build()),
+	PROXY_ADDRESS(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(ConnectionFactory.Defaults.PROXY_ADDRESS).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).textLimit(253).emptyStringAllowed(false).boldCustomValues(false).build()),
+	PROXY_PORT(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(ConnectionFactory.Defaults.PROXY_PORT).build(), new FieldEditorDetailsBuilder(EnhancedIntegerFieldEditor.class).numberValidRange(1, 65535).boldCustomValues(false).build()),
+	PROXY_AUTH_REQUIRED(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_ENABLED).defaultValue(ConnectionFactory.Defaults.PROXY_ENABLED).build(), new FieldEditorDetailsBuilder(DefaultBooleanFieldEditor.class).build()),
 	PROXY_USERNAME(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_AUTH_REQUIRED).build(), new FieldEditorDetailsBuilder(EnhancedStringFieldEditor.class).build()),
 	PROXY_PASSWORD(new PreferenceDetailsBuilder(HTTP_PROXY).parent(PROXY_AUTH_REQUIRED).build(), new FieldEditorDetailsBuilder(PasswordFieldEditor.class).build()),
 

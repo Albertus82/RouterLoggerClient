@@ -152,7 +152,7 @@ public class HttpPollingThread extends Thread {
 
 	private AppStatus getRouterLoggerStatus(final String baseUrl) throws IOException {
 		final URL url = new URL(baseUrl + "/status/app");
-		final HttpURLConnection urlConnection = HttpConnector.openConnection(url, eTagStatus);
+		final HttpURLConnection urlConnection = ConnectionFactory.createHttpConnection(url, eTagStatus);
 
 		urlConnection.connect();
 		for (final String header : urlConnection.getHeaderFields().keySet()) {
@@ -168,7 +168,7 @@ public class HttpPollingThread extends Thread {
 
 	private DeviceStatusDto getRouterDataDto(final String baseUrl) throws IOException {
 		final URL url = new URL(baseUrl + "/status/device");
-		final HttpURLConnection urlConnection = HttpConnector.openConnection(url, eTagData);
+		final HttpURLConnection urlConnection = ConnectionFactory.createHttpConnection(url, eTagData);
 
 		urlConnection.connect();
 		for (final String header : urlConnection.getHeaderFields().keySet()) {
