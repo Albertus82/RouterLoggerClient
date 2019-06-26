@@ -64,8 +64,8 @@ public class RouterLoggerClientGui extends ApplicationWindow {
 	private AppStatus currentStatus;
 	private AppStatus previousStatus;
 
-	private volatile Thread mqttConnectionThread;
-	private volatile Thread httpPollingThread;
+	private Thread mqttConnectionThread;
+	private Thread httpPollingThread;
 
 	public RouterLoggerClientGui() {
 		super(null);

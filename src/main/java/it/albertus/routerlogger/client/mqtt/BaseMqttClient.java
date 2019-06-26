@@ -17,7 +17,7 @@ public abstract class BaseMqttClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(BaseMqttClient.class);
 
-	private volatile IMqttClient client;
+	private IMqttClient client;
 
 	protected class MqttClientStartThread extends Thread {
 

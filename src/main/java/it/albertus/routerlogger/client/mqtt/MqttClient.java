@@ -34,7 +34,7 @@ public class MqttClient extends BaseMqttClient {
 	private static final String CFG_KEY_MQTT_MAX_INFLIGHT = "mqtt.max.inflight";
 	private static final String CFG_KEY_MQTT_CONNECTION_TIMEOUT = "mqtt.connection.timeout";
 	private static final String CFG_KEY_MQTT_KEEP_ALIVE_INTERVAL = "mqtt.keep.alive.interval";
-	private static final String CFG_KEY_MQTT_PASSWORD = "mqtt.password";
+	private static final String CFG_KEY_MQTT_PASSWORD = "mqtt.password"; // NOSONAR
 	private static final String CFG_KEY_MQTT_USERNAME = "mqtt.username";
 	private static final String CFG_KEY_MQTT_CLIENT_ID = "mqtt.client.id";
 	private static final String CFG_KEY_MQTT_SERVER_URI = "mqtt.server.uri";

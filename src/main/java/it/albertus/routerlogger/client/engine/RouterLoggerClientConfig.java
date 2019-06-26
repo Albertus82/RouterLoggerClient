@@ -4,15 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import it.albertus.routerlogger.client.resources.Messages;
 import it.albertus.util.InitializationException;
 import it.albertus.util.LanguageConfig;
 import it.albertus.util.LoggingConfig;
 import it.albertus.util.StringUtils;
-import it.albertus.util.logging.LoggerFactory;
 
 public class RouterLoggerClientConfig extends LoggingConfig implements LanguageConfig {
 
@@ -24,8 +21,6 @@ public class RouterLoggerClientConfig extends LoggingConfig implements LanguageC
 
 	private static final String CFG_FILE_NAME = "routerlogger-client.cfg";
 	private static final String LOG_FILE_NAME_PATTERN = "routerlogger-client.%g.log";
-
-	private static final Logger logger = LoggerFactory.getLogger(RouterLoggerClientConfig.class);
 
 	private static RouterLoggerClientConfig instance;
 
@@ -43,7 +38,6 @@ public class RouterLoggerClientConfig extends LoggingConfig implements LanguageC
 			}
 			catch (final IOException e) {
 				final String message = Messages.get("err.open.cfg", CFG_FILE_NAME);
-				logger.log(Level.SEVERE, message, e);
 				throw new InitializationException(message, e);
 			}
 		}

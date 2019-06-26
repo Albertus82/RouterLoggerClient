@@ -12,6 +12,7 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -39,7 +40,7 @@ public class ConnectionFactory {
 
 	private static final String USER_AGENT = String.format("Mozilla/5.0 (%s; %s; %s) RouterLoggerClient/%s (KHTML, like Gecko)", System.getProperty("os.name"), System.getProperty("os.arch"), System.getProperty("os.version"), Version.getInstance().getNumber());
 
-	private static final String CHARSET = "UTF-8";
+	private static final Charset charset = StandardCharsets.UTF_8;
 
 	private static final Configuration configuration = RouterLoggerClientConfig.getInstance();
 
@@ -80,7 +81,7 @@ public class ConnectionFactory {
 			final String username = configuration.getString("http.username");
 			final char[] password = configuration.getCharArray("http.password");
 			if (configuration.getBoolean("http.authentication", Defaults.AUTHENTICATION) && StringUtils.isNotEmpty(username) && password != null && password.length > 0) {
-				final byte[] un = username.getBytes(CHARSET);
+				final byte[] un = username.getBytes(charset);
 				final byte[] pw = toBytes(password);
 				final ByteBuffer buffer = ByteBuffer.allocate(un.length + 1 + pw.length);
 				buffer.put(un).put((byte) ':').put(pw);
@@ -94,7 +95,7 @@ public class ConnectionFactory {
 	}
 
 	private static byte[] toBytes(final char[] chars) {
-		final ByteBuffer byteBuffer = Charset.forName(CHARSET).encode(CharBuffer.wrap(chars));
+		final ByteBuffer byteBuffer = charset.encode(CharBuffer.wrap(chars));
 		return Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
 	}
 
